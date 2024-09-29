@@ -1,0 +1,71 @@
+- model: general_ledger.taxrate
+  pk: 29910b6e-b840-4c3a-9b94-dd814cd644e1
+  fields:
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    created_at: 2024-08-05 06:23:16.543200+00:00
+    updated_at: 2024-08-05 06:23:16.543234+00:00
+    description: ''
+    name: 20% (VAT on Income)
+    slug: 20-vat-on-income
+    tax_type: 907dbfd3-869e-4d3f-87f1-c037ad2b90e0
+    rate: '0.20'
+- model: general_ledger.taxrate
+  pk: b1a3408f-207a-4598-aae4-53e48e3ee9fb
+  fields:
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    created_at: 2024-08-05 06:21:54.112603+00:00
+    updated_at: 2024-08-05 06:21:54.112634+00:00
+    description: ''
+    name: 20% (VAT on Expenses)
+    slug: 20-vat-on-expenses
+    tax_type: 48abf932-ad5a-485c-af60-f1252deeda9f
+    rate: '0.20'
+- model: general_ledger.taxrate
+  pk: 58723f99-7b14-4877-822d-f8b2e4623718
+  fields:
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    created_at: 2024-08-06 02:05:44.723365+00:00
+    updated_at: 2024-08-06 02:05:44.723396+00:00
+    description: ''
+    name: No VAT
+    slug: no-vat
+    tax_type: 44718311-3a5a-407c-9587-d42a67b7ad7f
+    rate: '0.00'
+    is_visible: true
+    is_active: true
+    effective_date: null
+    end_date: null
+- model: general_ledger.taxrate
+  pk: 3162492a-3848-4ec0-a6b2-c88de70412d4
+  fields:
+    created_at: 2024-09-18 10:42:46.039896+00:00
+    updated_at: 2024-09-18 10:53:55.505713+00:00
+    description: ''
+    slug: 5-vat-on-expenses
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_type: 48abf932-ad5a-485c-af60-f1252deeda9f
+    name: 5% (VAT on Expenses)
+    short_name: 5%
+    rate: '0.0500'
+    is_visible: true
+    is_active: true
+    is_default: false
+    effective_date: null
+    end_date: null
+- model: general_ledger.taxrate
+  pk: 599cfabe-b47e-44e7-91eb-9e304c0de434
+  fields:
+    created_at: 2024-09-18 10:42:46.866191+00:00
+    updated_at: 2024-09-18 20:06:35.424120+00:00
+    description: ''
+    slug: 5-vat-on-income
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_type: 907dbfd3-869e-4d3f-87f1-c037ad2b90e0
+    name: 5% (VAT on Income)
+    short_name: 5%
+    rate: '0.0500'
+    is_visible: true
+    is_active: true
+    is_default: false
+    effective_date: null
+    end_date: null

@@ -1,0 +1,169 @@
+<!-- Top Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <div class="row w-100">
+      <div class="col-11 mx-auto">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <!-- Left Aligned Navbar Items -->
+          <ul class="navbar-nav me-auto">
+            <!-- Standalone Dashboard Button -->
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url('general_ledger:index') }}">Dashboard</a>
+            </li>
+            <!-- Dropdown Menu Items -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Business
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                {{ "Customers"|dropdownmenu('general_ledger:customer-list', path=request.path) }}
+                {{ "Suppliers"|dropdownmenu('general_ledger:supplier-list', path=request.path) }}
+                <li><a class="dropdown-item" href="{{ url('general_ledger:contact-list') }}">All Contacts</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:invoice-list') }}">Invoices</a></li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:bill-list') }}">Bills</a></li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:payments-list') }}">Payments</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Banking
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                <li><a class="dropdown-item" href="{{ url('general_ledger:bank-list') }}">Bank Accounts</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Accounting
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
+                <li><a class="dropdown-item" href="{{ url('general_ledger:account-list') }}">Chart of Accounts</a></li>
+                <li><a class="dropdown-item" href="/gl/accounts/">Trial Balance</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:balance_sheet') }}">Balance Sheet</a></li>
+                <li><a class="dropdown-item" href="/gl/bills/">Profit and Loss</a></li>
+              </ul>
+            </li>
+          </ul>
+          <!-- Right Aligned Navbar Items -->
+          <ul class="navbar-nav ms-auto">
+
+            <!-- notification Dropdown Menu -->
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4"
+                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-outline-light me-2" type="button"><i class="bi bi-bell"></i></button></a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
+                <li><a class="dropdown-item" href="{{ url('general_ledger:account-list') }}">Chart of Accounts</a></li>
+                <li><a class="dropdown-item" href="/gl/accounts/">Trial Balance</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:balance_sheet') }}">Balance Sheet</a></li>
+                <li><a class="dropdown-item" href="/gl/bills/">Profit and Loss</a></li>
+              </ul>
+            </li>
+            <!-- User Dropdown Menu -->
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown7"
+                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-outline-light" type="button"><i class="bi bi-gear"></i></button></a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
+              {% if active_book and active_book.pk %}
+                <li><a class="dropdown-item" href="{{ url('general_ledger:book-preferences', request.active_book.pk) }}">Book Settings</a></li>
+                {% endif %}
+                <li><a class="dropdown-item" href="{{ url('general_ledger:user') }}">User Settings</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                {% if request.user.is_authenticated and request.user.is_staff %}
+                <li><a class="dropdown-item" href="{{ url('admin:app_list', 'general_ledger') }}">Admin</a></li>
+                {% endif %}
+                <li>
+                  <a href="{{ url('general_ledger:debug') }}?next={{ request.path }}"
+                    class="dropdown-item" aria-current="page">
+                    Debug View
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ url('api-root') }}"
+                    class="dropdown-item" aria-current="page">
+                    Api Browser
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ url('swagger-ui') }}"
+                    class="dropdown-item" aria-current="page">
+                    Swagger UI
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ url('redoc') }}"
+                    class="dropdown-item" aria-current="page">
+                    Api Redoc
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+
+                {% if request.user.is_authenticated %}
+                <li>
+                  <a href="{{ url('general_ledger:account_logout') }}?next={{ request.path }}"
+                    class="dropdown-item" aria-current="page">
+                    Logout
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ url('general_ledger:select_active_entity') }}?next={{ request.get_full_path()|e }}"
+                    class="dropdown-item" aria-current="page">Select Active
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ url('general_ledger:books-list') }}?next={{ request.get_full_path()|e }}"
+                    class="dropdown-item" aria-current="page">List Books
+                  </a>
+                </li>
+                {% else %}<li>
+                  <a href="{{ url('general_ledger:account_login') }}?next={{ request.get_full_path()|e }}"
+                    class="dropdown-item" aria-current="page">
+                    Login
+                  </a>
+                </li>
+
+                {% endif %}
+
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+      if (item.classList.contains('active')) {
+        item.closest('.nav-item.dropdown').querySelector('.nav-link').classList.add('active');
+      }
+    });
+  });
+</script>

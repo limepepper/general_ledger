@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <nav aria-label="Generic pagination widget">
+        <ul class="pagination justify-content-center">
+          <li class="page-item {% if not page_obj.has_previous() %}disabled{% endif %}">
+            <a class="page-link"
+              href="?page=1{% for key,value in request.GET.items() %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">First</a>
+          </li>
+
+          {% if page_obj.paginator.num_pages > 2 and page_obj.number == page_obj.paginator.num_pages %}
+          <li class="page-item {% if not page_obj.has_previous() %}disabled{% endif %}"><a class="page-link"
+              href="?page={{ page_obj.previous_page_number()-1 if page_obj.has_previous() else '#' }}{% for key,value in request.GET.items() %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{
+              page_obj.previous_page_number()-1 }}</a></li>
+          {% endif %}
+
+          {% if page_obj.number > 1 %}
+          <li class="page-item {% if not page_obj.has_previous() %}disabled{% endif %}"><a class="page-link"
+              href="?page={{ page_obj.previous_page_number() if page_obj.has_previous() else '#' }}{% for key,value in request.GET.items() %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{
+              page_obj.previous_page_number() }}</a></li>
+          {% endif %}
+
+          <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+
+          {% if page_obj.has_next() %}
+          <li class="page-item">
+            <a class="page-link"
+              href="?page={{ page_obj.next_page_number() }}{% for key,value in request.GET.items() %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{
+              page_obj.next_page_number() }}</a>
+          </li>
+          {% endif %}
+
+          {% if page_obj.number == 1 and page_obj.paginator.num_pages > 2 %}
+          <li class="page-item"><a class="page-link"
+              href="?page={{ page_obj.next_page_number()+1 }}{% for key,value in request.GET.items() %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{
+              page_obj.next_page_number()+1 }}</a></li>
+          {% endif %}
+
+
+
+          <li class="page-item {% if not page_obj.has_next() %}disabled{% endif %}">
+            <a class="page-link"
+              href="?page={{ page_obj.paginator.num_pages }}{% for key,value in request.GET.items() %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Last</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+    </div>
+  </div>
+</div>

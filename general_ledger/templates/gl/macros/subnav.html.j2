@@ -1,0 +1,31 @@
+{% macro render_subnav(title='', menus=[]) %}
+<!-- Sub Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+  <div class="container">
+    <div class="row w-100">
+      <div class="col-11 mx-auto d-flex align-items-center justify-content-between">
+        <!-- Section Title -->
+        <span class="navbar-brand mb-0 h1">{{ title }}</span>
+        <!-- Right Aligned Icons -->
+        <div class="d-flex">
+          <ul class="navbar-nav ms-auto">
+              {% for menu in menus %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownNotif" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                {{ menu["header"] }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownNotif">
+              {% for link in menu["items"] %}
+                <li><a class="dropdown-item" href="{{ link.url }}">{{ link.text }}</a></li>
+          {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+{% endmacro %}

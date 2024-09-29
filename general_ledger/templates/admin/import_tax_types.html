@@ -1,0 +1,9 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Import Tax Types for {{ book.name }}</h1>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="import_file">
+  <input type="submit" value="Import">
+</form>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!-- Sub Navbar.html.j2 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+  <div class="container">
+    <div class="row w-100">
+      <div class="col-11 mx-auto d-flex align-items-center justify-content-between">
+        <!-- Section Title -->
+        <span class="navbar-brand mb-0 h1">{{ section_title }} ({{ active_book.name|default('none') if active_book is defined else "none"  }})</span>
+
+        {% block subnav_right_menu %}
+        <!-- Right Aligned Icons -->
+        <div class="d-flex">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownNotif" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                New
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownNotif">
+                <li><a class="dropdown-item" href="{{ url('general_ledger:invoice-create') }}">Invoice</a></li>
+                {# <li><a class="dropdown-item" href="{{ url('general_ledger:invoice-create2') }}">Invoice2</a></li> #}
+                <li><a class="dropdown-item" href="{{ url('general_ledger:bill-create') }}">Bill</a></li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:contact-create') }}">Contact</a></li>
+                                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:bank-create') }}">Bank Account</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- end of Right Aligned Icons -->
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- end Sub Navbar.html.j2 -->

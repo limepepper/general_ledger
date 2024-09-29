@@ -1,0 +1,9 @@
+  <div id="content-main">
+    <div class="module">
+      {% if historical_records %}
+        {% include 'gl/partials/history/object_history_list.html.j2' %}
+      {% else %}
+        <p>{{ _("This object doesn't have a change history.") }}</p>
+      {% endif %}
+    </div>
+  </div>

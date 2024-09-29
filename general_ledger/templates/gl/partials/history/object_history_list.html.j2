@@ -1,0 +1,60 @@
+<table id="change-history" class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{{ _('Object') }}</th>
+      {% for column in history_list_display %}
+      <th scope="col">{{ _(column) }} </th>
+      {% endfor %}
+      <th scope="col">{{ _('Date/time') }}</th>
+      <th scope="col">{{ _('Comment') }}</th>
+      <th scope="col">{{ _('Changed by') }}</th>
+      <th scope="col">{{ _('Change reason') }}</th>
+      <th scope="col">{{ _('Changes') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in historical_records %}
+    <tr>
+      <td>
+        <a href="#">
+          {{ record.history_object }}
+        </a>
+      </td>
+      {% for column in history_list_display %}
+      <td>{{ record[column] }}</td>
+      {% endfor %}
+      <td>{{ record.history_date|naturaltime }}</td>
+      <td>{{ record.get_history_type_display() }}</td>
+      <td>
+        {% if record.history_user %}
+
+        {% if admin_user_url %}
+        <a href="#">{{ record.history_user }}</a>
+        {% else %}
+        {{ record.history_user }}
+        {% endif %}
+        {% else %}
+        {{ _("None") }}
+        {% endif %}
+      </td>
+        <td>
+          {{ record.history_change_reason }}
+        </td>
+        <td>
+            {% if record.history_delta_changes %}
+              <ul>
+                {% for change in record.history_delta_changes %}
+                  <li>
+                    <strong>{{ change.field }}:</strong>
+                    {{ change.old }}
+                    {# Add some spacing, and prevent having the arrow point to the edge of the page if `new` is wrapped #}
+                    &nbsp;&rarr;&nbsp;&nbsp;{{ change.new }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

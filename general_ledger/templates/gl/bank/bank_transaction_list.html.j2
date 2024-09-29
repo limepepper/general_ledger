@@ -1,0 +1,19 @@
+{% extends 'gl/generic/generic_list.html.j2' %}
+{% from "gl/macros/subnav.html.j2" import render_subnav %}
+
+{% block title %}Bank Transactions{% endblock %}
+
+{% block sub_navbar %}
+
+{{ render_subnav(
+title="Bank Accounts",
+menus=[{"header": "Bank Stuff", "items": [
+{'url': url('general_ledger:bank-create'), 'text': 'Create Bank'},
+{'url': url('general_ledger:invoice-create'), 'text': 'Invoice create'},
+{'url': url('general_ledger:contact-create'), 'text': 'Contact create'},
+{'url': url('general_ledger:file-upload-create'), 'text': 'Upload statement'}]
+}]
+) }}
+
+{% endblock %}
+

@@ -1,0 +1,1 @@
+from .book_preferences import BookPreferenceModel

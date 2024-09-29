@@ -1,0 +1,45 @@
+{% extends 'gl/base.html.j2' %}
+{% from "gl/macros/subnav.html.j2" import render_subnav %}
+
+{% block title %}Balance Sheet{% endblock %}
+
+
+{% block sub_navbar %}
+
+{{ render_subnav(
+title="Balance Sheet",
+menus=[{"header": "Menu Items", "items": [
+{'url': url('general_ledger:invoice-create'), 'text': 'Invoice'},
+{'url': url('general_ledger:bill-create'), 'text': 'Bill'},
+{'url': url('general_ledger:contact-create'), 'text': 'Contact'}]
+}]
+) }}
+
+{% endblock %}
+
+{% block main %}
+
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+        <div class="card p-4">
+
+   <div class="p-5 mb-4 bg-light rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Balance Sheet</h1>
+        <p class="col-md-8 fs-4">Transations and entries and their associated accounts will be displayed here when the invoice is moved to awaiting approval</p>
+
+      </div>
+    </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

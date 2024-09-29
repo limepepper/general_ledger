@@ -1,0 +1,29 @@
+<!-- Modal -->
+
+<django-formset endpoint="{{ url('general_ledger:contact-create') }}" csrf-token="{{ csrf_token }}">
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add Contact</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {# {{ form_contact.as_p() }} #}
+
+          {{ render_form({"request": request},form_contact,"bootstrap", field_classes="row mb-3",
+          label_classes="col-sm-3",control_classes="col-sm-9") }}
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary"
+            df-click="disable -> submit({add: true}) -> emit('event name') -> reload !~ scrollToError">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</django-formset>

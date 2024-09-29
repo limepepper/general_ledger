@@ -1,0 +1,31 @@
+{% extends 'gl/partials/sub_navbar.html.j2' %}
+
+{% block subnav_right_menu %}
+{% with section_title="Payment Detail" %}
+
+
+<div class="col-6 mx-2 form-payment-state">
+
+  <div class="px-2 ">
+    {% if object.prev_status() %}
+    <form class="" method="post">{% csrf_token %}
+      <input type="hidden" id="state" name="demote" value="{{ object.prev_status() }}">
+      <button type="submit" class="btn btn-primary btn-lg">set: {{ object.prev_status().label
+        }}</button>
+    </form>
+    {% endif %}
+  </div>
+
+  <div class="form-inline-block">
+    {% if object.next_status() %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" id="id_state" name="promote" value="{{ object.next_status() }}">
+      <button type="submit" class="btn btn-primary btn-lg">set: {{ object.next_status().label }}</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endwith %}
+
+{% endblock %}

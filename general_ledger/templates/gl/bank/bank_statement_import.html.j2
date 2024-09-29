@@ -1,0 +1,21 @@
+{% extends 'gl/generic/generic_form.html.j2' %}
+
+{% block title %}Bank Management{% endblock %}
+
+{% block sub_navbar %}
+{% endblock %}
+
+{% block main %}
+
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="col-12 col-md-11 mx-auto">
+      <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p() }}
+      <button type="submit">Import</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

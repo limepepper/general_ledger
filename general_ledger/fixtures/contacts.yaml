@@ -1,0 +1,24 @@
+- model: general_ledger.contact
+  pk: 00151979-d023-425e-b08c-d063187af82a
+  fields:
+    created_at: 2024-09-05 09:24:22.236176+00:00
+    updated_at: 2024-09-05 09:24:22.236197+00:00
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Anthony Miles
+    address: '713 Haley Crossing Suite 815
+
+      East Tommy, MI 14604'
+    phone: 610.670.8026
+    email: douglaspeter@example.org
+    company_number: null
+    is_customer: true
+    is_supplier: true
+    is_demo: false
+    is_vat_registered: true
+    vat_number: null
+    sales_account: null
+    sales_tax_rate: null
+    sales_tax_inclusive: Exc
+    purchases_account: null
+    purchases_tax_rate: null
+    purchases_tax_inclusive: Exc

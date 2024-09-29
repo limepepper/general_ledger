@@ -1,0 +1,29 @@
+<form>
+  <div class="container p-2">
+    <div class="row g-1">
+      <div class="col-5">
+        {# <div class="form-floating"> #}
+          <select class="form-control" id="bankaccount-select-{{ object.id }}" placeholder="select bank account"
+            value="mdo@example.com">
+            <option value="1">Barclays</option>
+            <option value="2">Nat West</option>
+            <option value="3">Savings</option>
+          </select>
+          {# <label for="contact-select-{{ object.id }}">Contact</label> #}
+          {#
+        </div> #}
+      </div>
+      <div class="col-5">
+        {# <div class="form-floating"> #}
+          <input class="form-control" type="text" placeholder="Transaction description"
+            aria-label="default input example" id="description-input-{{ object.id }}">
+          {# <label for="description-input-{{ object.id }}">Transaction description</label> #}
+          {#
+        </div> #}
+      </div>
+      <div class="col-2">
+        <button class="btn btn-primary disabled" type="submit">Go</button>
+      </div>
+    </div>
+  </div>
+</form>

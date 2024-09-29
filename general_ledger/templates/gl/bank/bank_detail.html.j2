@@ -1,0 +1,75 @@
+{% extends 'gl/generic/generic_detail.html.j2' %}
+
+{% block title %}Bank Detail{% endblock %}
+
+{% block sub_navbar %}
+{% with section_title="Bank detail"
+%}
+{% include 'gl/partials/sub_navbar.html.j2' %}
+{% endwith %}
+{% endblock %}
+
+{% block main %}
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+        <div class="card p-4">
+
+          <div class="card-body">
+            <!-- generic object header -->
+            <h1>{{ object._meta.verbose_name.title() }} Detail</h1>
+            <!-- end generic object header -->
+
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Field</th>
+                  <th scope="col">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Edit Link</th>
+                  <td>
+                    {{ object.edit_link|safe }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">import export form</th>
+                  <td>
+                    <a href="/gl/banks/{{ object.id }}/import-form/">Import/Export Form</a>
+                  </td>
+                </tr>
+                {% for field in object._meta.fields %}
+                {% set field_value = object|attr(field.name) %}
+
+                <tr>
+                  <th scope="row">{{ field.name|title }}</th>
+                  <td>
+                    {% if field_value is none %}
+                    <em>None</em>
+                    {% elif field_value is mapping %}
+                    <pre>{{ field_value|pprint }}</pre>
+                    {% elif field_value is iterable and field_value is not string %}
+                    <ul>
+                      {% for item in field_value %}
+                      <li>{{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                    {% else %}
+                    {{ field_value }}
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

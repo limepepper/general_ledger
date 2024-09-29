@@ -1,0 +1,16 @@
+- model: general_ledger.book
+  pk: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    name: Demo Company Ltd
+    owner_id: 1
+    slug: demo-company-ltd
+- model: general_ledger.book
+  pk: fd1bb212-4163-4dea-b3eb-fb2539d9d16c
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    name: Test Company Ltd
+    owner_id: 1
+    slug: test-company-ltd

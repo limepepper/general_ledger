@@ -1,0 +1,9 @@
+
+{{ account.name.center(81) }}
+{{ '-' * 79 }}
+{{ " " * 29 }}{{ "Debit".center(18) }}{{ "Credit".center(18) }}{{ "Balance".center(18) }}
+{% for entry in account.entry_set.all() -%}
+{% if loop.first %}{{ entry.trans_date.strftime('%Y').ljust(38) }}{{ account.currency.rjust(num_width) }}{{ account.currency.rjust(num_width) }}{{ account.currency.rjust(num_width) }}{% endif %}
+{% include 'gl/console/three_col_account_row.j2' -%}
+{% endfor %}
+{{ "\n" }}

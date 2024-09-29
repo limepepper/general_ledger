@@ -1,0 +1,30 @@
+{% extends 'gl/partials/sub_navbar.html.j2' %}
+
+{% block subnav_right_menu %}
+{% with section_title="Invoice Detail" %}
+
+
+<div class="col-6 mx-2 form-invoice-status">
+
+  <div class="px-2">
+    {% if invoice.prev_status and invoice.can_prev() %}
+    <form class="" method="post">{% csrf_token %}
+      <input type="hidden" id="id_status1" name="status" value="{{ invoice.prev_status }}">
+      <button type="submit" class="btn btn-primary btn-lg">set: {{ invoice.prev_status.label
+        }}</button>
+    </form>
+    {% endif %}
+  </div>
+
+  <div class="form-inline-block">
+    {% if invoice.next_status %}
+    <form method="post">{% csrf_token %}
+      <input type="hidden" id="id_status2" name="status" value="{{ invoice.next_status }}">
+      <button type="submit" class="btn btn-primary btn-lg">set: {{ invoice.next_status.label }}</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endwith %}
+
+{% endblock %}

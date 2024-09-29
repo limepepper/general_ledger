@@ -1,0 +1,107 @@
+{% extends 'gl/layouts/generic_detail.html.j2' %}
+
+{% block title %}Payment detail{% endblock %}
+
+{% block sub_navbar %}
+{% with section_title="Payment Detail" %}
+<!-- subnav bar block in payment_detail -->
+{% include 'gl/partials/payments/detail-subnav.html.j2' %}
+<!-- end of subnav bar block in payment_detail -->
+{% endwith %}
+{% endblock %}
+
+
+{% block main %}
+
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+        <div class="card p-4">
+          <div class="card-body">
+            <!-- payment header -->
+            <div class="row border-primary">
+              <div class="col-4">
+                <h1>{{ payment.name}}</h1>
+              </div>
+              <div class="col-8 text-end">
+                {% include 'gl/partials/payments/actions.html.j2' %}
+              </div>
+            </div>
+            <!-- end row -->
+
+            {% with tabs_config={"tabs":[{"slug": "home", "title": "Home","include":"gl/partials/payments/detail-tab-1.html.j2"},{"slug": "technical", "title":
+            "Technical","include":"gl/partials/payments/detail-tab-2.html.j2"},{"slug": "history", "title": "History","include":"gl/partials/payments/detail-tab-3.html.j2"}]} %}
+            {% include 'gl/partials/generic/generic_tabbed.html.j2' %}
+
+            {% endwith %}
+
+
+
+
+            <!-- end of main content block in invoice_detail -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scriptend %}
+
+<script>
+
+var myfunc = function() {
+    // Get all tab buttons
+    const tabButtons = document.querySelectorAll('button.nav-link');
+
+    console.log(tabButtons);
+
+    // Check if there's a stored active tab
+    const storedActiveTab = localStorage.getItem('activeTab');
+    console.log(storedActiveTab);
+
+    if (storedActiveTab) {
+      // Remove active class from all tabs
+      tabButtons.forEach(button => {
+        button.classList.remove('active');
+        button.setAttribute('aria-selected', 'false');
+      });
+
+      // Add active class to the stored active tab
+      const activeButton = document.querySelector(storedActiveTab);
+      if (activeButton) {
+        activeButton.classList.add('active');
+        activeButton.setAttribute('aria-selected', 'true');
+
+        // Activate the corresponding tab content
+        const tabContent = document.querySelector(activeButton.getAttribute('data-bs-target'));
+        if (tabContent) {
+          const tabContents = document.querySelectorAll('.tab-pane');
+          tabContents.forEach(content => {
+            content.classList.remove('show', 'active');
+          });
+          tabContent.classList.add('show', 'active');
+        }
+      }
+    }
+
+    // Add click event listeners to all tab buttons
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        // Store the clicked tab's selector in localStorage
+        localStorage.setItem('activeTab', `#${this.id}`);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    //myfunc();
+  });
+</script>
+
+{% endblock %}

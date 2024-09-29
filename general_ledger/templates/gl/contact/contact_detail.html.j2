@@ -1,0 +1,37 @@
+{% extends 'gl/base.html.j2' %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block sub_navbar %}
+{% with section_title="Contact create"
+%}
+{% include 'gl/partials/sub_navbar.html.j2' %}
+{% endwith %}
+{% endblock %}
+
+{% block main %}
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+        <div class="card p-4">
+          <div class="card-body">
+          <!-- contact header -->
+            <h1>Contact Detail</h1>
+            <p><a href="{{ url('general_ledger:contact-update', contact.pk) }}">edit</a></p>
+          <!-- end contact header -->
+
+            {% with tabs_config={"tabs":[{"slug": "home", "title": "Home","include":"gl/partials/contacts/detail-tab-1.html.j2"},{"slug": "invoices", "title":
+            "Invoices","include":"gl/partials/contacts/detail-tab-2.html.j2"},{"slug": "bills", "title": "Bills","include":"gl/partials/contacts/detail-tab-3.html.j2"},{"slug": "history", "title": "History","include":"gl/partials/contacts/detail-tab-4.html.j2"}]} %}
+            {% include 'gl/partials/generic/generic_tabbed.html.j2' %}
+
+            {% endwith %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

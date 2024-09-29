@@ -1,0 +1,40 @@
+<div class="container mt-3">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Account</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Default Sales account for this invoice is</td>
+        <td>{{ invoice.get_sales_account() }}</td>
+      </tr>
+      <tr>
+        <td>Default Sales var rate for this invoice is</td>
+        <td>{{ invoice.get_sales_vat_rate() }}</td>
+      </tr>
+      <tr>
+        <td>Default Accounts receivable</td>
+        <td>{{ invoice.get_accounts_receivable() }}</td>
+      </tr>
+      <tr>
+        <td>Default VAT account</td>
+        <td>{{ invoice.get_sales_vat_account() }}</td>
+      </tr>
+      <tr>
+        <td>Account</td>
+        <td>{{ invoice.subtotal() }}</td>
+      </tr>
+      <tr>
+        <td>Only total_tax</td>
+        <td>{{ invoice.total_tax() }}</td>
+      </tr>
+      <tr>
+        <td>total receivabke</td>
+        <td>{{ invoice.total_inclusive() }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

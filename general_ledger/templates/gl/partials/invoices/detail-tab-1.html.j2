@@ -1,0 +1,66 @@
+<p>
+              {% if invoice.can_edit() %}
+              <a href="{{ url('general_ledger:invoice-update', object.pk) }}">edit</a>
+              <a href="{{ url('general_ledger:invoice-update2', object.pk) }}">edit2</a>
+              {% endif %}
+
+
+              {% if request.user.is_staff
+              %}<a href="{{ invoice.get_admin_url() }}">admin</a>{% endif %}
+            </p>
+            <p>Contact: {{ invoice.contact }}</p>
+            <p>Date: {{ invoice.date }}</p>
+            <p>Tax Inclusive: {{ invoice.tax_inclusive }}</p>
+            <p>Due Date: {{ invoice.due_date }}</p>
+            <p>Status: {{ invoice.status }}</p>
+            <p>Description: {{ invoice.description }}</p>
+            <div class="row border-primary">
+              <div class="row border-bottom border-primary">
+                <div class="col-4">Details</div>
+                <div class="col-2 text-end">Quantity</div>
+                <div class="col-2 text-end">Unit Price</div>
+                <div class="col-2 text-end">Vat Rate</div>
+                <div class="col-2 text-end">Total</div>
+              </div>
+              {% for item in invoice.invoice_lines.all() %}
+              <div class="row">
+                <div class="col-4">{{ item.description }}</div>
+                <div class="col-2 text-end">{{ item.quantity }}</div>
+                <div class="col-2 text-end">{{ item.unit_price|floatformat(2) }}</div>
+                <div class="col-2 text-end">{{ item.vat_rate.short_name }}</div>
+                <div class="col-2 text-end">{{ item.line_total|floatformat(2) }}</div>
+              </div>
+              {% endfor %}
+              <!-- subtotals -->
+              <div class="row">
+                <div class="col-6"></div>
+                <div class="col-2"></div>
+                <div class="col-2 border-top border-bottom">Subtotal</div>
+                <div class="col-2 text-end border-top border-bottom">{{ invoice.subtotal()|floatformat(2) }}</div>
+              </div>
+              <!-- taxes -->
+              {% for tax_rate, tax_total in invoice.total_by_tax_type().items() %}
+              <div class="row">
+                <div class="col-6"></div>
+                <div class="col-2"></div>
+                <div class="col-2">{{ tax_rate.short_name }}</div>
+                <div class="col-2 text-end">{{ tax_total|floatformat(2) }}</div>
+              </div>
+              {% endfor %}
+              <!-- tax total -->
+              <div class="row">
+                <div class="col-6"></div>
+                <div class="col-2"></div>
+                <div class="col-2 border-top">Tax Total</div>
+                <div class="col-2 text-end border-top">{{ invoice.total_tax()|floatformat(2)}}</div>
+              </div>
+              <!-- end tax total -->
+              <!-- grand total -->
+              <div class="row">
+                <div class="col-6"></div>
+                <div class="col-2"></div>
+                <div class="col-2 border-top">Total</div>
+                <div class="col-2 text-end border-top">{{ invoice.total_inclusive()|curr  }}</div>
+              </div>
+              <!-- end grand total -->
+            </div>

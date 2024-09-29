@@ -1,0 +1,3 @@
+{% for item in invoice.invoice_lines.all() %}
+ {{ item.description }}  {{ item.quantity }}  {{ item.unit_price }}  {{ item.vat_rate.short_name }} {{ item.line_total }}
+{% endfor %}
