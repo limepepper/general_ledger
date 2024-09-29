@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+{% from "gl/macros/subnav.html.j2" import render_subnav %}
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="description" content="{% block metadscription %}GL app{% endblock %}">
+
+  {% block prehead %}
+
+  {% endblock %}
+
+  {# Load CSS and JavaScript #}
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC">
+
+  <link rel="stylesheet" crossorigin="anonymous" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+  <!-- Custom Stylesheet -->
+  <link href="{{ static('gl/css/style.css') }}" rel="stylesheet">
+  <title>{% block title %}Base Title (should never see this){% endblock %}</title>
+
+  <!-- Gridstack CSS -->
+  <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/10.3.1/gridstack.min.css"
+    rel="stylesheet">
+  <!-- Gridstack JS -->
+  <script crossorigin="anonymous"
+    src="https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/10.3.1/gridstack-all.min.js"></script>
+
+
+  <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css">
+
+
+   <link rel="stylesheet" crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- boot strap datatables css -->
+
+{#
+<link crossorigin="anonymous" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.min.css" rel="stylesheet"> #}
+
+  <link crossorigin="anonymous" href="https://cdn.datatables.net/2.1.6/css/dataTables.bootstrap5.css" rel="stylesheet">
+
+{# <link crossorigin="anonymous" href="https://cdn.datatables.net/2.1.6/css/dataTables.jqueryui.min.css" rel="stylesheet"> #}
+
+  {% block extrahead %}
+
+
+
+  {% endblock %}
+
+
+</head>
+
+<body>
+
+
+
+  {% block navbar %}
+
+  {% include 'gl/partials/navbar.html.j2' %}
+
+  {% endblock %}
+
+  {% block sub_navbar %}
+
+  {{ render_subnav() }}
+
+  {% endblock %}
+
+  {% block warnings %}
+{% include 'gl/partials/messages/warnings.html.j2' %}
+  {% endblock %}
+
+  {% block main %}
+
+  <!-- Main Content -->
+  <div class="main-content-container">
+    <div class="container main-content">
+      <div class="row">
+        <div class="col-12 col-md-11 mx-auto">
+          <h1>Default content from base.html</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% endblock %}
+
+  {% block footer %}
+
+  {% include 'gl/partials/footer.html.j2' %}
+
+  {% endblock %}
+
+
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
+<!-- Bootstrap JS + popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <!-- Bootstrap Icons -->
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    rel="stylesheet">
+
+<!-- boot strap tables -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.2/dist/bootstrap-table.min.js"></script>
+
+<!-- data tables -->
+
+  <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+
+  <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js"></script>
+
+{# <script src="https://cdn.datatables.net/2.1.6/js/dataTables.jqueryui.min.js"></script> #}
+
+  {% block scriptend %}
+
+  {% endblock %}
+
+</body>
+
+</html>

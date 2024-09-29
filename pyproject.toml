@@ -1,0 +1,44 @@
+[project]
+name = "general-ledger"
+version = "0.0.1"
+readme = "README.md"
+requires-python = ">=3.10"
+description = "Double entry accounting"
+keywords = ["django", "finance", "bookkeeping", "accounting"]
+authors = [
+    { name = "Tom Hodder", email = "tom@limepepper.co.uk" }
+]
+maintainers = [
+]
+dependencies = [
+    "asgiref>=3.5.2; python_version >= '3.7'",
+    "django>=5.0",
+    "faker>=15.3.3",
+    "markdown>=3.4.1",
+    "ofxtools>=0.9.5",
+    "pillow>=9.3.0",
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/limepepper/general-ledger"
+"Bug Tracker" = "https://github.com/limepepper/general-ledger/issues"
+
+[project.license]
+text = "MIT License"
+
+[project.optional-dependencies]
+dev = ["sphinx~=4.5.0"]
+
+[tool.setuptools]
+packages = ["general_ledger", "dashboard"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "dashboard.settings"

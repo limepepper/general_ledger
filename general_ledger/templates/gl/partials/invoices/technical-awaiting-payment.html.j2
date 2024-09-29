@@ -1,0 +1,9 @@
+<div class="col-md-12">
+  <div class="h-100 p-5 bg-light border rounded-3">
+    <h2>This invoice has been posted</h2>
+    <p>use the bank reconcioliation page to asssign payments to this invoice to mark it paid. Also can raise credit notes or manual payments</p>
+  </div>
+</div>
+
+{% set transactions = invoice.transactions.all() %}
+{% include 'gl/partials/tx/tx-table.html.j2' %}

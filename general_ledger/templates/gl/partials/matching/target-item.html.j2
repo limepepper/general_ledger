@@ -1,0 +1,57 @@
+<div class="container">
+  <ul class="nav nav-tabs" id="myMatchSourceTab-{{ object.id }}" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="match-tab-{{ object.id }}" data-bs-toggle="tab"
+        data-bs-target="#match-tab-pane-{{ object.id }}" type="button" role="tab"
+        aria-controls="match-tab-pane-{{ object.id }}" aria-selected="true">Match</button>
+
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab-{{ object.id }}" data-bs-toggle="tab"
+        data-bs-target="#profile-tab-pane-{{ object.id }}" type="button" role="tab"
+        aria-controls="profile-tab-pane-{{ object.id }}" aria-selected="false">Create</button>
+
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="search-tab-{{ object.id }}" data-bs-toggle="tab"
+        data-bs-target="#search-tab-pane-{{ object.id }}" type="button" role="tab"
+        aria-controls="search-tab-pane-{{ object.id }}" aria-selected="false">Search</button>
+
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="transfer-tab-{{ object.id }}" data-bs-toggle="tab"
+        data-bs-target="#transfer-tab-pane-{{ object.id }}" type="button" role="tab"
+        aria-controls="transfer-tab-pane-{{ object.id }}" aria-selected="false">Transfer</button>
+
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent-{{ object.id }}">
+    <!-- Match tab -->
+    <div class="tab-pane fade show active" id="match-tab-pane-{{ object.id }}" role="tabpanel"
+      aria-labelledby="match-tab-{{ object.id }}" tabindex="0">
+
+      {% include 'gl/partials/matching/target-match-form.html.j2' %}
+
+    </div>
+    <!-- End Match tab -->
+    <!-- Create tab -->
+    <div class="tab-pane fade" id="profile-tab-pane-{{ object.id }}" role="tabpanel"
+      aria-labelledby="profile-tab-{{ object.id }}" tabindex="0">
+      {% include 'gl/partials/matching/target-create-form.html.j2' %}
+    </div>
+    <!-- End Create tab -->
+    <!-- Search tab -->
+    <div class="tab-pane fade" id="search-tab-pane-{{ object.id }}" role="tabpanel" aria-labelledby="search-tab"
+      tabindex="0">
+      {% include 'gl/partials/matching/target-search-form.html.j2' %}
+    </div>
+    <!-- End Search tab -->
+    <!-- Transfer tab -->
+    <div class="tab-pane fade" id="transfer-tab-pane-{{ object.id }}" role="tabpanel" aria-labelledby="transfer-tab"
+      tabindex="0">
+      {% include 'gl/partials/matching/target-xfer-form.html.j2' %}
+    </div>
+    <!-- End Transfer tab -->
+  </div>
+
+</div>

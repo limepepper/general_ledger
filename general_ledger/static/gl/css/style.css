@@ -1,0 +1,207 @@
+/* Ensure the entire page uses Flexbox to keep the footer at the bottom */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #e9ecef;
+}
+
+/* Navbar styles */
+.navbar.bg-primary {
+  background-color: #007bff;
+  /* Bootstrap primary blue color */
+}
+
+
+.navbar-dark .navbar-nav .nav-link,
+.navbar-dark .navbar-brand {
+  color: #ffffff;
+  /* White text for navbar items */
+}
+
+.nav-item.active {
+  background-color: #38af91;
+  /* Pink background for active navbar item */
+}
+
+
+/* Navbar dropdown menu items styles. this is the background
+of the menu that drops */
+.navbar-dark .navbar-nav .dropdown-menu {
+  background-color: #ffffff;
+  /* White background */
+}
+
+.navbar-dark .navbar-nav .dropdown-item {
+  color: #000000;
+  /* Black text */
+}
+
+/* Add hover effect for navbar dropdown items */
+.navbar-dark .navbar-nav .dropdown-item:hover,
+.navbar-dark .navbar-nav .dropdown-item:focus {
+  background-color: #f9f8fa;
+  /* Light gray background on hover */
+  color: #000000;
+  /* Black text on hover */
+}
+
+/* Add hover effect for navbar items */
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-brand:hover {
+  background-color: #e72063;
+  color: #f8f9fa;
+  /* Light gray text on hover */
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .nav-link {
+  color: #000000;
+  /* Black text for sub navbar items */
+}
+
+/* Footer styles */
+footer.bg-light {
+  background-color: #f8f9fa;
+  /* Light grey background for footer */
+}
+
+footer .text-center {
+  color: #000000;
+  /* Black text color for footer */
+}
+
+/* footer .p-3 {
+    background-color: rgba(0, 0, 0, 0.2);
+} */
+
+/* Button and form styles */
+.btn-outline-light {
+  color: #ffffff;
+  /* White text */
+  border-color: #ffffff;
+  /* White border */
+}
+
+.btn-outline-light:hover {
+  color: #000000;
+  /* Black text on hover */
+  background-color: #ffffff;
+  /* White background on hover */
+  border-color: #ffffff;
+  /* White border on hover */
+}
+
+/* Main content area should grow and take up remaining space */
+.main-content {
+  flex: 1 0 auto;
+  /* Flex-grow: 1, Flex-shrink: 0, Flex-basis: auto */
+}
+
+/* Main content card styles */
+.main-content .card {
+  background-color: #f8f9fa;
+  /* Light gray background for the card */
+  border-radius: 0.75rem;
+  /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Drop shadow */
+  /* padding: 20px; */
+  /* Padding inside the card */
+}
+
+/* Background for the main content area */
+.main-content-container {
+  background-color: #e9ecef;
+  /* Light gray background for the container */
+  padding-top: 20px;
+  /* Padding around the card */
+  padding-bottom: 20px;
+  /* Padding around the card */
+}
+
+/* Responsive container for the chart */
+#chart-container {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+#chart {
+  width: 100%;
+}
+
+.invoice-status-container {
+  display: flex;
+  align-items: right;
+}
+
+.form-invoice-status {
+  display: flex;
+}
+
+.form-inline-block {
+  display: flex;
+  align-items: center;
+}
+
+.invoice-status-badge {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 0.4em 0.9em;
+  border-radius: 0.25rem;
+  color: #df2424;
+}
+
+.invoice-status-draft {
+  background-color: #a8d5a8;
+}
+
+/* Light green */
+.invoice-status-awaiting-approval {
+  background-color: #6fcf6f;
+}
+
+/* Medium green */
+.invoice-status-awaiting-payment {
+  background-color: #4caf50;
+}
+
+/* Dark green */
+.invoice-status-paid {
+  background-color: #007bff;
+}
+
+
+
+.form-payment-state {
+  display: flex;
+}
+
+
+/* Blue */
+.chevron-right {
+  display: inline-block;
+  margin-left: -5px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid currentColor;
+}
+
+/* HTML: <div class="chevron"></div> */
+.chevron {
+  --s: 25px;
+  /* control the shape (can be percentage) */
+
+  height: 60px;
+  aspect-ratio: 3/5;
+  clip-path: polygon(0 0, var(--s) 0, 100% 50%, var(--s) 100%, 0 100%, calc(100% - var(--s)) 50%);
+  background: #5E9FA3;
+}
+
+.potential-match {
+  background-color: #8ecfcf;
+  /* Light red */
+}

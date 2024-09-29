@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 0;
+            color: #ff6b6b;
+        }
+        p {
+            font-size: 1.5rem;
+            color: #4a4a4a;
+        }
+        .emoji {
+            font-size: 5rem;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #4ecdc4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #45b7aa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🙃</div>
+        <h1>404</h1>
+        <p>Oops! The page you're looking for is playing hide and seek.</p>
+        <p>We've sent our best detective to find it, but in the meantime...</p>
+        <a href="/" class="back-link">Take me back home!</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 invoice-status-container border">
+      <div class="invoice-status-badge{% if invoice.status == 'DR' %} invoice-status-draft{% endif %}">Draft</div>
+      <div class="chevron"></div>
+      <div class="invoice-status-badge{% if invoice.status == 'AA' %} invoice-status-awaiting-approval{% endif %}">
+        Awaiting Approval</div>
+      <div class="chevron"></div>
+      <div class="invoice-status-badge{% if invoice.status == 'AP' %} invoice-status-awaiting-payment{% endif %}">
+        Awaiting Payment</div>
+      <div class="chevron"></div>
+      <div class="invoice-status-badge{% if invoice.status == 'PD' %} invoice-status-paid{% endif %}">Paid</div>
+    </div>
+  </div>
+</div>

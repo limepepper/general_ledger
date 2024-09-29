@@ -1,0 +1,110 @@
+- name: Accounts Payable
+  code: '100'
+  description: Invoices from suppliers but not yet paid
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: current-liability
+  is_system: '1'
+  currency: GBP
+  slug: accounts-payable
+- name: Accounts Receivable
+  code: '101'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: current-asset
+  is_system: '1'
+  currency: GBP
+  slug: accounts-receivable
+- name: Bank Account
+  code: '102'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: bank
+  is_system: '0'
+  currency: GBP
+  slug: bank-account
+- name: Loan Account
+  code: '103'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: non-current-liability
+  is_system: '0'
+  currency: GBP
+  slug: loan-account
+- name: Sales
+  code: '104'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: 20-vat-on-income
+  type__slug: sales
+  is_system: '1'
+  currency: GBP
+  slug: sales
+- name: Savings Account
+  code: '105'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: bank
+  is_system: '0'
+  currency: GBP
+  slug: savings-account
+- name: Cash
+  code: '106'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: current-asset
+  is_system: '1'
+  currency: GBP
+  slug: cash
+- name: Capital
+  code: '107'
+  description: ''
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: equity
+  is_system: '1'
+  currency: GBP
+  slug: capital
+- name: Purchases
+  code: '500'
+  description: Items bought for the purpose of being resold by the business in the short term
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: 20-vat-on-expenses
+  type__slug: direct-costs
+  is_system: '1'
+  currency: GBP
+  slug: purchases
+- name: General Expenses
+  code: '5000'
+  description: General expenses incurred by the business
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: 20-vat-on-expenses
+  type__slug: overhead
+  is_system: '1'
+  currency: GBP
+  slug: general-expenses
+- name: VAT
+  code: '8000'
+  description: Vat Control Account
+  is_placeholder: '0'
+  is_hidden: '0'
+  tax_rate__slug: no-vat
+  type__slug: current-liability
+  is_system: '1'
+  currency: GBP
+  slug: vat

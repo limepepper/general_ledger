@@ -1,0 +1,38 @@
+{% extends 'gl/base.html.j2' %}
+{% block navbar %}
+
+{% include 'gl/partials/navbar.html.j2' %}
+
+{% endblock %}
+
+{% block main %}
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+        <div class="card p-4">
+          <div class="card-body">
+            <div class="flex flex-col items-center">
+              <h1 class="text-4xl tracking-wide dark:text-white my-4">{{ _("Sign In") }}</h1>
+              <form class="login" method="POST" action="{{ url('account_login') }}">
+                {% csrf_token %}
+                {{ form.as_p() }}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <a class="button secondaryAction" href="{{ url('general_ledger:account_reset_password') }}">{{ _("Forgot Password?")
+                  }}</a>
+                <button class="primaryAction" type="submit">{{ _("Sign In") }}</button>
+              </form>
+
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of Main Content -->
+{% endblock %}

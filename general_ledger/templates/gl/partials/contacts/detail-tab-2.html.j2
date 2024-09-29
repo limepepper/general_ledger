@@ -1,0 +1,21 @@
+<div class="col-md-12">
+  <div class="h-100 p-5 bg-light border rounded-3">
+
+
+{% for status in ["DR", "AA", "AP", "PD"] %}
+{% with object_list = contact.invoice_set.filter(status=status), list_display=["name", "date", "description", "due_date", "is_overdue", "status"] %}
+
+<h1>{{ status|itypelab }} </h1>
+
+{% if object_list %}
+{% include 'gl/partials/generic/generic-list-display.html.j2' %}
+{% else %}
+
+no invoices thing here
+{% endif %}
+{% endwith %}
+
+{% endfor %}
+
+  </div>
+</div>

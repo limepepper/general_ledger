@@ -1,0 +1,120 @@
+- model: general_ledger.accounttype
+  pk: 020d5c7a-9bd2-4840-96b4-3742b5286bc7
+  fields:
+    description: ''
+    slug: current-asset
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Current Asset
+    category: A
+- model: general_ledger.accounttype
+  pk: 0dfa4a29-09e5-4022-b855-404f10fe1c42
+  fields:
+    description: ''
+    slug: sales
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Sales
+    category: R
+- model: general_ledger.accounttype
+  pk: 19d9ea45-4564-4f3e-b7dd-c4a93cee5a98
+  fields:
+    description: ''
+    slug: prepayment
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Prepayment
+    category: A
+- model: general_ledger.accounttype
+  pk: 1c1f6254-0abb-426f-b92a-96a55ce1e1ac
+  fields:
+    description: ''
+    slug: other-income
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Other Income
+    category: R
+- model: general_ledger.accounttype
+  pk: 2e07f017-6508-4538-bd2e-6b54a7d411bb
+  fields:
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Current Liability
+    slug: current-liability
+    category: L
+- model: general_ledger.accounttype
+  pk: 46dcba82-3bf0-4288-8c58-a90f917938cb
+  fields:
+    description: ''
+    slug: direct-costs
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Direct Costs
+    category: X
+- model: general_ledger.accounttype
+  pk: 5eb1f56a-abfc-462a-bb15-fb1861ff0a4e
+  fields:
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Bank
+    slug: bank
+    category: A
+- model: general_ledger.accounttype
+  pk: 6e79b603-ba41-4ff0-b4bf-a2ce6ee6828a
+  fields:
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Expense
+    slug: expense
+    category: X
+- model: general_ledger.accounttype
+  pk: 75a2d05a-cb0e-417c-bb70-66abb1e7af4a
+  fields:
+    description: ''
+    slug: equity
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Equity
+    category: E
+- model: general_ledger.accounttype
+  pk: afbc808b-78d2-4fdc-8eb9-83db3d30e83e
+  fields:
+    description: ''
+    slug: unpaid-expense-claim
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Unpaid Expense Claims
+    category: L
+- model: general_ledger.accounttype
+  pk: bbef0fa2-1b61-4bce-8631-976d8e82e944
+  fields:
+    description: ''
+    slug: depreciation
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Depreciation
+    category: X
+- model: general_ledger.accounttype
+  pk: d5d12848-1e9a-4807-8ccd-b8a32fbff811
+  fields:
+    description: ''
+    slug: inventory
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Inventory
+    category: A
+- model: general_ledger.accounttype
+  pk: dab895be-e395-4fb9-a946-9a1d4add9d6b
+  fields:
+    description: ''
+    slug: overhead
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Overhead
+    category: X
+- model: general_ledger.accounttype
+  pk: e6ec274d-4b49-4a20-99c2-997a41fb5125
+  fields:
+    description: ''
+    slug: non-current-asset
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Non-current Asset
+    category: A
+- model: general_ledger.accounttype
+  pk: fb4547f5-50be-4723-a05e-debf20eb5905
+  fields:
+    description: ''
+    slug: non-current-liability
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Non-current Liability
+    category: L

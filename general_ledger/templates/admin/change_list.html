@@ -1,0 +1,69 @@
+<!-- Create a new file: templates/admin/change_list.html -->
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  #changelist-filter h2 {
+      cursor: pointer;
+      padding: 8px 15px;
+      margin: 0;
+      background: #79aec8;
+      color: #fff;
+      font-size: 14px;
+  }
+  #changelist-filter .filter-content {
+      display: none;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      background: #fff;
+  }
+  #changelist-filter.expanded .filter-content {
+      display: block;
+  }
+  #changelist-filter {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1000;
+      width: 200px;
+  }
+  #changelist {
+      position: relative;
+  }
+</style>
+{% endblock %}
+
+{% block filters %}
+{% if cl.has_filters %}
+<div id="changelist-filter">
+  <h2>Filter</h2>
+  <div class="filter-content">
+    {{ block.super }}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var filterHeader = document.querySelector('#changelist-filter h2');
+      var filterContent = document.querySelector('#changelist-filter .filter-content');
+
+      filterHeader.addEventListener('click', function() {
+          document.getElementById('changelist-filter').classList.toggle('expanded');
+      });
+
+      // Close filter dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+          var isClickInside = filterHeader.contains(event.target) || filterContent.contains(event.target);
+          if (!isClickInside) {
+              document.getElementById('changelist-filter').classList.remove('expanded');
+          }
+      });
+  });
+</script>
+{% endblock %}

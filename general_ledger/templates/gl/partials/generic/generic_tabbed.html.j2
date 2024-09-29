@@ -1,0 +1,19 @@
+<!-- generic tabbed template -->
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  {% for tab in tabs_config["tabs"] %}
+  <li class="nav-item" role="presentation">
+    <button class="nav-link {% if loop.first %}active{% endif %}" id="pills-{{ tab.slug }}-tab" data-bs-toggle="pill"
+      data-bs-target="#pills-{{ tab.slug }}" type="button" role="tab" aria-controls="pills-home" aria-selected="true">{{
+      tab.title }}</button>
+  </li>
+  {% endfor %}
+</ul>
+<div class="tab-content" id="tabbed-content">
+  {% for tab in tabs_config["tabs"] %}
+  <div class="tab-pane fade show {% if loop.first %}active{% endif %}" id="pills-{{ tab.slug }}" role="tabpanel"
+    aria-labelledby="tabbed-tab-1">
+    {% include tab.include %}
+  </div>
+  {% endfor %}
+</div>
+<!-- end of generic tabbed template -->

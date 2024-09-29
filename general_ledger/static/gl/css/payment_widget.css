@@ -1,0 +1,74 @@
+.invoice-line {
+  display: flex;
+  flex-direction: row;
+  background-color: #e9ecef;
+}
+
+ul.invoice-line {
+  list-style: none;
+}
+
+.empty-form {
+  display: none;
+}
+
+
+
+.form-number {
+  width: 6em;
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+}
+/*
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+  appearance: none;
+} */
+
+/* .invoice-form-as-table select,
+.invoice-form-as-table input {
+  width: 100%
+} */
+
+/* .invoice-form-as-table div {
+  display: flex;
+
+} */
+
+.invoice-form-as-table div {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.invoice-form-as-table label {
+  vertical-align: top;
+}
+
+.invoice-form-as-table div {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* @media (min-width: 600px) {
+  .invoice-form-as-table div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .invoice-form-as-table div {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .invoice-form-as-table div {
+    grid-template-columns: repeat(4, 1fr);
+  }
+} */

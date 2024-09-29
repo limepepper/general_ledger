@@ -1,0 +1,58 @@
+{% extends 'gl/base.html.j2' %}
+
+{% block title %}Chart of Accounts{% endblock %}
+
+{% block sub_navbar %}
+{% with section_title="Account list"
+%}
+{% include 'gl/partials/sub_navbar.html.j2' %}
+{% endwith %}
+{% endblock %}
+
+{% block main %}
+
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="col-12 col-md-11 mx-auto">
+      <div class="row">
+
+        <div class="card p-4">
+          <table id="table-contact-list" class="table table-striped">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for accounts in accounts %}
+
+              <tr>
+                <td>{{ accounts.code }}</td>
+                <td>{{ accounts.name }}</td>
+                <td>{{ accounts.type }}</td>
+                <td>{{ accounts.type.get_category_display() }}</td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- django pagination controls -->
+        {% include 'gl/partials/contacts/list-pagination.html.j2' %}
+        <!-- end django pagination controls -->
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

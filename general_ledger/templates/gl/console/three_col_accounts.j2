@@ -1,0 +1,7 @@
+Three column accounts for this ledger "{{ ledger.name }}"
+{%
+set num_width = 12
+-%}
+{% for account in accounts -%}
+{% if account.entry_set.all().count() > 0 %}{% include 'gl/console/three_col_account.j2' -%}{% endif -%}
+{% endfor %}

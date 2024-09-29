@@ -1,0 +1,37 @@
+<p>
+  {% if object.can_edit() %}
+  <a href="{{ url('general_ledger:payment-update', object.pk) }}">edit</a>
+  {% endif %}
+
+
+  {% if request.user.is_staff
+  %}<a href="{{ object.get_admin_url() }}">admin</a>{% endif %}
+</p>
+<p>Date: {{ object.date }}</p>
+<p>State: {{ object.state }}</p>
+<p>Description: {{ object.description }}</p>
+<div class="row border-primary">
+  <div class="row border-bottom border-primary">
+    <div class="col text-end">From account</div>
+    <div class="col text-end">From type</div>
+    <div class="col text-end">To Account</div>
+    <div class="col text-end">to type</div>
+    <div class="col text-end">Amount</div>
+  </div>
+  {% for item in object.items.all() %}
+  <div class="row">
+    <div class="col text-end">{{ item.from_account }}</div>
+    <div class="col text-end">{{ item.from_content_type }}</div>
+    <div class="col text-end">{{ item.to_account }}</div>
+    <div class="col text-end">{{ item.to_content_type }}</div>
+    <div class="col text-end">{{ item.amount }}</div>
+  </div>
+  {% endfor %}
+  <!-- subtotals -->
+  <div class="row">
+    <div class="col-6"></div>
+    <div class="col-2"></div>
+    <div class="col-2 border-top border-bottom">amount</div>
+    <div class="col-2 text-end border-top border-bottom">{{ object.amount }}</div>
+  </div>
+</div>

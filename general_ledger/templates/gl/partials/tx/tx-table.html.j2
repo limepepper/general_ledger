@@ -1,0 +1,47 @@
+{% for transaction in transactions %}
+
+<div class="container mt-3">
+  <table>
+    <thead>
+      <tr>
+        <th>Transaction</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Description</td>
+        <td>{{ transaction.description }}</td>
+      </tr>
+      <tr>
+        <td>Is posted</td>
+        <td>{{ transaction.is_posted }}</td>
+      </tr>
+
+    </tbody>
+  </table>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>account code</th>
+        <th>Type</th>
+        <th>tx type</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in transaction.entry_set.all() %}
+      <tr>
+        <td>{{ entry.account.name }}</td>
+        <td>{{ entry.account.code }}</td>
+        <td>{{ entry.account.type }}</td>
+        <td>{{ entry.tx_type_enum.label }}</td>
+        <td>{{ entry.amount|curr }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endfor %}
