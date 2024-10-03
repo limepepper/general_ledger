@@ -10,11 +10,6 @@ from django.contrib.auth import get_user_model
 from general_ledger.factories.bank_transactions import BankTransactionFactory
 from general_ledger.factories.invoice import InvoiceFactory
 
-handler = GelfUdpHandler(host="localhost", port=12201)
-
-logger.add(handler, serialize=True)
-
-
 from general_ledger.management.utils import (
     get_book,
     get_or_create_customers,
@@ -64,9 +59,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
-        logger.trace("handle in command")
-
-        inspect(logger)
+        logger.info("===========Generating Financial Data==========")
 
         user = get_user_model().objects.get(username=kwargs["user"])
         book = get_book(kwargs["book"])

@@ -9,16 +9,13 @@ from formset.widgets import Selectize
 
 from general_ledger.models import Contact, Account, TaxRate
 
-dLogger = logging.getLogger("form-debug")
-dLogger.setLevel(logging.DEBUG)
-
 
 class ContactUpdateForm(
     models.ModelForm,
 ):
 
     logger = logging.getLogger(__name__)
-    dLogger.debug("ContactUpdateForm : start")
+    logger.debug("ContactUpdateForm : start")
 
     class Meta:
         model = Contact
@@ -40,7 +37,7 @@ class ContactUpdateForm(
     )
 
     def __init__(self, *args, **kwargs):
-        dLogger.debug("ContactUpdateForm : __init__")
+        self.logger.debug("ContactUpdateForm : __init__")
         request = kwargs.pop("request", None)
         super().__init__(*args, **kwargs)
 

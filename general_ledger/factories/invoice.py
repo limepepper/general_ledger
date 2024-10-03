@@ -8,13 +8,18 @@ from factory.django import DjangoModelFactory
 
 from general_ledger.models import Invoice, InvoiceLine
 from general_ledger.models.tax_inclusive import TaxInclusive
+from faker import Faker
 
 
 def get_random_tax_rate_for_book(book):
     return random.choice(book.tax_rates.all().filter(tax_type__name="Sales"))
 
 
+fake = Faker()
+
+
 class InvoiceFactory(DjangoModelFactory):
+
     class Meta:
         model = Invoice
         skip_postgeneration_save = True
@@ -23,11 +28,7 @@ class InvoiceFactory(DjangoModelFactory):
     ledger = SubFactory("general_ledger.factories.LedgerFactory")
 
     description = factory.Faker("sentence", nb_words=6)
-    invoice_number = factory.Faker(
-        "random_number",
-        digits=8,
-        fix_len=True,
-    )
+
     contact = factory.SubFactory(
         "general_ledger.factories.ContactFactory",
         book=factory.SelfAttribute("..ledger.book"),
@@ -35,10 +36,25 @@ class InvoiceFactory(DjangoModelFactory):
         is_supplier=False,
     )
 
+    invoice_number = factory.LazyAttribute(
+        lambda p: "{}{}".format(
+            "INV-",
+            fake.random_number(
+                digits=6,
+                fix_len=True,
+            ),
+        )
+    )
+
     tax_inclusive = factory.LazyFunction(
         lambda: random.choice([choice.value for choice in TaxInclusive])
     )
-    date = factory.Faker("date_between", start_date="-2y", end_date="today")
+
+    date = factory.Faker(
+        "date_between",
+        start_date="-2y",
+        end_date="today",
+    )
 
     due_date = factory.LazyAttribute(
         lambda con_factory: con_factory.date + timedelta(30)
@@ -70,13 +86,14 @@ class InvoiceLineFactory(DjangoModelFactory):
     class Meta:
         model = InvoiceLine
 
-    invoice = factory.SubFactory("general_ledger.factories.InvoiceFactory")
+    invoice = factory.SubFactory(
+        "general_ledger.factories.InvoiceFactory",
+    )
     description = factory.Faker("sentence", nb_words=6)
     quantity = LazyAttribute(lambda _: random.randint(1, 10))
-    # unit_price = FuzzyDecimal(10, 1000, 2)
-    unit_price = factory.Faker(
-        "pydecimal", left_digits=3, right_digits=2, positive=True
-    )
+    # unit_price = factory.Faker(
+    #     "pydecimal", left_digits=3, right_digits=2, positive=True
+    # )
     vat_rate = LazyAttribute(
         lambda o: o.invoice.ledger.book.taxrate_set.filter(tax_type__name="Sales")
         .order_by("?")

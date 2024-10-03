@@ -1,7 +1,7 @@
-import logging
-
 import yaml
+from loguru import logger
 
+from dashboard import settings
 from general_ledger.models.ledger import Ledger
 from general_ledger.models.account import Account
 from general_ledger.models.account_type import AccountType
@@ -14,8 +14,6 @@ from general_ledger.models.tax_type import (
 
 class BookHelper:
 
-    logger = logging.getLogger(__name__)
-
     def __init__(self, book):
         self.book = book
 
@@ -23,7 +21,7 @@ class BookHelper:
         return self.book
 
     def init_data(self):
-        self.logger.debug("init_data")
+        logger.debug("init_data")
         self.init_default_coa()
         self.init_default_ledger()
         self.init_tax_types()
@@ -33,7 +31,7 @@ class BookHelper:
         self.init_default_accounts()
 
     def init_default_coa(self):
-        self.logger.debug("====== initializing default CoA ======")
+        logger.debug("====== initializing default CoA ======")
         obj, created = ChartOfAccounts.objects.update_or_create(
             slug="default",
             book=self.book,
@@ -44,11 +42,13 @@ class BookHelper:
                 "is_hidden": False,
             },
         )
-        self.logger.debug(f"====== obj: {obj} created: {created}")
+        logger.debug(f"====== obj: {obj} created: {created}")
 
     def init_tax_types(self):
-        self.logger.debug("init_tax_types")
-        with open("general_ledger/fixtures/tax_types.yaml", "r") as file:
+        logger.debug("init_tax_types")
+        with open(
+            settings.BASE_DIR / "general_ledger/fixtures/tax_types.yaml", "r"
+        ) as file:
             tax_types = yaml.safe_load(file)
             for tax_type in tax_types:
                 # print(tax_type)
@@ -62,21 +62,23 @@ class BookHelper:
                         "slug": tax_type["fields"].get("slug", None),
                     },
                 )
-                self.logger.debug(f"created: {created} tax_type: {obj}")
+                logger.debug(f"created: {created} tax_type: {obj}")
                 # TaxType.objects.create(
                 #     name=tax_type['name'],
                 #     book=self,
                 # )
 
     def init_tax_rates(self):
-        self.logger.debug("init tax rates")
-        with open("general_ledger/fixtures/tax_rates_2.yaml", "r") as file:
+        logger.debug("init tax rates")
+        with open(
+            settings.BASE_DIR / "general_ledger/fixtures/tax_rates_2.yaml", "r"
+        ) as file:
             tax_rates = yaml.safe_load(file)
             for tax_rate in tax_rates:
                 # print(tax_type)
                 # print(tax_type["fields"]["name"])
-                self.logger.debug("==============")
-                self.logger.debug(tax_rate)
+                logger.debug("==============")
+                logger.debug(tax_rate)
                 obj, created = TaxRate.objects.update_or_create(
                     name=tax_rate["name"],
                     tax_type=TaxType.objects.get(
@@ -96,15 +98,17 @@ class BookHelper:
                         "slug": tax_rate["slug"],
                     },
                 )
-                self.logger.debug(f"created: {created} tax_rate: {obj}")
+                logger.debug(f"created: {created} tax_rate: {obj}")
 
     def init_account_types(self):
-        self.logger.debug("====== initializing account types ======")
-        with open("general_ledger/fixtures/account_types.yaml", "r") as file:
+        logger.debug("====== initializing account types ======")
+        with open(
+            settings.BASE_DIR / "general_ledger/fixtures/account_types.yaml", "r"
+        ) as file:
             account_types = yaml.safe_load(file)
             for account_type in account_types:
-                self.logger.debug(account_type)
-                self.logger.debug(account_type["fields"]["name"])
+                logger.debug(account_type)
+                logger.debug(account_type["fields"]["name"])
                 obj, created = AccountType.objects.update_or_create(
                     name=account_type["fields"]["name"],
                     book=self.book,
@@ -113,17 +117,19 @@ class BookHelper:
                         "slug": account_type["fields"].get("slug", None),
                     },
                 )
-                self.logger.debug(f"created: {created}")
+                logger.debug(f"created: {created}")
 
     def init_default_accounts(self):
-        self.logger.debug("====== initializing default accounts ======")
-        with open("general_ledger/fixtures/Account-2024-08-27.yaml", "r") as file:
+        logger.debug("====== initializing default accounts ======")
+        with open(
+            settings.BASE_DIR / "general_ledger/fixtures/Account-2024-08-27.yaml", "r"
+        ) as file:
             accounts = yaml.safe_load(file)
             for account in accounts:
-                self.logger.debug("==============")
-                self.logger.debug(account)
-                self.logger.debug(f"tax_rate__slug: {account['tax_rate__slug']}")
-                self.logger.debug(f"self: {self}")
+                logger.debug("==============")
+                logger.debug(account)
+                logger.debug(f"tax_rate__slug: {account['tax_rate__slug']}")
+                logger.debug(f"self: {self}")
                 # @TODO this should be update or create
                 obj, created = Account.objects.update_or_create(
                     name=account["name"],
@@ -144,10 +150,10 @@ class BookHelper:
                         "slug": account["slug"] if "slug" in account else None,
                     },
                 )
-                self.logger.debug(f"created: {created}")
+                logger.debug(f"created: {created}")
 
     def init_default_ledger(self):
-        self.logger.debug("====== initializing default ledger ======")
+        logger.debug("====== initializing default ledger ======")
         obj, created = Ledger.objects.get_or_create(
             name="General Ledger",
             slug="general-ledger",
@@ -158,4 +164,4 @@ class BookHelper:
                 "is_hidden": False,
             },
         )
-        self.logger.debug(f"obj: {obj} created: {created}")
+        logger.debug(f"obj: {obj} created: {created}")

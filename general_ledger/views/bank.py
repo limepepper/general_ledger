@@ -56,11 +56,11 @@ class BankUpdateView(
     logger = logging.getLogger(__name__)
 
     success_message = "%(name)s was updated successfully"
+    success_url = reverse_lazy("general_ledger:bank-list")
 
     model = Bank
     template_name = "gl/bank/bank_form.html.j2"
     form_class = BankForm
-    success_url = reverse_lazy("general_ledger:bank-list")
 
     extra_context = {
         "click_actions": "disable -> submit({add: true}) -> proceed !~ scrollToError",

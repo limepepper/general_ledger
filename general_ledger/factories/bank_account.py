@@ -5,25 +5,9 @@ from factory.django import DjangoModelFactory
 from faker import Faker
 
 from general_ledger.factories.account import AccountFactory
+from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.faker_utils import rand_sort_code, suffixes
 from general_ledger.models import Bank
-
-
-def rand_sort_code(_):
-    return f"{randint(0, 99):02d}-{randint(0, 99):02d}-{randint(0, 99):02d}"
-
-
-suffixes = [
-    "Bank",
-    "National Bank",
-    "Savings and Loans",
-    "Mutual",
-    "Credit Union",
-]
-
-
-def rand_bankish_name():
-    return f"{factory.Faker('company')} {factory.Faker('random_element',  elements=suffixes)}"
-
 
 fake = Faker()
 
@@ -33,21 +17,21 @@ class BankAccountFactory(DjangoModelFactory):
         model = Bank
         # django_get_or_create = ("name",)
 
+    book = factory.SubFactory("general_ledger.factories.book.BookFactory")
+
     name = factory.LazyAttribute(
         lambda p: "{} {}".format(fake.company(), fake.random_element(elements=suffixes))
     )
 
-    account_number = factory.Faker(
-        "random_number",
-        digits=8,
-        fix_len=True,
+    account_number = factory.LazyAttribute(
+        lambda _: f"{fake.random_number(digits=8, fix_len=True):08d}"
     )
-    # sort_code = factory.LazyAttribute(
-    #     lambda _: f"{factory.Faker('random_number', digits=2, fix_len=True)}"
-    # )
+
     sort_code = factory.LazyAttribute(rand_sort_code)
 
-    book = factory.SubFactory("general_ledger.factories.book.BookFactory")
+    type = factory.Faker(
+        "random_element", elements=[choice for choice in Bank.TYPE_CHOICES]
+    )
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):
@@ -66,3 +50,12 @@ class BankAccountFactory(DjangoModelFactory):
         if "account" in kwargs and isinstance(kwargs["account"], dict):
             kwargs["account"] = AccountFactory(**kwargs["account"])
         return super().create(**kwargs)
+
+    @classmethod
+    def create_with_transactions(cls, num_transactions=0, **kwargs):
+        bank = cls.create(**kwargs)
+        BankTransactionFactory.create_batch(
+            num_transactions,
+            bank=bank,
+        )
+        return bank

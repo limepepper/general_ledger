@@ -1,17 +1,13 @@
-import logging
-from decimal import Decimal
-
 from django.db import models
-from django.urls import reverse
-from django.utils.html import format_html
+from loguru import logger
+from rich import inspect
 
 from general_ledger.models import Account, TaxRate, AccountType
-from general_ledger.models.mixins import LinksMixin
-from general_ledger.models.mixins import (
-    UuidMixin,
-    CreatedUpdatedMixin,
-    SlugMixin,
-)
+
+
+# LOGGING_CONSOLE = Console(
+#     file=sys.stderr,
+# )
 
 
 class BankManager(models.Manager):
@@ -27,39 +23,70 @@ class BankManager(models.Manager):
             is_active=True,
         )
 
+    def filter_kwargs(self, **kwargs):
+        # Account = apps.get_model('general_ledger', 'Account')
+        model_fields = [field.name for field in self.model._meta.get_fields()]
+        filtered_kwargs = {
+            key: value for key, value in kwargs.items() if key in model_fields
+        }
+        return filtered_kwargs
+
     def create_with_account(
         self,
-        name,
         book,
-        account_number,
-        sort_code,
-        code=None,
+        bank_id=None,
         **kwargs,
     ):
-        coa = book.get_default_coa()
-        account, created = Account.objects.get_or_create(
-            name=name,
-            coa=coa,
-            tax_rate=TaxRate.objects.get(
+        """
+        Create a Bank instance with an associated Account instance
+        """
+
+        bank_type = kwargs.pop("type", None)
+
+        filtered_account_kwargs = Account.objects.filter_kwargs(**kwargs)
+        # inspect(filtered_account_kwargs, title="filtered_account_kwargs")
+        account_defaults = {
+            "name": kwargs.get("name"),
+            "tax_rate": TaxRate.objects.get(
                 slug="no-vat",
                 book=book,
             ),
-            type=AccountType.objects.get(
+            "type": AccountType.objects.get(
                 name="Bank",
                 book=book,
             ),
-            **kwargs,
+            "coa": book.get_default_coa(),
+        }
+        account_defaults.update(filtered_account_kwargs)
+
+        # logger.debug(account_defaults)
+
+        # inspect(bank_id, title="bank_id")
+        if bank_id:
+            try:
+                existing_pk = Account.objects.get(bank_account=bank_id).pk
+            except Account.DoesNotExist:
+                existing_pk = None
+        else:
+            existing_pk = None
+
+        account, account_created = Account.objects.update_or_create(
+            id=existing_pk,
+            defaults=account_defaults,
         )
 
-        bank, created = self.get_or_create(
-            name=name,
+        filtered_bank_kwargs = self.filter_kwargs(**kwargs)
+        if bank_type:
+            filtered_bank_kwargs.update({"type": bank_type})
+        bank, bank_created = self.update_or_create(
+            id=bank_id,
             book=book,
-            account_number=account_number,
-            sort_code=sort_code,
-            id=account,
-            **kwargs,
+            account=account,
+            defaults=filtered_bank_kwargs,
         )
-        return (
-            bank,
-            account,
+
+        logger.info(
+            f"Bank: '{bank}' / [{bank_created}] Account: '{account}' / [{account_created}]"
         )
+
+        return bank

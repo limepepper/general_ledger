@@ -1,18 +1,11 @@
 import logging
 
 from django import forms
-from django.forms import (
-    UUIDField,
-    HiddenInput,
-)
-from formset.widgets import Selectize
-from django.forms import models
 from django.db import transaction
+from rich import inspect
+
 from general_ledger.models import (
     Bank,
-    Account,
-    TaxRate,
-    AccountType,
 )
 
 
@@ -26,7 +19,7 @@ class BankForm(
     class Meta:
         model = Bank
         fields = "__all__"
-        exclude = ["book"]
+        exclude = ["book", "account", "slug", "id"]
 
     def __init__(self, *args, **kwargs):
         self.logger.debug(f"BankForm kwargs: {args} {kwargs}")
@@ -40,37 +33,27 @@ class BankForm(
         else:
             raise ValueError("No book found")
 
-        self.fields["id"].queryset = Account.objects.for_book(self.book)
-
-    id = models.ModelChoiceField(
-        queryset=Account.objects.none(),
-        widget=Selectize(
-            search_lookup="name__icontains",
-        ),
-        required=False,
-    )
-
     @transaction.atomic
     def save(self, commit=True):
-        # First, create the Account instance
-        account = Account.objects.create(
-            name=self.cleaned_data["name"],
-            coa=self.book.get_default_coa(),
-            tax_rate=TaxRate.objects.get(
-                slug="no-vat",
-                book=self.book,
-            ),
-            type=AccountType.objects.get(
-                name="Bank",
-                book=self.book,
-            ),
+        if not commit:
+            raise ValueError("Cannot save without commit=True")
+        # inspect(self.instance, title=f"self.instance {self.instance._meta.model=}")
+
+        # inspect(self.instance, title="self.instance1")
+
+        # @TODO can just call is valid?
+        bank_account = super().save(commit=False)
+
+        # inspect(self.instance, title="self.instance2")
+
+        # inspect(bank_account, title="bank_account")
+
+        # is_new = not Bank.objects.filter(pk=self.instance.pk).exists()
+
+        bank = Bank.objects.create_with_account(
+            book=self.book,
+            bank_id=self.instance.pk,
+            **self.cleaned_data,
         )
 
-        # Now, create the BankAccount instance
-        bank_account = super().save(commit=False)
-        bank_account.id = account
-
-        if commit:
-            bank_account.save()
-
-        return bank_account
+        return bank

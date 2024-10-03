@@ -70,7 +70,7 @@ class InvoiceDetailView(
         print("InvoiceDetailView - calling get_context_data")
         data = super().get_context_data(**kwargs)
         inspect(self.object)
-        inspect(self.object.history.all())
+        # inspect(self.object.history.all())
         historical_records = HistoryView.get_history_queryset(
             self.request,
             history_manager=self.object.history,
@@ -230,7 +230,3 @@ class InvoiceCreateView(
         else:
             return self.form_invalid
         return redirect("general_ledger:invoice-detail", pk=invoice.pk)
-
-
-dLogger = logging.getLogger("form-debug")
-dLogger.setLevel(logging.DEBUG)

@@ -5,7 +5,7 @@ from decimal import Decimal
 from loguru import logger
 from rich import print, inspect
 
-from general_ledger.builders.invoice import InvoiceBuilder
+from general_ledger.builders.invoice_builder import InvoiceBuilder
 from general_ledger.models import (
     Ledger,
     Payment,
@@ -131,7 +131,7 @@ class PaymentBuilder(PaymentBuilderAbstract):
             payment_item = self.payment.items.create(
                 amount=item["from_object"].amount,
                 from_object=item["from_object"],
-                from_account=item["from_object"].bank.id,
+                from_account=item["from_object"].bank.account,
                 to_object=item["to_object"],
                 to_account=item["to_object"].get_accounts_receivable(),
             )

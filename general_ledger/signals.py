@@ -15,8 +15,10 @@ from general_ledger.models import (
 from general_ledger.models.invoice_transaction import InvoiceTransaction
 
 
+# @TODO replace this with xstate machine
 @receiver(pre_save, sender=Invoice)
 def store_previous_status(sender, instance, **kwargs):
+    logger.trace("storing previous status for invoice")
     if instance.pk:
         try:
             instance._previous_status = Invoice.objects.get(pk=instance.pk).status
@@ -31,7 +33,7 @@ def trigger_invoice_processing(
     sender, instance, created, raw, using, update_fields, **kwargs
 ):
 
-    logger.info("handling post save signal for invoice")
+    logger.trace("handling post save signal for invoice")
     if not created and hasattr(instance, "_previous_status"):
         if instance.status != instance._previous_status:
             logger.info("handling state change for invoice")
@@ -47,7 +49,7 @@ def process_invoice_state_change(
     current_status,
     previous_status,
 ):
-    logger.info(
+    logger.debug(
         f"Invoice state change {invoice_pk} : {previous_status} -> {current_status}"
     )
     invoice_helper = InvoiceHelper(pk=invoice_pk)
@@ -58,7 +60,7 @@ def process_invoice_state_change(
 @receiver(post_save, sender=InvoiceLine)
 @receiver(post_delete, sender=InvoiceLine)
 def update_invoice_total(sender, instance, **kwargs):
-    print(f"calling post delete signal in invoice line")
+    logger.debug(f"calling post delete signal in invoice line")
     instance.invoice.recalculate_total()
     instance.invoice.save()
 
@@ -74,7 +76,7 @@ def update_payment_total(sender, instance, **kwargs):
 @receiver(pre_transition, sender=Payment)
 def payment_state_change(sender, instance, name, source, target, **kwargs):
     # inspect(logger)
-    logger.info(f"Payment state change {source} -> {target}")
+    logger.debug(f"Payment state change {source} -> {target}")
     # print("Payment state change")
 
 
@@ -83,7 +85,7 @@ def delete_related_transaction(sender, instance, **kwargs):
     try:
         txs = Transaction.objects.get(id=instance.transaction.id)
         txs.delete()
-        inspect(txs)
+        logger.debug(txs)
     except Transaction.DoesNotExist:
         pass  # No related transaction found, nothing to do
 

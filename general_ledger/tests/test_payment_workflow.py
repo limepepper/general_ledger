@@ -1,22 +1,13 @@
-from django.test import TestCase
-from uuid import uuid4, UUID
-
-
-import logging
-
-from rich import inspect
-
 from general_ledger.factories.bank_transactions import BankTransactionFactory
 from general_ledger.factories.invoice import InvoiceFactory
-from general_ledger.models import Book, Ledger, Payment, Bank
+from general_ledger.models import Book, Payment, Bank
 from general_ledger.models.document_status import DocumentStatus
 from general_ledger.tests import GeneralLedgerBaseTest
 
 
-# Create your tests here.
 class PaymentWorkflowTests(GeneralLedgerBaseTest):
 
-    def test_simple(self):
+    def test_payment_workflow_simple_1(self):
         book = Book.objects.first()
         ledger = book.get_default_ledger()
         bank = Bank.objects.filter(type=Bank.CHECKING).first()
@@ -35,7 +26,7 @@ class PaymentWorkflowTests(GeneralLedgerBaseTest):
         payment.items.create(
             amount=100,
             from_object=tx,
-            from_account=tx.bank.id,
+            from_account=tx.bank.account,
             to_object=invoice,
             to_account=invoice.get_accounts_receivable(),
         )

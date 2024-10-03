@@ -67,7 +67,7 @@ class TestChap4Woods(GeneralLedgerBaseTest):
             )[0],
         )
 
-        self.logger.info(purchases)
+        self.logger.debug(purchases)
 
         tb1 = TransactionBuilder(ledger=ledger, description="Pay postage with cash")
         tb1.set_trans_date("2024-06-1")
@@ -102,7 +102,7 @@ class TestChap4Woods(GeneralLedgerBaseTest):
         #
         # # self.logger.info(f"calling save in transaction: {ledger}")
         lh = LedgerHelper(ledger)
-        self.logger.info(lh.get_account_summary())
+        self.logger.debug("\n" + lh.get_account_summary())
 
     def test_4_7(self):
         """

@@ -4,6 +4,7 @@ from factory import post_generation, SubFactory
 from faker import Faker
 
 from general_ledger.models import Book
+import sys
 
 fake = Faker()
 

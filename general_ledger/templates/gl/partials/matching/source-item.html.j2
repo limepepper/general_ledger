@@ -2,7 +2,8 @@
   <div class="row">
     <div class="col-6 border">
       <p>{{ object.date }}</p>
-      <p>{{ object.name }}</p>
+      <p>{{ object.hash }}</p>
+      <p>{{ object.ofx_memo }}</p>
     </div>
     <div class="col-3 border d-flex align-items-center text-center align-middle align-center">
       {% if object.get_credit_amount() %}

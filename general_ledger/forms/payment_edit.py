@@ -17,7 +17,7 @@ class PaymentEditForm(forms.ModelForm):
         return super().is_valid()
 
     def save(self, commit=True):
-        inspect(self.instance)
+        # inspect(self.instance)
         if "promote" in self.data:
             self.instance.promote()
         elif "demote" in self.data:

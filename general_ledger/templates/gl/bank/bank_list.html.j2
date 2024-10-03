@@ -26,40 +26,9 @@ menus=[{"header": "Bank Stuff", "items": [
     <div class="col-12 col-md-11 mx-auto">
       {% for object in object_list %}
       <div class="row">
-        <div class="card">
 
-          <div class="card-header container">
-            <div class="row">
-              <div class="col">
-                {{ object.link|safe }}
-              </div>
-              <div class="col text-end">
-                {% include 'gl/partials/banks/bank-list-item-actions.html.j2' %}
-              </div>
-            </div>
-          </div>
+{% include 'gl/partials/banks/bank-detail-card.html.j2' %}
 
-          <div class="card-body">
-            <div class="row">
-              <div class="col-10">
-                <div id="chart-{{ object.id_id }}"></div>
-              </div>
-              <div class="col-2 text-end">
-
-                <div class="row text-center">
-                  <h5>Balance</h5>
-                  <h4>{{ object.get_balance() }}</h4>
-                </div>
-
-                <div class="row float-middle float-center text-center">
-                  <h5> Unmatched</h5>
-                  <h4><a href="{{ url('general_ledger:bank-reconciliation', object.id_id) }}">{{ object.get_unmatched_count() }}</a></h4>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
       </div>
       {% endfor %}
     </div>
@@ -71,10 +40,11 @@ menus=[{"header": "Bank Stuff", "items": [
   document.addEventListener('DOMContentLoaded', function () {
     {% for object in object_list %}
 
-    createBankStatementChart(
-      'chart-{{object.id_id}}',
-      '{{object.id_id}}',
-      '2024-03-01',
+      renderBankBalanceChart(
+      '{{ url('bankbalance-list') }}',
+      '#chart-{{object.id}}',
+      '{{object.id}}',
+      '2010-03-01',
       '2024-09-30'
     );
 
@@ -88,14 +58,15 @@ menus=[{"header": "Bank Stuff", "items": [
 
 {% block extrahead %}
 
-<script src="{{ static('gl/js/bank_statement-chart.js') }}"></script>
+{# <script src="{{ static('gl/js/bank_statement-chart.js') }}"></script> #}
+<script src="{{ static('gl/js/bank-balance-chart.js') }}"></script>
 
 {% endblock %}
 
 {% block scriptend %}
 
 
-<!-- Initialize Gridstack -->
+<!-- Initialize apexcharts -->
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.js"></script>
 

@@ -55,7 +55,7 @@ class InvoiceHelper:
         ):
             self.unpost_related_records()
         else:
-            self.logger.error(
+            self.logger.debug(
                 f"Invalid state change from {previous_status} to {current_status}"
             )
 

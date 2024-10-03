@@ -15,7 +15,7 @@ from .xero_gl_import import XeroGlImport
 from .contact import Contact
 from .invoice_purchaseinvoice import PurchaseInvoice
 from .invoice_purchaseinvoice_line import PurchaseInvoiceLine
-from .bank import Bank
+from .bank_account import Bank
 from .permissions import UserBookAccess
 from .bank_statement_line import BankStatementLine
 from .file_upload import FileUpload

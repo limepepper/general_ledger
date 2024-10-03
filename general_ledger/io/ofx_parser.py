@@ -45,7 +45,7 @@ class OFXParser(StatementParser):
             data["end_date"] = statement.end_date
 
             data["balance"] = statement.balance
-            inspect(statement.balance_date)
+            # inspect(statement.balance_date)
             data["balance_date"] = statement.balance_date
             data["balance_source"] = "ofx"
 

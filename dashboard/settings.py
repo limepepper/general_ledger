@@ -1,29 +1,64 @@
 import os
+import sys
 from pathlib import Path
-from pygelf import GelfUdpHandler
-from loguru import logger
+
 import graypy
-import logging
+from django.contrib.messages import constants as messages
+from loguru import logger
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 GRAYLOG_PORT = 12201
 GRAYLOG_SERVER_IP = "localhost"
 
-# handler = GelfUdpHandler(host=GRAYLOG_SERVER_IP, port=GRAYLOG_PORT)
-handler = graypy.GELFUDPHandler(GRAYLOG_SERVER_IP, GRAYLOG_PORT)
-logging.getLogger().addHandler(handler)
+logger.remove()
 
-# logger.add(handler, serialize=True)
+
+# handler = GelfUdpHandler(host=GRAYLOG_SERVER_IP, port=GRAYLOG_PORT)
+
+# handler = graypy.GELFUDPHandler(GRAYLOG_SERVER_IP, GRAYLOG_PORT)
+# logging.getLogger().addHandler(handler)
+
+
+filter_dict = {
+    "": "WARNING",
+    "django": "INFO",
+    "general_ledger.management.utils": "TRACE",
+    "general_ledger": "INFO",
+    "general_ledger.helpers": "DEBUG",
+    "general_ledger.helpers.book": "INFO",
+    "general_ledger.helpers.invoice": "DEBUG",
+}
+
+
 logger.add(
-    handler,
-    level="INFO",
-    serialize=True,
-    # filter=map_level_to_gelf,
+    "log/loguru.log",
+    colorize=True,
+    level="TRACE",
+    format="<yellow>{time:HH:mm:ss}</yellow> "
+    "<level>{level: <5}</level> |{module}|{name}|"
+    "<cyan>{file.name}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
 )
 
-from django.contrib.messages import constants as messages
+logger.add(
+    sys.stderr,
+    colorize=True,
+    level="TRACE",
+    filter=filter_dict,
+    format="<red>{time:HH:mm:ss}</red> "
+    "<level>{level: <5}</level> |"
+    "<cyan>{file.name}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
+)
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# logger.add(handler, serialize=True)
+# logger.add(
+#     handler,
+#     level="INFO",
+#     serialize=True,
+#     # filter=map_level_to_gelf,
+# )
+# logger.level("FATAL", no=60, color="<red>", icon="!!!")
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -46,7 +81,8 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "root": {
-        "handlers": ["file", "console"],
+        # "handlers": ["file", "console"],
+        "handlers": ["file", "richconsole"],
         "level": "DEBUG",
     },
     "loggers": {
@@ -57,11 +93,11 @@ LOGGING = {
         },
         "general_ledger": {
             "handlers": ["general_ledger"],
-            "level": "INFO",
+            "level": "WARNING",
         },
         "general_ledger.models.book": {
             "handlers": ["general_ledger"],
-            "level": "INFO",
+            "level": "WARNING",
             "propagate": False,
         },
         "factory.generate": {
@@ -71,6 +107,11 @@ LOGGING = {
         },
         "faker.factory": {
             "handlers": ["file", "console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "TransactionModel": {
+            "handlers": ["general_ledger"],
             "level": "WARNING",
             "propagate": False,
         },
@@ -136,6 +177,10 @@ LOGGING = {
             "style": "{",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
         "sql": {
             "()": "general_ledger.sql_formatter.SQLFormatter",
             "format": "[%(duration).3f] %(statement)s",
@@ -160,6 +205,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_select2",
+    "django_filters",
     "dynamic_preferences",
     "drf_spectacular",
     "allauth",

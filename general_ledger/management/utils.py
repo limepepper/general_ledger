@@ -1,10 +1,9 @@
 import sys
 
-from rich import inspect
+from loguru import logger
 
 from general_ledger.factories import ContactFactory, BankAccountFactory
-from general_ledger.models import Book, Contact, Bank
-from loguru import logger
+from general_ledger.models import Book, Contact
 
 
 def get_book(book_str: str) -> Book:
@@ -71,8 +70,10 @@ def get_or_create_banks(
     is_demo=False,
 ):
     # inspect(book.bank_set.all())
-    inspect(Bank.TYPE_CHOICES)
+    # inspect(Bank.TYPE_CHOICES)
+    logger.trace("=====get_or_create_banks=====")
     banks = book.bank_set.filter(type=type).order_by("?")[:num_banks]
+    logger.trace("found {} existing banks matching type {}", banks.count(), type)
 
     num_old_banks = banks.count()
     num_new_banks = 0
@@ -81,9 +82,11 @@ def get_or_create_banks(
         pass
     else:
         num_new_banks = num_banks - num_old_banks
+        logger.trace("creating {} new banks of type {}", num_new_banks, type)
         _ = BankAccountFactory.create_batch(
             num_new_banks,
             book=book,
+            type=type,
         )
         banks = book.bank_set.filter(type=type).order_by("?")[:num_banks]
 

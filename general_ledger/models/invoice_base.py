@@ -36,6 +36,12 @@ class InvoiceBaseMixin(
     class Meta:
         abstract = True
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["ledger", "invoice_number"],
+                name="invoice_uniq_invoice_number_ledger",
+            )
+        ]
 
     # this is the ledger that the invoice txs gets posted to
     ledger = models.ForeignKey(
@@ -50,7 +56,6 @@ class InvoiceBaseMixin(
 
     invoice_number = models.CharField(
         max_length=20,
-        unique=True,
     )
 
     @property

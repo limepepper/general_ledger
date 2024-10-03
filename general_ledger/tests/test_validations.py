@@ -30,17 +30,17 @@ class TestValidations(GeneralLedgerBaseTest):
         print(invoice.is_valid)
         print(invoice.is_overdue)
         inspect(invoice)
-        inspect(invoice.date)
-        inspect(invoice.due_date)
+        # inspect(invoice.date)
+        # inspect(invoice.due_date)
 
         invoice.save()
 
-        inspect(invoice)
-        inspect(invoice.date)
-        inspect(invoice.due_date)
+        # inspect(invoice)
+        # inspect(invoice.date)
+        # inspect(invoice.due_date)
 
         invoice.refresh_from_db()
 
-        inspect(invoice)
-        inspect(invoice.date)
-        inspect(invoice.due_date)
+        # inspect(invoice)
+        # inspect(invoice.date)
+        # inspect(invoice.due_date)

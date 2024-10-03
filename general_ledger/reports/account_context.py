@@ -56,7 +56,7 @@ class AccountContext:
             key = entry.trans_date.strftime("%Y-%m")
             sorted_dict[key].append(entry)
 
-        self.logger.info(
+        self.logger.debug(
             f"years: {self.years} debit_years: {self.debit_years} credits_years: {self.credits_years}\n"
             f" sorted_dict: {pprint.pformat(sorted_dict)}\n"
         )
@@ -222,12 +222,9 @@ class AccountContext:
         if the entry has a single opposite, return it
         """
 
-        ety = (
-            entry.transaction.entry_set.filter(
-                ~Q(id=entry.id) & Q(tx_type=Direction(entry.tx_type).opposite())
-            )
-            .values_list("account__name", flat=True)
-        )
+        ety = entry.transaction.entry_set.filter(
+            ~Q(id=entry.id) & Q(tx_type=Direction(entry.tx_type).opposite())
+        ).values_list("account__name", flat=True)
 
         accounts = ", ".join(ety)
         return accounts if accounts else None

@@ -1,0 +1,66 @@
+{% extends 'gl/generic/generic_detail.html.j2' %}
+
+{% block title %}Bank Detail{% endblock %}
+
+{% block sub_navbar %}
+{% with section_title="Bank detail"
+%}
+{% include 'gl/partials/sub_navbar.html.j2' %}
+{% endwith %}
+{% endblock %}
+
+{% block main %}
+<!-- Main Content -->
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="row">
+      <div class="col-12 col-md-11 mx-auto">
+
+
+{% include 'gl/partials/banks/bank-detail-card.html.j2' %}
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+
+      renderBankBalanceChart(
+      '{{ url('bankbalance-list') }}',
+      '#chart-{{object.id}}',
+      '{{object.id}}',
+      '2010-03-01',
+      '2024-09-30'
+    );
+
+
+  });
+
+
+</script>
+{% endblock %}
+
+
+{% block extrahead %}
+
+{# <script src="{{ static('gl/js/bank_statement-chart.js') }}"></script> #}
+<script src="{{ static('gl/js/bank-balance-chart.js') }}"></script>
+
+{% endblock %}
+
+
+{% block scriptend %}
+
+
+<!-- Initialize Gridstack -->
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.js"></script>
+
+
+{% endblock %}
