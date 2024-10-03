@@ -18,9 +18,6 @@ from general_ledger.views.generic import GenericListView, GenericDetailView
 from general_ledger.views.mixins import ActiveBookRequiredMixin, FormsetifyMixin
 from general_ledger.views.mixins import GeneralLedgerSecurityMixIn
 
-dLogger = logging.getLogger("form-debug")
-dLogger.setLevel(logging.DEBUG)
-
 
 class ContactListView(
     GeneralLedgerSecurityMixIn,
@@ -69,9 +66,9 @@ class ContactUpdateView(
     FormViewMixin,
     UpdateView,
 ):
-    logger = logging.getLogger("django.db.backends")
+    logger = logging.getLogger(__name__)
 
-    dLogger.debug("ContactUpdateView : start")
+    logger.debug("ContactUpdateView : start")
 
     model = Contact
     template_name = "gl/contact/contact_form.html.j2"
@@ -81,10 +78,10 @@ class ContactUpdateView(
     # form = ContactUpdateForm()
 
     def get_context_data(self, **kwargs):
-        dLogger.debug(
+        self.logger.debug(
             f"ContactUpdateView : {'get_context_data' : >13} (start) kwargs: {kwargs}"
         )
-        self.logger.info(f"ContactUpdateView : get_context_data kwargs: {kwargs}")
+        self.logger.debug(f"ContactUpdateView : get_context_data kwargs: {kwargs}")
         context_data = super().get_context_data(**kwargs)
         if self.object:
             context_data["change"] = True
@@ -92,53 +89,53 @@ class ContactUpdateView(
             context_data["add"] = True
         context_data["object_title"] = "Contact"
         context_data["request"] = self.request
-        dLogger.debug(
+        self.logger.debug(
             f"ContactUpdateView : get_context_data (returning) context_data: {context_data}"
         )
         return context_data
 
     def get_queryset(self):
-        dLogger.debug("ContactUpdateView : get_queryset")
+        self.logger.debug("ContactUpdateView : get_queryset")
         qs = super().get_queryset()
-        dLogger.debug("ContactUpdateView : get_queryset (returning)")
+        self.logger.debug("ContactUpdateView : get_queryset (returning)")
         return qs
 
     def get_object(self, queryset=None):
-        dLogger.debug("ContactUpdateView : get_object (start)")
+        self.logger.debug("ContactUpdateView : get_object (start)")
         if queryset is None:
             queryset = self.get_queryset()
         pk = self.kwargs.get(self.pk_url_kwarg)
-        dLogger.debug("ContactUpdateView : get_object (returning)")
+        self.logger.debug("ContactUpdateView : get_object (returning)")
         if pk:
             return queryset.get(pk=pk)
 
     def get_form_kwargs(self):
-        dLogger.debug("ContactUpdateView : get_form_kwargs")
+        self.logger.debug("ContactUpdateView : get_form_kwargs")
         kwargs = super().get_form_kwargs()
         kwargs["request"] = self.request
-        dLogger.debug(f"ContactUpdateView : get_form_kwargs kwargs: {kwargs}")
+        self.logger.debug(f"ContactUpdateView : get_form_kwargs kwargs: {kwargs}")
         return kwargs
 
     def get(self, request, *args, **kwargs):
-        dLogger.debug("ContactUpdateView : get (start)")
-        self.logger.info(f"ContactUpdateView : get args {args} kwargs: {kwargs}")
+        self.logger.debug("ContactUpdateView : get (start)")
+        self.logger.debug(f"ContactUpdateView : get args {args} kwargs: {kwargs}")
 
         result = super().get(request, *args, **kwargs)
-        dLogger.debug(f"ContactUpdateView : get (returning) {result}")
+        self.logger.debug(f"ContactUpdateView : get (returning) {result}")
         return result
 
     def post(self, request, *args, **kwargs):
-        dLogger.debug("ContactUpdateView : post")
-        self.logger.info(f"ContactUpdateView : post args {args} kwargs: {kwargs}")
+        self.logger.debug("ContactUpdateView : post")
+        self.logger.debug(f"ContactUpdateView : post args {args} kwargs: {kwargs}")
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        dLogger.debug("ContactUpdateView : form_valid")
-        self.logger.info("calling form_valid in create")
+        self.logger.debug("ContactUpdateView : form_valid")
+        self.logger.debug("calling form_valid in create")
         # active_book = self.request.session.get("active_book_pk")
         active_book = self.request.active_book
-        self.logger.info(f"active_book: {active_book}")
-        self.logger.info(f"form.instance.book: {form.instance}")
+        self.logger.debug(f"active_book: {active_book}")
+        self.logger.debug(f"form.instance.book: {form.instance}")
         form.instance.book = active_book
         if extra_data := self.get_extra_data():
             if extra_data.get("add") is True:

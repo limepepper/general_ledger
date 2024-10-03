@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import connection
 from django.db.models import Sum
 from django.db.models.functions import TruncDate
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rich import inspect
 
@@ -13,7 +13,10 @@ from general_ledger.serializers.bank_transaction import BankStatementGroupedSeri
 from datetime import datetime, timedelta
 
 
-class BankStatementGroupedView(generics.ListAPIView):
+class BankStatementGroupedView(
+    viewsets.ModelViewSet,
+):
+    # chart-d6c66283-6235-469f-8ed4-328b648a6679
     queryset = BankStatementLine.objects.all()
     serializer_class = BankStatementGroupedSerializer
     filterset_class = BankStatementFilter
@@ -37,8 +40,12 @@ class BankStatementGroupedView(generics.ListAPIView):
 
         print(f"Queryset: {queryset}")
 
-        start_date = self.request.query_params.get("start_date")
-        end_date = self.request.query_params.get("end_date")
+        start_date = self.request.query_params.get(
+            "start_date", (datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
+        )
+        end_date = self.request.query_params.get(
+            "end_date", (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+        )
 
         if start_date and end_date:
             start_date = datetime.strptime(start_date, "%Y-%m-%d").date()

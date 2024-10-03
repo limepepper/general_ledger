@@ -8,15 +8,14 @@ from general_ledger.factories import BookFactory, ContactFactory
 
 
 @pytest.mark.django_db
-def test_some_stuff(user, client):
-    inspect(user)
+def test_inventory_basic_1(user, client):
+    # inspect(user)
     client.force_login(user)
 
     book = BookFactory(
         name="book-1",
         owner=user,
     )
-    book.initialize()
 
     ContactFactory.create_batch(10, book=book)
 
@@ -26,16 +25,4 @@ def test_some_stuff(user, client):
 
     response = client.get(reverse("general_ledger:contact-list"))
 
-    inspect(response)
-
-
-# class InventoryItemTest(TestCase):
-#     def setUp(self):
-#         self.factory = RequestFactory()
-#
-#     def test_inventory_list(self):
-#         request = self.factory.get("/")
-#         view = InventoryListView.as_view()
-#         # request.user = admin_user
-#         response = view(request)
-#         assert response.status_code == 200
+    # inspect(response)

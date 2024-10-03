@@ -29,9 +29,9 @@ class DocumentStatusTests(GeneralLedgerBaseTest):
 
         payment.to_state_recorded()
         payment.save()
-        inspect(payment.state)
+        # inspect(payment.state)
         payment.refresh_from_db()
-        inspect(payment.state)
+        # inspect(payment.state)
 
         print(payment.state)
         print(DocumentStatus.RECORDED)
@@ -40,4 +40,4 @@ class DocumentStatusTests(GeneralLedgerBaseTest):
 
         # payment.state = DocumentStatus.VOID
 
-        inspect(payment)
+        # inspect(payment)

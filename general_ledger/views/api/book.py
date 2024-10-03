@@ -7,6 +7,8 @@ from general_ledger.serializers.book import BookSerializer
 from general_ledger.serializers.contact import ContactSerializer
 
 
-class BookViewSet(viewsets.ModelViewSet):
+class BookViewSet(
+    viewsets.ModelViewSet,
+):
     queryset = Book.objects.all()
     serializer_class = BookSerializer

@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-export DJANGO_SETTINGS_MODULE=mysite.settings.test
+export DJANGO_SETTINGS_MODULE=dashboard.settings
 
 python manage.py reset_db --noinput
 

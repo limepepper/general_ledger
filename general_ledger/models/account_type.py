@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from general_ledger.models.mixins import NameDescriptionMixin, UuidMixin, SlugMixin
 from .direction import Direction
+from ..managers.account_type import AccountTypeManager
 
 
 class AccountType(
@@ -14,6 +15,7 @@ class AccountType(
 ):
 
     logger = logging.getLogger(__name__)
+    objects = AccountTypeManager()
 
     class Meta:
         verbose_name = "Account Type"

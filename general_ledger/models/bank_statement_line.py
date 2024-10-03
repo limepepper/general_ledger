@@ -2,14 +2,14 @@ import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from loguru import logger
 
-from general_ledger.models.payment import Payment
 from general_ledger.models.mixins import LinksMixin
 from general_ledger.models.mixins import (
     UuidMixin,
     CreatedUpdatedMixin,
 )
-from loguru import logger
+from general_ledger.models.payment import Payment
 
 
 class BankStatementLine(
@@ -20,6 +20,21 @@ class BankStatementLine(
 ):
 
     logger = logging.getLogger(f"{__name__}.{__qualname__}")
+
+    class Meta:
+        db_table = "gl_bank_statement_line"
+        verbose_name = "Bank Statement Line"
+        verbose_name_plural = "Bank Statement Lines"
+        ordering = [
+            "date",
+            "index",
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["bank", "date", "index"],
+                name="bankstatementline_uniq_bank_date_index",
+            )
+        ]
 
     # generic view class attributes
     links_detail = "general_ledger:bank-transaction-detail"
@@ -35,20 +50,6 @@ class BankStatementLine(
         "amount",
     )
 
-    # # generic view class attributes
-    # links_detail = "general_ledger:bank-statement-detail"
-    # links_list = "general_ledger:bank-statement-list"
-    # links_create = "general_ledger:bank-statement-create"
-    # links_edit = "general_ledger:bank-statement-update"
-    # links_title_field = "name"
-    #
-    # generic_list_display = (
-    #     "link",
-    #     "type",
-    #     "account_number",
-    #     "sort_code",
-    # )
-
     bank = models.ForeignKey(
         "Bank",
         on_delete=models.CASCADE,
@@ -56,12 +57,45 @@ class BankStatementLine(
 
     date = models.DateField()
 
+    amount = models.DecimalField(
+        max_digits=16,
+        decimal_places=4,
+    )
+
+    type = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+
+    ofx_fitid = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    ofx_memo = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
     name = models.CharField(
         max_length=255,
         # db_comment="This field is used to store the description, or payee of the transaction. It is confusingly called 'name' by the OFX specification.",
         help_text="This is the description of the transaction. It is confusingly called 'name' by the OFX specification. It is populated from the description when provided",
     )
-    payee = models.CharField(max_length=255, null=True, blank=True)
+
+    payee = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+
+    # this badly named field is for tracaking FITID in OFX
+    transaction_id = models.CharField(
+        max_length=124,
+        null=True,
+        blank=True,
+    )
 
     # this field is for creating a canonical hash for the transaction
     # to allow comparing across different sources.
@@ -75,16 +109,21 @@ class BankStatementLine(
         default=0,
     )
 
-    amount = models.DecimalField(max_digits=16, decimal_places=4)
-
     # some formats don't track balance per line
     balance = models.DecimalField(
-        max_digits=16, decimal_places=4, null=True, blank=True
+        max_digits=16,
+        decimal_places=4,
+        null=True,
+        blank=True,
     )
 
-    # this badly named field is for tracaking FITID in OFX
-    transaction_id = models.CharField(max_length=124, null=True, blank=True)
-    type = models.CharField(max_length=255, null=True, blank=True)
+    # link back to the payment
+    payments_to = GenericRelation(
+        "PaymentItem",
+        related_query_name="bank_transaction_from",
+        content_type_field="from_content_type",
+        object_id_field="from_object_id",
+    )
 
     # this is a flag to indicate that the transaction has been matched
     # to a candidate transaction in the system. however the user can
@@ -96,33 +135,29 @@ class BankStatementLine(
         self.is_reconciled = True
         self.save()
 
-    payments_to = GenericRelation(
-        "PaymentItem",
-        related_query_name="bank_transaction_from",
-        content_type_field="from_content_type",
-        object_id_field="from_object_id",
-    )
-
     def get_payments(self):
         distinct_payments = Payment.objects.filter(
             items__from_object_id=self.id
         ).distinct()
         return distinct_payments
 
-    class Meta:
-        db_table = "gl_bank_statement_line"
-        verbose_name = "Bank Statement Line"
-        verbose_name_plural = "Bank Statement Lines"
-        ordering = ["date", "name"]
-
     # calculate hash if not provided
     def save(self, *args, **kwargs):
         logger.trace(f"BankTransaction: [saving] {self._state}")
+
+        self.full_clean()
 
         if self._state.adding:
             if not self.hash:
                 self.hash = self.get_hash()
                 logger.trace("BankTransaction: [hash] {self.hash}")
+
+            if not self.index:
+                logger.trace(f"BankStatementLine adding index: {self}")
+                last_index = BankStatementLine.objects.filter(
+                    bank=self.bank, date=self.date
+                ).aggregate(models.Max("index"))["index__max"]
+                self.index = last_index + 1 if last_index is not None else 1
 
         super().save(*args, **kwargs)
 

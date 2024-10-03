@@ -27,7 +27,7 @@ class Command(BaseCommand):
         file_path = file_upload.file.path
         parser = ParserFactory.get_parser(file_path)
         parsed_data = parser.parse(file_path)
-        inspect(parsed_data, methods=False)
+        # inspect(parsed_data, methods=False)
 
         bank = Bank.objects.for_book(book).get(
             sort_code=parsed_data["sort_code"],

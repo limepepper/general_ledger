@@ -49,3 +49,10 @@ class AccountManager(models.Manager):
             name=name,
             book=book,
         )
+
+    def filter_kwargs(self, **kwargs):
+        account_fields = [field.name for field in self.model._meta.get_fields()]
+        filtered_kwargs = {
+            key: value for key, value in kwargs.items() if key in account_fields
+        }
+        return filtered_kwargs

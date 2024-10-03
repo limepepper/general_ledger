@@ -32,7 +32,7 @@ class PaymentStateTests(GeneralLedgerBaseTest):
         invoice = InvoiceFactory(
             ledger=ledger,
         )
-        inspect(invoice)
+        # inspect(invoice)
         for il in invoice.invoice_lines.all():
             inspect(il)
 
@@ -46,7 +46,7 @@ class PaymentStateTests(GeneralLedgerBaseTest):
         payment.items.create(
             amount=100,
             from_object=tx,
-            from_account=tx.bank.id,
+            from_account=tx.bank.account,
             to_object=invoice,
             to_account=invoice.get_accounts_receivable(),
         )

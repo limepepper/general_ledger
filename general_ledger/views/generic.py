@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django_filters.views import FilterView
 from django import template
 
@@ -63,3 +63,17 @@ class GenericDetailView(DetailView):
         modeladmin = admin.site._registry[self.model]
         context_data["modeladmin"] = modeladmin
         return context_data
+
+
+class GenericUpdateView(UpdateView):
+    def get_template_names(self):
+        if (
+            hasattr(self, "template_name")
+            and self.template_name
+            and template_exists(self.template_name)
+        ):
+            return [self.template_name]
+        return [
+            f"gl/{self.model._meta.model_name}/{self.model._meta.model_name}_list.html.j2",
+            f"gl/generic/generic_list.html.j2",
+        ]

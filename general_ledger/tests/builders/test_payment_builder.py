@@ -5,7 +5,7 @@ from decimal import Decimal
 from django.test import override_settings
 from loguru import logger
 
-from general_ledger.builders.invoice import InvoiceBuilder
+from general_ledger.builders.invoice_builder import InvoiceBuilder
 from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import ContactFactory
 from general_ledger.factories.bank_transactions import BankTransactionFactory
@@ -23,7 +23,7 @@ class TestPaymentBuilder(GeneralLedgerBaseTest):
     # logger = logging.getLogger(__name__)
 
     @override_settings(DEBUG=True)
-    def test_simple(self):
+    def test_simple_payment_builder_1(self):
         self.logger.debug("Test simple")
         self.assertEqual(1, 1)
 
@@ -31,6 +31,8 @@ class TestPaymentBuilder(GeneralLedgerBaseTest):
         book.initialize()
         ledger = book.get_default_ledger()
         bank = Bank.objects.for_book(book).first()
+
+        assert isinstance(book, Book)
 
         logger.info(f"{book=} {ledger=} {bank=}")
 

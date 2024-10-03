@@ -66,7 +66,6 @@ class InvoiceLine(
         on_delete=models.CASCADE,
     )
 
-    # preserving the original order of the line items
     order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -86,7 +85,7 @@ class InvoiceLine(
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        logger.trace(f"LineItem.save: {self}")
+        logger.trace("LineItem.save: {}", self)
         self.full_clean()
         if self._state.adding:
             logger.trace(f"LineItem adding: {self}")
@@ -111,19 +110,14 @@ class InvoiceLine(
         :return:
         """
         if TaxInclusive(self.invoice.tax_inclusive) == TaxInclusive.INCLUSIVE:
-            # return self.line_total / (1 + self.vat_rate.rate)
-            # Calculate net price if the unit price includes tax
             tax_multiplier = Decimal(1) + self.vat_rate.rate
             unit_price_exclusive = self.unit_price / tax_multiplier
             line_total = Decimal(unit_price_exclusive * self.quantity)
-            # print(f"line_total: {self.line_total} {type(self.line_total)}")
             return (
                 line_total,
                 self.account,
             )
-        # elif self.invoice.tax_inclusive == TaxInclusive.EXCLUSIVE:
         else:
-            # Unit price is already exclusive of tax if tax is exclusive or none
             return (
                 Decimal(self.line_total),
                 self.account,
@@ -139,10 +133,8 @@ class InvoiceLine(
             unit_price_exclusive = self.unit_price / tax_multiplier
             tax_amount = (self.unit_price - unit_price_exclusive) * self.quantity
         elif TaxInclusive(self.invoice.tax_inclusive) == TaxInclusive.EXCLUSIVE:
-            # Tax is not included in unit price, calculate tax based on exclusive price
             tax_amount = self.line_total_exclusive()[0] * self.vat_rate.rate
         else:
-            # No tax - ignore any supplied tax rate
             tax_amount = Decimal(0)
 
         return (
@@ -155,10 +147,8 @@ class InvoiceLine(
         Calculate the line total including tax.
         """
         if TaxInclusive(self.invoice.tax_inclusive) == TaxInclusive.INCLUSIVE:
-            # The unit price already includes tax
             line_total = Decimal(self.unit_price * self.quantity)
         else:
-            # Calculate inclusive price
             line_total = Decimal(self.line_total_exclusive()[0] + self.tax_amount()[0])
 
         return line_total

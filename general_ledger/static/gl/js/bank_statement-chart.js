@@ -1,14 +1,14 @@
 // bank-statement-chart.js
 
-function createBankStatementChart(containerId, bankId, startDate, endDate) {
+function createBankStatementChart(baseUrl, containerId, bankId, startDate, endDate) {
   // Fetch data from the API
-  fetch(`/gl/bank-statements/grouped/?bank_id=${bankId}&start_date=${startDate}&end_date=${endDate}`)
+  fetch(baseUrl + `?bank_id=${bankId}&start_date=${startDate}&end_date=${endDate}`)
     .then(response => response.json())
     .then(data => {
       // Prepare the data for ApexCharts
       const chartData = {
-        dates: data.map(item => item.date),
-        amounts: data.map(item => parseFloat(item.amount))
+        dates: data.map(item => item.balance_date),
+        amounts: data.map(item => parseFloat(item.balance))
       };
 
       // Configure the chart options

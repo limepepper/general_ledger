@@ -5,7 +5,7 @@ from django_filters.views import FilterView
 
 from general_ledger.filters import AccountFilter
 from general_ledger.models import Account
-from general_ledger.views.generic import GenericDetailView
+from general_ledger.views.generic import GenericDetailView, GenericUpdateView
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,
     ActiveBookRequiredMixin,
@@ -64,6 +64,16 @@ class AccountListView(
 class AccountCreateView(
     LoginRequiredMixin,
     CreateView,
+):
+    model = Account
+    template_name = "gl/account_form.html.j2"
+    fields = ["name", "description", "currency", "code"]
+    success_url = reverse_lazy("general_ledger:account-list")
+
+
+class AccountUpdateView(
+    LoginRequiredMixin,
+    GenericUpdateView,
 ):
     model = Account
     template_name = "gl/account_form.html.j2"

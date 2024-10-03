@@ -17,7 +17,6 @@ class BankStatementLineAdmin(ImportExportModelAdmin):
         "bank__name",
         "bank__book",
     )
-
     date_hierarchy = "date"
     search_fields = (
         "hash",

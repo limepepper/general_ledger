@@ -14,6 +14,8 @@ from general_ledger.views.api import (
     TransactionViewSet,
 )
 from general_ledger.views.api.account import AccountViewSet
+from general_ledger.views.api.bank_statement import BankStatementGroupedView
+from general_ledger.views.api.bank_balance import BankBalanceViewSet
 from general_ledger.views.api.contact import ContactViewSet
 from general_ledger.views.api.invoice import InvoiceViewSet
 
@@ -26,6 +28,8 @@ router.register(r"accounts", AccountViewSet)
 router.register(r"ledgers", LedgerViewSet)
 router.register(r"books", BookViewSet)
 router.register(r"transactions", TransactionViewSet)
+router.register(r"bankstatementlines", BankStatementGroupedView)
+router.register(r"bank_balances", BankBalanceViewSet)
 # router.register(r"invoicelines", InvoiceLineViewSet)
 
 urlpatterns = [

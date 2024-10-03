@@ -8,9 +8,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect, resolve_url
 from django.urls import reverse_lazy
 from django.views.generic.base import ContextMixin
-
-dLogger = logging.getLogger("form-debug")
-dLogger.setLevel(logging.DEBUG)
+from loguru import logger
 
 
 class GeneralLedgerSecurityMixIn(
@@ -105,7 +103,7 @@ class ActiveBookRequiredMixin(ContextMixin):
         """
         Adds the active entity to the context.
         """
-        dLogger.debug(
+        logger.debug(
             f"ActiveBookRequiredMixin : {'get_context_data' : >20} (start) - kwargs: {kwargs}"
         )
         activeBookRequiredMixinLogger.debug(
@@ -116,7 +114,7 @@ class ActiveBookRequiredMixin(ContextMixin):
         activeBookRequiredMixinLogger.debug(
             f"ActiveBookRequiredMixin get_context_data returning {data}"
         )
-        dLogger.debug(
+        logger.debug(
             f"ActiveBookRequiredMixin : {'get_context_data' : >20} (returning) - data: {data}"
         )
         return data

@@ -16,7 +16,7 @@ from general_ledger.models import (
 def custom_formfield_callback(field, **kwargs):
     # if isinstance(field, models.CharField):
     #     return forms.CharField(widget=forms.TextInput(attrs={"class": "custom-class"}))
-    logger.warning(f"calling custom_formfield_callback {field}")
+    logger.trace(f"calling custom_formfield_callback {field}")
     return field.formfield(**kwargs)
 
 

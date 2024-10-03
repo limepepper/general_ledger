@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import path
+from django.urls import path, include
 
 from . import views
-from .models import Bank
 from .views import (
     AccountListView,
     AccountCreateView,
@@ -11,20 +10,9 @@ from .views import (
     GeneralLedgerLogoutView,
     HomeView,
 )
-from .views.account import AccountDetailView
-from .views.bank import (
-    BankListView,
-    BankDetailView,
-    BankUpdateView,
-)
-from .views.bank_matching import BankReconciliation, BankTxMatchedEditView
-from general_ledger.views.api.bank_statement import BankStatementGroupedView
-from .views.bank_statement_import import (
-    bank_statement_import,
-    bank_statement_import_confirm,
-)
+from .views.account import AccountDetailView, AccountUpdateView
+from .views.bank_matching import BankTxMatchedEditView
 from .views.bank_transactions import (
-    BankTransactionsListView,
     BankTransactionDetailView,
     BankTransactionUpdateView,
 )
@@ -34,7 +22,6 @@ from .views.contact import ContactListView, ContactUpdateView
 from .views.debug import DebugTemplateView
 from .views.file_upload import FileUploadCreateView, FileUploadDetailView
 from .views.formset.invoice_formsetified import InvoiceEditView
-from .views.generic import GenericListView
 from .views.invoice import (
     InvoiceListView,
     InvoiceDetailView,
@@ -75,6 +62,7 @@ urlpatterns = [
         name="select_active_entity",
     ),
     path("test", views.test1, name="test1"),
+    path("banks/", include("general_ledger.views.urls")),
     path(
         "reports/income_statement/",
         views.IncomeStatementView.as_view(),
@@ -154,6 +142,11 @@ urlpatterns = [
         AccountDetailView.as_view(),
         name="account-detail",
     ),
+    path(
+        "accounts/<uuid:pk>/update/",
+        AccountUpdateView.as_view(),
+        name="account-update",
+    ),
     #
     # invoices
     #
@@ -199,65 +192,6 @@ urlpatterns = [
         "bills/create/",
         BillCreateView.as_view(),
         name="bill-create",
-    ),
-    #
-    # banks
-    #
-    path(
-        "banks/",
-        BankListView.as_view(),
-        name="bank-list",
-    ),
-    path(
-        "banks/list/",
-        GenericListView.as_view(
-            model=Bank,
-            template_name="gl/generic/generic_list.html.j2",
-        ),
-        name="bank-list-generic",
-    ),
-    path(
-        "banks/<uuid:pk>",
-        BankDetailView.as_view(),
-        name="bank-detail",
-    ),
-    path(
-        "banks/update/<uuid:pk>",
-        BankUpdateView.as_view(),
-        name="bank-update",
-    ),
-    path(
-        "banks/create/",
-        BankUpdateView.as_view(),
-        name="bank-create",
-    ),
-    #
-    # bank statements
-    #
-    path(
-        "banks/<uuid:pk>/import-form/",
-        bank_statement_import,
-        name="bank-statements-import",
-    ),
-    path(
-        "banks/<uuid:pk>/import-form/confirm/",
-        bank_statement_import_confirm,
-        name="bank-statements-import-confirm",
-    ),
-    path(
-        "bank-statements/grouped/",
-        BankStatementGroupedView.as_view(),
-        name="bank-statements-grouped",
-    ),
-    path(
-        "banks/<uuid:bank_id>/reconciliation",
-        BankReconciliation.as_view(),
-        name="bank-reconciliation",
-    ),
-    path(
-        "banks/<uuid:bank_id>/transactions/",
-        BankTransactionsListView.as_view(),
-        name="bank-transactions-list",
     ),
     #
     # account transactions

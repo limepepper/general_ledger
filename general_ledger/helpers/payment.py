@@ -37,7 +37,7 @@ class PaymentHelper:
         tb.set_trans_date(self.payment.date)
 
         for line in self.payment.items.all():
-            inspect(line.from_object)
+            # inspect(line.from_object)
 
             tb.add_entry(
                 line.to_account,
