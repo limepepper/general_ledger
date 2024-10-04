@@ -7,7 +7,7 @@ from pygelf import GelfUdpHandler
 from rich import inspect
 from django.contrib.auth import get_user_model
 
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.factories.invoice import InvoiceFactory
 
 from general_ledger.management.utils import (

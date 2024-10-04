@@ -18,6 +18,7 @@ class InvoiceBuilder:
         ledger,
         **kwargs,
     ):
+        self.contact = kwargs.get("contact", None)
         logger.trace(f"init in InvoiceBuilder '{kwargs=}'")
         self.ledger = ledger
         if not self.ledger:
@@ -36,36 +37,21 @@ class InvoiceBuilder:
         logger.info(f"Adding memo invoice {kwargs=}")
         if not kwargs.get("contact"):
             raise ValueError("contact is required")
-        contact = kwargs.get("contact")
-        self.create_invoice(**kwargs)
-        qs = Account.objects.for_book(self.ledger.book)
-        taxrate_qs = TaxRate.objects.for_book(self.ledger.book)
-        if kwargs.get("sales_account__slug"):
-            sales_account = qs.get(slug=kwargs.get("sales_account__slug"))
-        elif hasattr(contact, "sales_account") and contact.sales_account:
-            sales_account = getattr(contact, "sales_account")
-        else:
-            sales_account = self.ledger.coa.get_sales_account()
-        if kwargs.get("tax_rate__slug"):
-            vat_rate = taxrate_qs.get(slug=kwargs.get("tax_rate__slug"))
-        elif hasattr(contact, "sales_tax_rate") and contact.sales_tax_rate:
-            vat_rate = getattr(contact, "sales_tax_rate")
-        else:
-            vat_rate = self.book.taxrate_set.get(slug="20-vat-on-income")
+        self._create_invoice(**kwargs)
+        sales_account, tax_rate = self._parse_kwargs(**kwargs)
         self.invoice.invoice_lines.create(
             invoice=self.invoice,
             quantity=1,
             unit_price=kwargs.get("amount"),
             account=sales_account,
-            vat_rate=vat_rate,
+            vat_rate=tax_rate,
         )
         return self
 
-    def create_invoice(self, **kwargs):
-        qs = Account.objects.for_ledger(self.ledger)
-        sales_account = qs.filter(slug=kwargs.get("sales_account__slug", None)).first()
+    def _create_invoice(self, **kwargs):
+        sales_account, tax_rate = self._parse_kwargs(**kwargs)
         self.invoice = Invoice(
-            invoice_number=DocNumSeq.get_next_number('PAY'),
+            invoice_number=DocNumSeq.get_next_number("PAY"),
             contact=kwargs.get("contact"),
             date=kwargs.get("date", self.date),
             due_date=kwargs.get("due_date", None),
@@ -77,29 +63,45 @@ class InvoiceBuilder:
         )
         return self
 
-    def create_invoice_line(self, **kwargs):
+    def _create_invoice_line(self, **kwargs):
         if not self.invoice:
             raise ValueError("Invoice not created yet")
-        qs = Account.objects.for_ledger(self.ledger)
         self.invoice_lines.append(
             InvoiceLine(
                 invoice=self.invoice,
                 quantity=kwargs.get("quantity", 1),
                 unit_price=kwargs.get("unit_price"),
-                account=qs.get(slug=kwargs["sales_account__slug"]),
-                vat_rate=TaxRate.objects.for_ledger(self.ledger).get(
-                    slug=kwargs["tax_rate__slug"]
-                ),
-            )
+                account=kwargs["sales_account"],
+                vat_rate=kwargs["tax_rate"],
+            ),
         )
+
         return self
+
+    def _parse_kwargs(self, **kwargs):
+        qs = Account.objects.for_book(self.ledger.book)
+        taxrate_qs = TaxRate.objects.for_book(self.ledger.book)
+        if kwargs.get("sales_account__slug"):
+            sales_account = qs.get(slug=kwargs.get("sales_account__slug"))
+        elif hasattr(self.contact, "sales_account") and self.contact.sales_account:
+            sales_account = getattr(self.contact, "sales_account")
+        else:
+            sales_account = self.ledger.coa.get_sales_account()
+        if kwargs.get("tax_rate__slug"):
+            vat_rate = taxrate_qs.get(slug=kwargs.get("tax_rate__slug"))
+        elif hasattr(self.contact, "sales_tax_rate") and self.contact.sales_tax_rate:
+            vat_rate = getattr(self.contact, "sales_tax_rate")
+        else:
+            vat_rate = self.book.taxrate_set.get(slug="20-vat-on-income")
+        return sales_account, vat_rate
 
     def add_line(self, **kwargs):
         logger.info(f"Adding line {kwargs=}")
+        sales_account, tax_rate = self._parse_kwargs(**kwargs)
         self.entries.append(
             {
-                "sales_account__slug": kwargs["sales_account__slug"],
-                "tax_rate__slug": kwargs["tax_rate__slug"],
+                "sales_account": sales_account,
+                "tax_rate": tax_rate,
                 "unit_price": kwargs["unit_price"],
                 "quantity": kwargs.get("quantity", 1),
             }
@@ -109,10 +111,10 @@ class InvoiceBuilder:
     def build(self):
         if not self.invoice:
             logger.info("Creating invoice")
-            self.create_invoice(**self.kwargs)
+            self._create_invoice(**self.kwargs)
         self.invoice.save()
         for entry in self.entries:
-            self.create_invoice_line(**entry)
+            self._create_invoice_line(**entry)
         for invoice_line in self.invoice_lines:
             invoice_line.save()
 

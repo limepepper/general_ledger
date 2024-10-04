@@ -23,6 +23,8 @@ class AddBankFormTests(TestCase):
             request=request,
         )
 
+        inspect(create_form)
+
         new_bank = create_form.save()
         new_bank_from_query = Bank.objects.get(name="A bank name")
         assert new_bank == new_bank_from_query

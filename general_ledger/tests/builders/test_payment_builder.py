@@ -8,7 +8,7 @@ from loguru import logger
 from general_ledger.builders.invoice_builder import InvoiceBuilder
 from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import ContactFactory
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.models import (
     Book,
     Bank,
@@ -49,7 +49,7 @@ class TestPaymentBuilder(GeneralLedgerBaseTest):
         ib.add_line(
             contact=ContactFactory.customer(book=book),
             description="A simple line item",
-            unit_price=Decimal(100.0000),
+            unit_price=Decimal("100.0000"),
             sales_account__slug="sales",
             tax_rate__slug="no-vat",
         )

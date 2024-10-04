@@ -24,6 +24,10 @@ class Payment(
     """
     A payment is a document of a transfer that links a bank transaction to an invoice, or between other
     financial documents
+
+    :param ledger: The Ledger this payment belongs to
+    :type ledger: ForeignKey to Ledger
+
     """
 
     objects = PaymentManager()

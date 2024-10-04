@@ -6,7 +6,7 @@ from rich import inspect
 from general_ledger.builders.invoice_builder import InvoiceBuilder
 from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import BookFactory, ContactFactory, BankAccountFactory
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.helpers.matcher import MatcherHelper
 from general_ledger.models import Bank
 from general_ledger.models.bank_statement_line_type import BankStatementLineType

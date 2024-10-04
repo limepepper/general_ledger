@@ -3,18 +3,19 @@ import logging
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http.response import JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView
 from django_filters.views import FilterView
 from formset.views import FormViewMixin
 
+import general_ledger
 from general_ledger.forms.bank import BankForm
-from general_ledger.models import Bank, BankStatementLine
+from general_ledger.models import Bank
 from general_ledger.views.generic import GenericListView
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,
     ActiveBookRequiredMixin,
 )
-
+from general_ledger.filters.bank_account_filter import BankAccountFilter
 
 class BankListView(
     GeneralLedgerSecurityMixIn,
@@ -25,7 +26,7 @@ class BankListView(
 
     model = Bank
     context_object_name = "banks"
-    # filterset_class = BankFilter
+    filterset_class = BankAccountFilter
 
     def get_context_data(self, **kwargs):
         logger = logging.getLogger(__name__)

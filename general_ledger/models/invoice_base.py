@@ -1,21 +1,25 @@
 from datetime import date
 from decimal import Decimal
 
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from loguru import logger
+from rich import inspect
 
-from general_ledger.models.tax_inclusive import TaxInclusive
-from general_ledger.models.mixins import (
-    UuidMixin,
-    CreatedUpdatedMixin,
-    SlugMixin,
-)
 from general_ledger.models.mixins import (
     BusinessAccountsMixin,
     LinksMixin,
     ValidatableModelMixin,
     EditableMixin,
 )
+from general_ledger.models.mixins import (
+    UuidMixin,
+    CreatedUpdatedMixin,
+    SlugMixin,
+)
+from general_ledger.models.tax_inclusive import TaxInclusive
+
 
 # this is a bunch of app specific mixins
 
@@ -70,6 +74,24 @@ class InvoiceBaseMixin(
         null=True,
         blank=True,
     )
+
+    def clean(self):
+
+        super().clean()
+        # inspect(self)
+
+        if not self.contact.is_customer:
+            raise ValidationError(
+                {"contact": _("The selected contact is not a customer.")}
+            )
+
+        if not self.due_date:
+            raise ValidationError({"due_date": _("Due date is required.")})
+
+        if self.due_date and self.date > self.due_date:
+            raise ValidationError(
+                {"due_date": _("Due date cannot be before invoice date.")}
+            )
 
     is_active = models.BooleanField(default=True)
     is_locked = models.BooleanField(default=False)

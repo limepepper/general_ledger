@@ -17,6 +17,14 @@ documentation for details.
 
    intro
    installation
+   general_ledger
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
 
 .. note::
 

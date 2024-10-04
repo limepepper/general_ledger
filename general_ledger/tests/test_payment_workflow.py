@@ -1,4 +1,4 @@
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.factories.invoice import InvoiceFactory
 from general_ledger.models import Book, Payment, Bank
 from general_ledger.models.document_status import DocumentStatus

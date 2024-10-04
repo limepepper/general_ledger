@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from general_ledger.models import Book
 
+from django.views import View
+
 logger = logging.getLogger(__name__)
 
 
@@ -41,3 +43,7 @@ def select_active_entity(request):
             "next": request.GET.get("next"),
         },
     )
+
+class ServerResponseSimulator(View):
+    def get(self, request):
+        raise Exception("This is a test exception")

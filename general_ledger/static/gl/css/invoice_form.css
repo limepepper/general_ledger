@@ -12,7 +12,16 @@ ul.invoice-line {
   display: none;
 }
 
-
+ul.errorlist {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  list-style: none;
+}
 
 .form-number {
   width: 6em;

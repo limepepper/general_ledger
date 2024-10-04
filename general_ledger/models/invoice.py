@@ -108,13 +108,6 @@ class Invoice(
         default=0,
     )
 
-    def clean(self):
-        if not self.contact.is_customer:
-            raise ValidationError(
-                {"contact": _("The selected contact is not a customer.")}
-            )
-        super().clean()
-
     @property
     def amount(self):
         return self.total_amount
@@ -422,3 +415,10 @@ class Invoice(
     def do_prev(self):
         self.status = self.prev_status
         self.save()
+
+    def do_posted(self):
+        if self.is_draft() and self.can_record():
+            self.do_next()
+        if self.is_awaiting_approval() and self.can_post():
+            self.do_next()
+

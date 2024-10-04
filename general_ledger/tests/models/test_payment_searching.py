@@ -3,7 +3,7 @@ from django.db.models import Q
 from rich import inspect
 
 from general_ledger.factories import BookFactory, BankAccountFactory
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.helpers.matcher import MatcherHelper
 from general_ledger.models import Bank, Payment
 

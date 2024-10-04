@@ -18,6 +18,9 @@ media
 local_settings.py
 *.sqlite3
 
+# Sphinx documentation #
+docs/build/
+
 # Backup files #
 *.bak
 *.*_bak

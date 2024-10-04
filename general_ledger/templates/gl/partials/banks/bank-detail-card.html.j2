@@ -13,6 +13,9 @@
   <div class="card-body">
     <div class="row">
       <div class="col-10">
+      {% if request.user.preferences["debugging__debug_level"] > 0 %}
+      <div><a href="{{ url('bankbalance-list') }}?bank_id={{object.id}}&start_date=2010-03-01&end_date={{ inject_today_date() }}">graph source</a></div>
+      {% endif %}
         <div id="chart-{{ object.id }}"></div>
       </div>
       <div class="col-2 text-end">

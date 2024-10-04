@@ -1,7 +1,7 @@
 import pytest
 
 from general_ledger.factories import BankAccountFactory, BookFactory
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.management.utils import (
     get_book,
     get_or_create_customers,

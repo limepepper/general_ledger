@@ -16,6 +16,7 @@ from rich import inspect
 from general_ledger.filters import InvoiceFilter
 from general_ledger.forms import InvoiceForm, InvoiceLineFormSet
 from general_ledger.forms.contact_inline import ContactInlineForm
+from general_ledger.forms.invoice import create_invoice_line_formset
 from general_ledger.forms.invoice_status import InvoiceStatusForm
 from general_ledger.models import Invoice
 from general_ledger.views.generic import GenericListView, GenericDetailView
@@ -139,7 +140,10 @@ class InvoiceUpdateView(
 
         invoice = Invoice.objects.get(pk=kwargs["pk"])
 
-        invoice_form = InvoiceForm(request.POST, instance=invoice)
+        invoice_form = InvoiceForm(
+            request.POST,
+            instance=invoice,
+        )
 
         formset = InvoiceLineFormSet(
             request.POST,
@@ -175,7 +179,13 @@ class InvoiceCreateView(
 
     model = Invoice
     template_name = "gl/invoice/invoice_form.html.j2"
-    fields = ["description"]
+    # fields = ["description"]
+    form_class = InvoiceForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["book"] = self.request.active_book
+        return kwargs
 
     def get_success_url(self):
         return reverse_lazy(
@@ -188,30 +198,28 @@ class InvoiceCreateView(
         data = super().get_context_data(**kwargs)
         if self.request.method == "GET":
             active_book = self.request.active_book
-            invoice_form = InvoiceForm(
+            data["invoice_form"] = InvoiceForm(
+                book=active_book,
                 initial={
                     "book": self.request.active_book,
                     "invoice_number": f"{active_book.invoice_prefix}-{active_book.invoice_sequence:04d}",
                 },
             )
-            formset = InvoiceLineFormSet(
+            data["formset"] = InvoiceLineFormSet(
                 form_kwargs={"request": self.request},
             )
-            # print(self.get_context_data())
-            data["invoice_form"] = invoice_form
-            data["formset"] = formset
             data["is_update"] = False
 
             form_contact = ContactInlineForm()
             data["form_contact"] = form_contact
         elif self.request.method == "POST":
-            invoice_form = InvoiceForm(self.request.POST)
-            formset = InvoiceLineFormSet(
-                self.request.POST,
-                form_kwargs={"request": self.request},
+            data["invoice_form"] = InvoiceForm(self.request.POST)
+            data["formset"] = create_invoice_line_formset(
+                book=self.request.active_book,
+                data=self.request.POST,
+                instance=self.object,
             )
-            data["invoice_form"] = invoice_form
-            data["formset"] = formset
+
             data["is_update"] = False
         return data
 
