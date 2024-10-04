@@ -1,7 +1,7 @@
 
   <div class="mb-3">
 
-    {% if object.payments_to.count() > 0 %}
+    {% if object.payments_to.count() or object.payments_from.count() %}
     has payments
     <ul class="potential-match">
     {% for payment in object.get_payments() %}

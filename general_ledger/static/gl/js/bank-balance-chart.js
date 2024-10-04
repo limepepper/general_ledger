@@ -56,6 +56,18 @@ function renderBankBalanceChart(baseUrl, containerId, bankId, startDate, endDate
             name: 'Bank Balance',
             data: []
         }],
+        noData: {
+          text: 'No data available. Please import your bank data to see your balance over time.',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
+          style: {
+            color: '#000000',
+            fontSize: '14px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+          }
+        },
         stroke: {
             curve: 'stepline',
         },

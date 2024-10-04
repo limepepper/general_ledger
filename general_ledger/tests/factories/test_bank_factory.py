@@ -44,8 +44,8 @@ class TestBankAccountFactory(TestCase):
         bank_2 = BankAccountFactory(type=Bank.SAVINGS)
 
         txs = BankTransactionFactory.create_transfers(
-            [bank_1, bank_2],
             50,
+            [bank_1, bank_2],
         )
 
         self.assertEqual(len(txs), 100)

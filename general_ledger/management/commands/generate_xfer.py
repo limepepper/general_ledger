@@ -4,12 +4,14 @@ from loguru import logger
 from rich import inspect
 
 from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.helpers.matcher import MatcherHelper
 from general_ledger.management.utils import (
     get_book,
     get_or_create_banks,
 )
-from general_ledger.models import Bank
+from general_ledger.models import Bank, BankStatementLine, Payment, PaymentItem
 
+from django.db.models import Q
 
 class Command(BaseCommand):
     help = "generate Book data"
@@ -50,29 +52,83 @@ class Command(BaseCommand):
             help="num of checking banks to get or create",
             default=2,
         )
+        parser.add_argument(
+            "--bank1",
+            type=str,
+            help="if operation involves bank to bank transfers, provide the first bank",
+            default="",
+        )
+        parser.add_argument(
+            "--bank2",
+            type=str,
+            help="if operation involves bank to bank transfers, provide the second bank",
+            default="",
+        )
+
+    def __init__(self, stdout=None, stderr=None, no_color=False, force_color=False):
+        super().__init__(stdout, stderr, no_color, force_color)
+        self.bank2 = None
+        self.bank1 = None
+        self.num_banks = None
+        self.num_contacts = None
+        self.is_demo = None
+        self.book = None
+        self.ledger = None
 
     def handle(self, *args, **kwargs):
         logger.info("===========Generating Financial Data==========")
 
-        user = get_user_model().objects.get(username=kwargs["user"])
-        book = get_book(kwargs["book"])
-        ledger = book.get_default_ledger()
-        is_demo = kwargs["set_demo"]
-        num_contacts = kwargs["num_contacts"]
-        num_banks = kwargs["num_banks"]
+        self.user = get_user_model().objects.get(username=kwargs["user"])
+        self.book = get_book(kwargs["book"])
+        self.ledger = self.book.get_default_ledger()
+        self.is_demo = kwargs["set_demo"]
+        self.num_contacts = kwargs["num_contacts"]
+        self.num_banks = kwargs["num_banks"]
+
+        if kwargs.get("bank1"):
+            self.bank1 = Bank.objects.search(kwargs.get("bank1"))
+        if kwargs.get("bank2"):
+            self.bank2 = Bank.objects.search(kwargs.get("bank2"))
+
+        self.do_xfers()
+
+    def do_xfers(self):
+        self.bank1.bankstatementline_set.all().delete()
+        self.bank2.bankstatementline_set.all().delete()
+
+        qs = Payment.objects.filter(
+            Q(items__from_object_id__in=self.bank1.bankstatementline_set.values_list('id', flat=True)) |
+            Q(items__to_object_id__in=self.bank2.bankstatementline_set.values_list('id', flat=True))
+        )
+        # print(qs.query)
+        print(qs.count())
+        qs.delete()
+
+
+        txferss = BankTransactionFactory.create_transfers(
+            10,
+            banks=[self.bank1, self.bank2],
+        )
+        inspect(txferss, title="txferss generated")
+        matcher = MatcherHelper(banks=[self.bank1, self.bank2])
+        matcher.reconcile_bank_statement()
+        inspect(matcher, title="matcher")
+        matcher.process_matches()
+
+    def other1(self, *args, **kwargs):
 
         checking_banks = get_or_create_banks(
-            book,
+            self.book,
             type=Bank.CHECKING,
             num_banks=2,
-            is_demo=is_demo,
+            is_demo=self.is_demo,
         )
 
         savings_banks = get_or_create_banks(
-            book,
+            self.book,
             type=Bank.SAVINGS,
             num_banks=2,
-            is_demo=is_demo,
+            is_demo=self.is_demo,
         )
 
         # for foo in checking_banks:

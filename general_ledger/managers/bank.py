@@ -1,4 +1,7 @@
+from uuid import UUID
+
 from django.db import models
+from django.db.models import Q
 from loguru import logger
 from rich import inspect
 
@@ -22,6 +25,19 @@ class BankManager(models.Manager):
             book=book,
             is_active=True,
         )
+
+    def search(self, query):
+        try:
+            uuid_value = UUID(query)
+        except (ValueError, TypeError) as e:
+            uuid_value = None
+
+        filter_condition = Q(slug__iexact=query) | Q(name__icontains=query)
+
+        if uuid_value:
+            filter_condition |= Q(pk=uuid_value)
+
+        return self.get_queryset().get(filter_condition)
 
     def filter_kwargs(self, **kwargs):
         # Account = apps.get_model('general_ledger', 'Account')

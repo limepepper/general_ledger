@@ -1,8 +1,10 @@
 import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.core.exceptions import ValidationError
 from django.db import models
 from loguru import logger
+from rich import inspect
 
 from general_ledger.models.mixins import LinksMixin
 from general_ledger.models.mixins import (
@@ -10,6 +12,8 @@ from general_ledger.models.mixins import (
     CreatedUpdatedMixin,
 )
 from general_ledger.models.payment import Payment
+
+from django.db.models import Q
 
 
 class BankStatementLine(
@@ -124,6 +128,12 @@ class BankStatementLine(
         content_type_field="from_content_type",
         object_id_field="from_object_id",
     )
+    payments_from = GenericRelation(
+        "PaymentItem",
+        related_query_name="bank_transaction_to",
+        content_type_field="to_content_type",
+        object_id_field="to_object_id",
+    )
 
     # this is a flag to indicate that the transaction has been matched
     # to a candidate transaction in the system. however the user can
@@ -137,15 +147,13 @@ class BankStatementLine(
 
     def get_payments(self):
         distinct_payments = Payment.objects.filter(
-            items__from_object_id=self.id
+            Q(items__from_object_id=self.id) | Q(items__to_object_id=self.id)
         ).distinct()
         return distinct_payments
 
     # calculate hash if not provided
     def save(self, *args, **kwargs):
         logger.trace(f"BankTransaction: [saving] {self._state}")
-
-        self.full_clean()
 
         if self._state.adding:
             if not self.hash:
@@ -158,6 +166,12 @@ class BankStatementLine(
                     bank=self.bank, date=self.date
                 ).aggregate(models.Max("index"))["index__max"]
                 self.index = last_index + 1 if last_index is not None else 1
+
+        try:
+            self.full_clean()
+        except ValidationError as e:
+            inspect(self)
+            raise e
 
         super().save(*args, **kwargs)
 

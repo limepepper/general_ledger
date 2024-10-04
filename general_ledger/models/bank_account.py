@@ -110,3 +110,6 @@ class Bank(
 
     def get_unmatched_count(self):
         return self.bankstatementline_set.filter(is_matched=False).count()
+
+    def get_unreconciled_count(self):
+        return self.bankstatementline_set.filter(is_reconciled=False).count()

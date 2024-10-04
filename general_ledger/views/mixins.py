@@ -86,19 +86,6 @@ class ActiveBookRequiredMixin(ContextMixin):
             self.redirect_field_name,
         )
 
-    # @TODO this seemed like a good idea at the time
-    # but is probably causing extra queries if something is supering this
-    # def get_queryset(self):
-    #     dLogger.debug(
-    #         f"ActiveBookRequiredMixin : {'get_queryset' : >20} (start) - self.model.objects.count(): {self.model.objects.count()} model {self.model}"
-    #     )
-    #     activeBookRequiredMixinLogger.debug(f"active_book: {self.request.active_book}")
-    #     qs = self.model.objects.for_book(self.request.active_book)
-    #     dLogger.debug(
-    #         f"ActiveBookRequiredMixin : {'get_queryset' : >20} (returning) - objects.for_book: {qs.count()}  model {self.model}"
-    #     )
-    #     return qs
-
     def get_context_data(self, **kwargs):
         """
         Adds the active entity to the context.

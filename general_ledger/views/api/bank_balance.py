@@ -17,6 +17,7 @@ class BankBalanceViewSet(
         bank_id = self.request.query_params.get("bank_id", None)
         if not bank_id:
             return BankBalance.objects.none()
+
         start_date = self.request.query_params.get(
             "start_date", (datetime.now() - timedelta(days=1080)).strftime("%Y-%m-%d")
         )

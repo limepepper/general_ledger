@@ -23,6 +23,9 @@
         </div>
 
         <div class="row float-middle float-center text-center">
+          <h5> Unreconciled</h5>
+          <h4><a href="{{ url('general_ledger:bank-reconciliation', object.pk) }}">{{ object.get_unreconciled_count()
+              }}</a></h4>
           <h5> Unmatched</h5>
           <h4><a href="{{ url('general_ledger:bank-reconciliation', object.pk) }}">{{ object.get_unmatched_count()
               }}</a></h4>
