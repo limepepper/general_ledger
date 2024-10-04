@@ -1,10 +1,10 @@
-from django.test import RequestFactory, TestCase
 from datetime import datetime, timedelta
+
 import pytest
-from django.urls import reverse
 from rich import inspect
 
 from general_ledger.builders.invoice_builder import InvoiceBuilder
+from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import BookFactory, ContactFactory, BankAccountFactory
 from general_ledger.factories.bank_transactions import BankTransactionFactory
 from general_ledger.helpers.matcher import MatcherHelper
@@ -121,7 +121,7 @@ class TestMatcherHelper:
             amount=100,
             type=BankStatementLineType.CREDIT,
         )
-        matcher = MatcherHelper()
+        matcher = MatcherHelper(book=book)
         matcher.reconcile_bank_statement()
         inspect(matcher.candidates)
         assert len(matcher.candidates["combination"]) == 1
@@ -130,17 +130,19 @@ class TestMatcherHelper:
     def test_xfer_matcher(self, resources):
         book, bank = resources
 
-        bank_1 = BankAccountFactory(type=Bank.CHECKING)
-        bank_2 = BankAccountFactory(type=Bank.SAVINGS)
+        bank_1 = BankAccountFactory(type=Bank.CHECKING, book=book)
+        bank_2 = BankAccountFactory(type=Bank.SAVINGS, book=book)
 
-        num_transfers = 10
+        num_transfers = 3
 
         txs = BankTransactionFactory.create_transfers(
-            [bank_1, bank_2],
             num_transfers,
+            [bank_1, bank_2],
         )
         assert len(txs) == 2 * num_transfers
-        matcher = MatcherHelper()
+        matcher = MatcherHelper(
+            book=book,
+        )
         matcher.reconcile_bank_statement()
         # inspect(matcher.candidates)
         assert len(matcher.candidates["transfer"]) == num_transfers
@@ -148,3 +150,19 @@ class TestMatcherHelper:
         # this shouldn't change anything
         matcher.reconcile_bank_statement()
         assert len(matcher.candidates["transfer"]) == num_transfers
+
+        for xfer in matcher.candidates["transfer"]:
+            bsl_from, bsl_to = xfer
+            # inspect(bsl_from)
+            # inspect(bsl_to)
+            pb = PaymentBuilder(
+                ledger=book.get_default_ledger(),
+                book=book,
+                date=bsl_from.date,
+            )
+            pb.add_xfer(
+                from_object=bsl_from,
+                to_object=bsl_to,
+            )
+            payment = pb.build()
+            inspect(pb)

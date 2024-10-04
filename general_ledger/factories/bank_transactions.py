@@ -48,12 +48,43 @@ class BankTransactionFactory(DjangoModelFactory):
     name = factory.LazyAttribute(lambda _: fake.bs().capitalize())
 
     @classmethod
+    def create_transfer(
+        cls,
+        bank_from,
+        bank_to,
+        amount,
+        date=None,
+    ):
+        if date is None:
+            date = datetime.now()
+        transaction_from = cls.create(
+            bank=bank_from,
+            amount=-amount,
+            date=date,
+            type=BankStatementLineType.XFER,
+            name="To A/C " + bank_to.account_number,
+            ofx_memo=bank_to.book.name,
+        )
+
+        transaction_to = cls.create(
+            bank=bank_to,
+            amount=amount,
+            date=date,
+            type=BankStatementLineType.XFER,
+            name="From A/C " + bank_from.account_number,
+            ofx_memo=bank_from.book.name,
+        )
+
+        return transaction_from, transaction_to
+
+    @classmethod
     def create_transfers(
         cls,
-        banks,
         num_transactions,
+        banks,
         years_ago=3,
         description="Bank Transfer",
+        banks_to=None,
     ):
         """
         Creates parameterized bank transfers between two or more banks.
@@ -72,33 +103,33 @@ class BankTransactionFactory(DjangoModelFactory):
 
         for _ in range(num_transactions):
 
-            bank_from, bank_to = fake.random.sample(banks, 2)
+            if banks_to:
+                bank_from = fake.random.choice(banks)
+                bank_to = fake.random.choice(banks_to)
+            else:
+                bank_from, bank_to = fake.random.sample(banks, 2)
+
+            if bank_from == bank_to:
+                raise ValueError("Cannot transfer to the same bank")
 
             transaction_date = fake.date_between(
                 start_date=datetime.now() - timedelta(days=years_ago * 365),
                 end_date="today",
             )
 
-            amount = fake.pydecimal(left_digits=3, right_digits=2, positive=True)
+            amount = fake.pydecimal(
+                left_digits=3,
+                right_digits=2,
+                positive=True,
+            )
 
-            transaction_from = cls.create(
-                bank=bank_from,
-                amount=-amount,
+            transaction_from, transaction_to = cls.create_transfer(
+                bank_from,
+                bank_to,
+                amount,
                 date=transaction_date,
-                type=BankStatementLineType.XFER,
-                name="To A/C " + bank_to.account_number,
-                ofx_memo=bank_to.book.name,
             )
             created_transactions.append(transaction_from)
-
-            transaction_to = cls.create(
-                bank=bank_to,
-                amount=amount,
-                date=transaction_date,
-                type=BankStatementLineType.XFER,
-                name="From A/C " + bank_from.account_number,
-                ofx_memo=bank_from.book.name,
-            )
             created_transactions.append(transaction_to)
 
         return created_transactions

@@ -2,13 +2,15 @@ from dynamic_preferences.preferences import Section
 from dynamic_preferences.registries import (
     global_preferences_registry,
 )
-from dynamic_preferences.types import BooleanPreference, StringPreference
+from dynamic_preferences.types import BooleanPreference, StringPreference, IntegerPreference
 from dynamic_preferences.users.registries import user_preferences_registry
 from .registries import book_preferences_registry
 
 
 general = Section("general")
 discussion = Section("discussion")
+access = Section("access")
+debugging = Section("debugging")
 
 
 # We start with a global preference
@@ -35,8 +37,15 @@ class CommentNotificationsEnabled(BooleanPreference):
     name = "comment_notifications_enabled"
     default = True
 
+@user_preferences_registry.register
+class DebugLevel(IntegerPreference):
+    """
+    set the debugging level for the UI. 0 is no debugging, 1 is some debugging, 2 is full debugging and will add lots of UI flow breaking stuff
+    """
 
-access = Section("access")
+    section = debugging
+    name = "debug_level"
+    default = 0
 
 
 @book_preferences_registry.register

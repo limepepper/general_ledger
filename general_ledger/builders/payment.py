@@ -38,9 +38,9 @@ class PaymentBuilder(PaymentBuilderAbstract):
 
     """
 
-    bank_statement_line: BankStatementLine = (None,)
-    ledger: Ledger = (None,)
-    invoice: Invoice = (None,)
+    bank_statement_line: BankStatementLine = None
+    ledger: Ledger = None
+    invoice: Invoice = None
 
     def __init__(
         self,
@@ -114,6 +114,29 @@ class PaymentBuilder(PaymentBuilderAbstract):
             }
         )
 
+    def add_xfer(
+        self,
+        from_object,
+        to_object,
+    ):
+        if from_object.amount != -to_object.amount:
+            raise ValueError(
+                f"Amounts do not match: {from_object.amount=} {to_object.amount=}"
+            )
+
+        if not isinstance(from_object, BankStatementLine):
+            raise ValueError("from account is not bank statement line")
+
+        if not isinstance(to_object, BankStatementLine):
+            raise ValueError("to account is not bank statement line")
+
+        self.items.append(
+            {
+                "from_object": from_object,
+                "to_object": to_object,
+            }
+        )
+
     def post_invoice(self):
         if self.invoice.is_draft():
             self.invoice.mark_awaiting_approval()
@@ -128,12 +151,24 @@ class PaymentBuilder(PaymentBuilderAbstract):
         )
         self.payment.save()
         for item in self.items:
+            from_object = item["from_object"]
+            to_object = item["to_object"]
+            from_account = (
+                item["from_object"].bank.account
+                if isinstance(from_object, BankStatementLine)
+                else item["from_object"].get_accounts_payable()
+            )
+            to_account = (
+                item["to_object"].get_accounts_receivable()
+                if isinstance(to_object, Invoice)
+                else item["to_object"].bank.account
+            )
             payment_item = self.payment.items.create(
                 amount=item["from_object"].amount,
-                from_object=item["from_object"],
-                from_account=item["from_object"].bank.account,
-                to_object=item["to_object"],
-                to_account=item["to_object"].get_accounts_receivable(),
+                from_object=from_object,
+                from_account=from_account,
+                to_object=to_object,
+                to_account=to_account,
             )
             # payment_item.save()
         return self.payment

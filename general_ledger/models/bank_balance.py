@@ -2,23 +2,11 @@ import logging
 
 from django.db import models
 
+from general_ledger.managers.bank_balance import BankBalanceManager
 from general_ledger.models.mixins import (
     UuidMixin,
     CreatedUpdatedMixin,
 )
-
-
-class BankBalanceManager(models.Manager):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.select_related(
-            "bank",
-        )
-
-    def for_bank(self, bank):
-        return self.get_queryset().filter(
-            bank=bank,
-        )
 
 
 class BankBalance(
@@ -33,6 +21,7 @@ class BankBalance(
         db_table = "gl_bank_balance"
         verbose_name = "Bank Balance"
         verbose_name_plural = "Bank Balances"
+        ordering = ["balance_date"]
 
     bank = models.ForeignKey(
         "Bank",

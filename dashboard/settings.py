@@ -206,7 +206,6 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_select2",
     "django_filters",
-    "dynamic_preferences",
     "drf_spectacular",
     "allauth",
     "allauth.account",
@@ -218,6 +217,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_forms",
     "crispy_bootstrap5",
+    "dynamic_preferences",
+    "dynamic_preferences.users.apps.UserPreferencesConfig",
 ]
 
 MIDDLEWARE = [
