@@ -1,1 +1,0 @@
-from .banks import urlpatterns

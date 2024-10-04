@@ -1,9 +1,0 @@
-<div class="col-md-12">
-  <div class="h-100 p-5 bg-light border rounded-3">
-    <h2>The following Transactions have been created</h2>
-    <p>And will be posted to the ledger when the invoice is approved</p>
-  </div>
-</div>
-
-{% set transactions = invoice.transactions.all() %}
-{% include 'gl/partials/tx/tx-table.html.j2' %}

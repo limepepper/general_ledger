@@ -1,9 +1,0 @@
-<div class="col-md-12">
-  <div class="h-100 p-5 bg-light border rounded-3">
-    <h2>This invoice has been paid</h2>
-    <p>Removing this invoice is pretty hard now as it would involved roling</p>
-  </div>
-</div>
-
-{% set transactions = invoice.transactions.all() %}
-{% include 'gl/partials/tx/tx-table.html.j2' %}
