@@ -1,5 +1,6 @@
 from django.db import models
 from loguru import logger
+from simple_history.models import HistoricalRecords
 from xstate_machine import FSMField, transition
 
 from general_ledger.helpers.payment import PaymentHelper
@@ -26,6 +27,7 @@ class Payment(
     """
 
     objects = PaymentManager()
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Payment"
