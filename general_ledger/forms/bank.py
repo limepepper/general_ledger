@@ -19,7 +19,7 @@ class BankForm(
     class Meta:
         model = Bank
         fields = "__all__"
-        exclude = ["book", "account", "slug", "id"]
+        exclude = ["book", "account", "slug", "id", "tz"]
 
     def __init__(self, *args, **kwargs):
         self.logger.debug(f"BankForm kwargs: {args} {kwargs}")

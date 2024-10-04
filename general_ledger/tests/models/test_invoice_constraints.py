@@ -117,3 +117,58 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             invoice.full_clean()
 
         self.assertFalse(invoice.is_valid)
+
+
+    def test_customer_due_date_required(self):
+        ledger = LedgerFactory()
+        contact = ContactFactory.customer(
+            book=ledger.book,
+        )
+        invoice = Invoice.objects.create(
+            ledger=ledger,
+            contact=contact,
+            invoice_number="INV-001",
+            date="2024-01-01",
+            tax_inclusive=TaxInclusive.NONE,
+        )
+        invoice_line = InvoiceLine.objects.create(
+            invoice=invoice,
+            description="line 1",
+            vat_rate=TaxRate.objects.get(slug="20-vat-on-income", book=ledger.book),
+            quantity=1,
+            unit_price=40.0000,
+        )
+        inspect(invoice)
+
+        with self.assertRaises(ValidationError) as _:
+            invoice.full_clean()
+
+        self.assertFalse(invoice.is_valid)
+
+
+    def test_customer_due_date_before_date(self):
+        ledger = LedgerFactory()
+        contact = ContactFactory.customer(
+            book=ledger.book,
+        )
+        invoice = Invoice.objects.create(
+            ledger=ledger,
+            contact=contact,
+            invoice_number="INV-001",
+            date="2024-02-01",
+            due_date="2024-01-01",
+            tax_inclusive=TaxInclusive.NONE,
+        )
+        invoice_line = InvoiceLine.objects.create(
+            invoice=invoice,
+            description="line 1",
+            vat_rate=TaxRate.objects.get(slug="20-vat-on-income", book=ledger.book),
+            quantity=1,
+            unit_price=40.0000,
+        )
+        inspect(invoice)
+
+        with self.assertRaises(ValidationError) as _:
+            invoice.full_clean()
+
+        self.assertFalse(invoice.is_valid)

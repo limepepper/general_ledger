@@ -38,7 +38,7 @@ class BankTransactionDetailView(
     DetailView,
 ):
     model = BankStatementLine
-    template_name = "gl/bank_transaction_detail.html.j2"
+    template_name = "gl/bank/bank_transaction_detail.html.j2"
     context_object_name = "transaction"
 
 
@@ -53,6 +53,6 @@ class BankTransactionUpdateView(
     logger = logging.getLogger(__name__)
 
     model = BankStatementLine
-    template_name = "gl/bank_transaction_form.html.j2"
+    template_name = "gl/bank/bank_statement_form.html.j2"
     form_class = BankTransactionForm
-    success_url = reverse_lazy("general_ledger:bank-transactions-list")
+    success_url = reverse_lazy("general_ledger:bankstatementline-list")

@@ -23,19 +23,7 @@
             </div>
             <!-- end row -->
 
-<p>
-{{ ofx.account.statement.start_date }}
-</p><p></p>
-{{ ofx.account.statement.balance }}
-</p>
 
-{% for transaction in ofx.account.statement.transactions %}
-<p> {{ transaction.payee }} </p>
-<p> {{ transaction.amount }} </p>
-<p> {{ transaction.date }} </p>
-<p> {{ transaction.memo }} </p>
-<p> {{ transaction.type }}</p>
-{% endfor %}
 
 
 

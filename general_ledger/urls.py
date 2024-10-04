@@ -20,7 +20,7 @@ from .views.book import BookDetailView, BookListView
 from .views.book_preferences import BookPreferencesBuilder
 from .views.contact import ContactListView, ContactUpdateView
 from .views.debug import DebugTemplateView
-from .views.file_upload import FileUploadCreateView, FileUploadDetailView
+from .views.file_upload import FileUploadCreateView, FileUploadDetailView, FileUploadListView
 from .views.formset.invoice_formsetified import InvoiceEditView
 from .views.invoice import (
     InvoiceListView,
@@ -30,6 +30,7 @@ from .views.invoice import (
 from .views.login import GeneralLedgerLoginView
 from .views.payment import PaymentEditView, PaymentListView, PaymentDetailView
 from .views.user_preferences import GeneralLedgerUserPreferences
+
 
 urlpatterns = [
     path("", HomeView.as_view(), name="index"),
@@ -218,6 +219,11 @@ urlpatterns = [
         "file-uploads/<int:pk>",
         FileUploadDetailView.as_view(),
         name="file-upload-detail",
+    ),
+    path(
+        "file-uploads/",
+        FileUploadListView.as_view(),
+        name="file-upload-list",
     ),
     #
     # books

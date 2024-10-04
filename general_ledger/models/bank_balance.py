@@ -7,6 +7,7 @@ from general_ledger.models.mixins import (
     UuidMixin,
     CreatedUpdatedMixin,
 )
+from timezone_field import TimeZoneField
 
 
 class BankBalance(
@@ -22,6 +23,12 @@ class BankBalance(
         verbose_name = "Bank Balance"
         verbose_name_plural = "Bank Balances"
         ordering = ["balance_date"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["bank", "balance_date", "balance_type"],
+                name="bankbalance_uniq_bank_date_balance_type",
+            )
+        ]
 
     bank = models.ForeignKey(
         "Bank",
@@ -33,9 +40,21 @@ class BankBalance(
         decimal_places=4,
         null=False,
     )
+
+    """ 
+    for EOD balances given by OFX, this corresponds to a point in time balance of midnight, i.e. the start of the next day
+    """
     balance_date = models.DateTimeField(
         null=False,
     )
+
+    balance_date_tz = TimeZoneField(
+        default="Europe/London",
+    )
+
+    # balance_datetime = models.DateTimeField(
+    #     null=False,
+    # )
 
     # informal field noting which source the balance was taken from
     # e.g. "last bank statement", "last reconciliation"

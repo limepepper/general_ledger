@@ -18,6 +18,31 @@ class LinksMixin(models.Model):
     class Meta:
         abstract = True
 
+    # generic view class attributes
+    #links_detail = f"general_ledger:generic-detail"
+    # links_list = "general_ledger:bank-list"
+    # links_create = "general_ledger:bank-create"
+    # links_edit = "general_ledger:bank-update"
+    links_title_field = "name"
+
+    app_name = "general_ledger"
+
+    @property
+    def links_detail(self):
+        return f"{self.app_name}:{self._meta.model_name}-detail"
+
+    @property
+    def links_edit(self):
+        return f"{self.app_name}:{self._meta.model_name}-update"
+
+    @property
+    def links_create(self):
+        return f"{self.app_name}:{self._meta.model_name}-create"
+
+    @property
+    def links_list(self):
+        return f"{self.app_name}:{self._meta.model_name}-list"
+
     @property
     def edit_link(self):
         return format_html(

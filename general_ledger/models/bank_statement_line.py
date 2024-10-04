@@ -1,11 +1,19 @@
+import datetime
 import logging
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.timezone import is_aware
 from loguru import logger
 from rich import inspect
+from timezone_field import TimeZoneField
 
+from general_ledger.managers.bank import BankManager
+from general_ledger.managers.bank_statement_line import (
+    BankStatementLineManager,
+    BankStatementLineManagerQuerySet,
+)
 from general_ledger.models.mixins import LinksMixin
 from general_ledger.models.mixins import (
     UuidMixin,
@@ -24,6 +32,9 @@ class BankStatementLine(
 ):
 
     logger = logging.getLogger(f"{__name__}.{__qualname__}")
+    objects = BankStatementLineManager.from_queryset(
+        queryset_class=BankStatementLineManagerQuerySet
+    )()
 
     class Meta:
         db_table = "gl_bank_statement_line"
@@ -59,7 +70,18 @@ class BankStatementLine(
         on_delete=models.CASCADE,
     )
 
+    """
+    this is the timezone of the date of the transaction, either from
+    the transaction, if it was provided, or the timezone of the bank
+    account if it was not. The date itself is persisted in UTC
+    so this is needed to resolve back to the timezoned date.
+    """
+    tz = TimeZoneField(default="Europe/London")
+
+    # a bare date is generally provided by bank statements
+    # however payment providers may provide a datetime
     date = models.DateField()
+    datetime = models.DateTimeField()
 
     amount = models.DecimalField(
         max_digits=16,
@@ -77,8 +99,25 @@ class BankStatementLine(
         blank=True,
     )
 
+    ofx_name = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
     ofx_memo = models.CharField(
         max_length=255,
+        blank=True,
+    )
+
+    ofx_dtposted = models.CharField(
+        max_length=32,
+        null=True,
+        blank=True,
+    )
+
+    ofx_trntype = models.CharField(
+        max_length=32,
+        null=True,
         blank=True,
     )
 
@@ -156,6 +195,18 @@ class BankStatementLine(
         logger.trace(f"BankTransaction: [saving] {self._state}")
 
         if self._state.adding:
+            if not self.date and not self.datetime:
+                raise ValidationError("BankStatementLine must have a date or datetime")
+            if self.datetime and not self.date:
+                if is_aware(self.datetime):
+                    self.tz = self.datetime.tzinfo
+                else:
+                    self.tz = self.bank.tz
+                self.date = self.datetime.date()
+
+            elif self.date and not self.datetime:
+                self.datetime = datetime.datetime(self.date.year, self.date.month, self.date.day, tzinfo=self.bank.tz,)
+
             if not self.hash:
                 self.hash = self.get_hash()
                 logger.trace("BankTransaction: [hash] {self.hash}")

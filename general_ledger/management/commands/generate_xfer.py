@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from loguru import logger
 from rich import inspect
 
-from general_ledger.factories.bank_transactions import BankTransactionFactory
+from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.helpers.matcher import MatcherHelper
 from general_ledger.management.utils import (
     get_book,
@@ -134,10 +134,10 @@ class Command(BaseCommand):
         # for foo in checking_banks:
         #     inspect(foo)
 
-        txferss = BankTransactionFactory.create_transfers(
-            list(checking_banks.all()) + list(savings_banks.all()),
-            50,
-        )
+        # txferss = BankTransactionFactory.create_transfers(
+        #     list(checking_banks.all()) + list(savings_banks.all()),
+        #     50,
+        # )
 
         txs = BankTransactionFactory.create_batch(
             20,

@@ -85,9 +85,9 @@
                 <button class="btn btn-outline-light" type="button"><i class="bi bi-gear"></i></button></a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
               {% if active_book and active_book.pk %}
-                <li><a class="dropdown-item" href="{{ url('general_ledger:book-preferences', request.active_book.pk) }}">Book Settings</a></li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:book-preferences', request.active_book.pk) }}?next={{ request.path }}">Book Settings</a></li>
                 {% endif %}
-                <li><a class="dropdown-item" href="{{ url('general_ledger:user') }}">User Settings</a></li>
+                <li><a class="dropdown-item" href="{{ url('general_ledger:user') }}?next={{ request.path }}">User Settings</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>

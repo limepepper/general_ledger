@@ -17,6 +17,9 @@
             <form action="" enctype="multipart/form-data" method="post">
 
               {% csrf_token %}
+              {% if next %}
+              <input type="hidden" name="next" value="{{ next|e }}">
+              {% endif %}
               <table>
                 {{ form.as_table() }}
               </table>

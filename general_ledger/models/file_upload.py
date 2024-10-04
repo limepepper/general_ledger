@@ -3,6 +3,8 @@ from django.urls import reverse
 import magic
 import uuid
 
+from general_ledger.managers.file_upload import FileUploadManager
+
 
 def generate_unique_filename(instance, filename):
     splitted = filename.split(".")
@@ -17,8 +19,20 @@ def generate_unique_filename(instance, filename):
 
 
 class FileUpload(models.Model):
-    file = models.FileField(upload_to=generate_unique_filename)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    objects = FileUploadManager()
+
+    book = models.ForeignKey(
+        "Book",
+        on_delete=models.CASCADE,
+    )
+
+    file = models.FileField(
+        upload_to=generate_unique_filename,
+    )
+    uploaded_at = models.DateTimeField(
+        auto_now_add=True,
+    )
     name = models.CharField(
         max_length=255,
         blank=True,

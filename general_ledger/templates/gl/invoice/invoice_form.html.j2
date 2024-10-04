@@ -23,7 +23,7 @@
             <h1>Create Invoice</h1>
             {% endif %}
 
-            {% include 'gl/contact/contact_form_inline.html.j2' %}
+            {# {% include 'gl/contact/contact_form_inline.html.j2' %} #}
 
             <form method="post">
               {% csrf_token %}
@@ -56,6 +56,7 @@
                 <div class="col-md-3">
                   {{ invoice_form[field].label_tag() }}
                   {{ invoice_form[field] }}
+                {{ invoice_form[field].errors }}
                 </div>
                 {% endfor %}
 

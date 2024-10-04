@@ -9,7 +9,7 @@ from general_ledger.forms_widgets.contact_widget import ContactWidget
 from general_ledger.models import (
     Invoice,
     InvoiceLine,
-    Ledger,
+    Ledger, Account, TaxRate,
 )
 
 
@@ -20,6 +20,25 @@ def custom_formfield_callback(field, **kwargs):
     return field.formfield(**kwargs)
 
 
+def create_invoice_line_formset(book, data=None, instance=None):
+    InvoiceLineFormSet = inlineformset_factory(
+        Invoice,
+        InvoiceLine,
+        formset=BaseInvoiceLineFormSet,
+        form=InvoiceLineForm,
+        extra=1,
+        can_delete=True
+    )
+
+    class InvoiceLineFormSetWithBook(InvoiceLineFormSet):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for form in self.forms:
+                # form.fields['account'].queryset = Account.objects.filter(coa=book.get_default_coa())
+                form.fields['vat_rate'].queryset = TaxRate.objects.filter(book=book)
+
+    return InvoiceLineFormSetWithBook(data=data, instance=instance)
+
 class InvoiceForm(forms.ModelForm):
 
     logger = logging.getLogger(f"{__name__}.{__qualname__}")
@@ -28,6 +47,7 @@ class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
+        formfield_callback = custom_formfield_callback
         fields = [
             "contact",
             "ledger",
@@ -50,23 +70,18 @@ class InvoiceForm(forms.ModelForm):
         # formfield_callback = lambda f: f.formfield(
         #     widget=forms.TextInput(attrs={"class": "form-control"})
         # )
-        formfield_callback = custom_formfield_callback
 
     def __init__(self, *args, **kwargs):
         self.logger.debug(f"kwargs: {kwargs}")
-        request = kwargs.pop("request", None)
+        book = kwargs.pop("book", None)
         super().__init__(*args, **kwargs)
         self.logger.debug(f"kwargs2: {kwargs}")
-        self.logger.debug(f"request: {request}")
+        self.logger.debug(f"request: {book}")
         self.fields["contact"].extra_classes = "form-control"
 
-        if "instance" in kwargs:
+        if book:
             self.fields["ledger"].queryset = Ledger.objects.filter(
-                book=kwargs["instance"].ledger.book
-            )
-        elif "initial" in kwargs:
-            self.fields["ledger"].queryset = Ledger.objects.filter(
-                book=kwargs["initial"]["book"]
+                book=book
             )
 
     def get_context(self):

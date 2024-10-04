@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django_jinja import views
 
+from general_ledger.views.utils import ServerResponseSimulator
 
 handler400 = views.BadRequest.as_view()
 # handler403 = views.PermissionDenied.as_view()
@@ -21,6 +22,7 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
     path("api/v1/", include("general_ledger.urls_api")),
+    path("500", ServerResponseSimulator.as_view()),
 ]
 
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

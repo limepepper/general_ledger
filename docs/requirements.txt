@@ -1,1 +1,3 @@
 furo==2024.8.6
+django>=5
+Sphinx==8.0.2
