@@ -12,6 +12,10 @@ from crispy_forms.utils import render_crispy_form
 from django_jinja import library
 
 
+@library.global_function
+def inject_today_date():
+    return date.today().strftime("%Y-%m-%d")
+
 @library.global_function()
 def crispy(form, helper, context=None):
     return render_crispy_form(
