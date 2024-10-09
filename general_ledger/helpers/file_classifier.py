@@ -58,7 +58,7 @@ class FileClassifier:
                     qif = QifParser.parse(file)
                     return FileType.QIF
                 except Exception as e:
-                    logger.info("QIF parse failed")
+                    logger.info("QIF parse failed {}", str(e))
                     pass
 
         elif file_type == 'text/csv':
