@@ -1,26 +1,26 @@
 from django import forms
+from django.template.defaultfilters import filesizeformat
+from django.utils.translation import gettext_lazy as _
+from pandas.core.dtypes.inference import is_integer
 
-from general_ledger.models import FileUpload
+from general_ledger.forms_widgets.file_upload import MultipleFileField
 
-
-class MultipleClearableFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-
-class MultipleFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-
-class MultipleFileField(forms.FileField):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault("widget", MultipleFileInput())
-        super().__init__(*args, **kwargs)
-
-    def clean(self, data, initial=None):
-        single_file_clean = super().clean
-        if isinstance(data, (list, tuple)):
-            result = [single_file_clean(d, initial) for d in data]
-        else:
-            result = [single_file_clean(data, initial)]
-        return result
+# Add to your settings file
+CONTENT_TYPES = [
+    "image",
+    "video",
+    "text",
+    "application",
+]
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 5242880
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+MAX_UPLOAD_SIZE = 5242880
 
 
 class FileUploadForm(forms.Form):
@@ -33,4 +33,24 @@ class FileUploadForm(forms.Form):
         #         attrs={"multiple": True},
         #     ),
         # }
+
     file = MultipleFileField()
+
+    def clean_file(self):
+
+        contents = self.cleaned_data["file"]
+        if isinstance(contents, (list, tuple)):
+            for content in contents:
+                content_type = content.content_type.split("/")[0]
+                if content_type in CONTENT_TYPES:
+                    if content.size > int(MAX_UPLOAD_SIZE):
+                        raise forms.ValidationError(
+                            _("Please keep filesize under %s. Current filesize %s")
+                            % (
+                                filesizeformat(MAX_UPLOAD_SIZE),
+                                filesizeformat(content.size),
+                            )
+                        )
+                else:
+                    raise forms.ValidationError(_(f"fFile type '{content_type}' is not supported"))
+                return content

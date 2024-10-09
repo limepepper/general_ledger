@@ -357,3 +357,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 DEFAULT_EXCEPTION_REPORTER = (
     "general_ledger.utils.exception_reporter.MyExceptionReporter"
 )
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / ""

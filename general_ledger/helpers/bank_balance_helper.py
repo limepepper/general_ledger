@@ -81,7 +81,12 @@ class BankBalanceHelper:
         for balance in balances:
             print(f"{balance[0]} {balance[1]}")
             bal, created = BankBalance.objects.update_or_create(
-                balance_date=balance[0],
+                balance_date=datetime.datetime(
+                    balance[0].year,
+                    balance[0].month,
+                    balance[0].day,
+                    tzinfo=balance[2],
+                ),
                 bank=self.bank_account,
                 balance_type="ephemeral",
                 defaults={
@@ -90,8 +95,6 @@ class BankBalanceHelper:
                 },
             )
             print(f"{bal.balance_date} {bal.balance} {created}")
-
-        return balances
 
 
 #        return self.bank_account.balance

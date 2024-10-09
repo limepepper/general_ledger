@@ -1,0 +1,4 @@
+Transaction date,Transaction Type,Sort Code,Account Number,Transaction description,Debit amount,Credit amount,Balance
+2024-09-13,FPO,77-91-38,12345678,Mr Smith Expenses,525,,17109.25
+2024-02-21,SO,77-91-38,12345678,AAAAAA REFERENCE1,,2,17634.25
+2024-02-01,SO,77-91-38,12345678,SOMEONE REFERENCE,,5,17628.25
