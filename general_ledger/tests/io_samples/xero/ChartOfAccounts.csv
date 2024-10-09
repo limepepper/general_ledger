@@ -44,7 +44,6 @@
 620,Prepayments,Current Asset,No VAT,An expenditure that has been paid for in advance,No,No,No,
 630,Inventory,Inventory,No VAT,Value of tracked items for resale.,No,No,No,
 640,Other debtors,Current Asset,No VAT,,No,No,No,
-700,Investment in Gold etc.,Non-Current Asset,No VAT,,No,No,No,
 710,Office Equipment,Fixed Asset,No VAT,Office equipment that is owned and controlled by the business,No,Yes,No,
 711,Less Accumulated Depreciation on Office Equipment,Fixed Asset,No VAT,The total amount of office equipment costs that has been consumed by the business (based on the useful life),No,No,No,
 720,Computer Equipment,Fixed Asset,No VAT,Computer equipment that is owned and controlled by the business,No,Yes,No,

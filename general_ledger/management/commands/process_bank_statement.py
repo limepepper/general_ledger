@@ -4,12 +4,16 @@ from rich import inspect
 from general_ledger.io import ParserFactory
 from general_ledger.models import Book, FileUpload, BankStatementLine, Bank, BankBalance
 from django.contrib.auth import get_user_model
-
+from loguru import logger
 # from general_ledger.models.account_dl_treebeard import AccountClass
 
 
 class Command(BaseCommand):
     help = "process bank statement"
+
+    def __init__(self, stdout=None, stderr=None, no_color=False, force_color=False):
+        super().__init__(stdout, stderr, no_color, force_color)
+        self.bank1 = None
 
     def add_arguments(self, parser):
 
@@ -18,21 +22,30 @@ class Command(BaseCommand):
             type=int,
             help="process a specific file",
         )
+        parser.add_argument(
+            "--bank1",
+            type=str,
+            help="if operation involves bank to bank transfers, provide the first bank",
+            default="",
+        )
 
     def handle(self, *args, **kwargs):
-        user = get_user_model().objects.get(username="admin")
-        book = Book.objects.get(name="Demo Company Ltd", owner=user)
+        logger.info("===========bank statement==========")
+
+        if kwargs.get("bank1"):
+            self.bank1 = Bank.objects.search(kwargs.get("bank1"))
 
         file_upload = FileUpload.objects.get(id=kwargs["file_id"])
         file_path = file_upload.file.path
         parser = ParserFactory.get_parser(file_path)
         parsed_data = parser.parse(file_path)
+
         # inspect(parsed_data, methods=False)
 
-        bank = Bank.objects.for_book(book).get(
-            sort_code=parsed_data["sort_code"],
-            account_number=parsed_data["account_number"],
-        )
+        # bank = Bank.objects.for_book(book).get(
+        #     sort_code=parsed_data["sort_code"],
+        #     account_number=parsed_data["account_number"],
+        # )
 
         if "balance" in parsed_data and "balance_date" in parsed_data:
             print(f"{parsed_data['balance']=}")

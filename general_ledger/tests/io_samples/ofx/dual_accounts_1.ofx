@@ -1,0 +1,109 @@
+OFXHEADER:100
+DATA:OFXSGML
+VERSION:102
+SECURITY:NONE
+ENCODING:USASCII
+CHARSET:1252
+COMPRESSION:NONE
+OLDFILEUID:NONE
+NEWFILEUID:NONE
+<OFX>
+    <SIGNONMSGSRSV1>
+        <SONRS>
+            <STATUS>
+                <CODE>0</CODE>
+                <SEVERITY>INFO</SEVERITY>
+            </STATUS>
+            <DTSERVER>20241001204846</DTSERVER>
+            <LANGUAGE>ENG</LANGUAGE>
+        </SONRS>
+    </SIGNONMSGSRSV1>
+    <BANKMSGSRSV1>
+        <STMTTRNRS>
+            <TRNUID>1</TRNUID>
+            <STATUS>
+                <CODE>0</CODE>
+                <SEVERITY>INFO</SEVERITY>
+            </STATUS>
+            <STMTRS>
+                <CURDEF>GBP</CURDEF>
+                <BANKACCTFROM>
+                    <BANKID>112233</BANKID>
+                    <ACCTID>12345678</ACCTID>
+                    <ACCTTYPE>CHECKING</ACCTTYPE>
+                </BANKACCTFROM>
+                <BANKTRANLIST>
+                    <DTSTART>20240102</DTSTART>
+                    <DTEND>20240930</DTEND>
+                    <STMTTRN>
+                        <TRNTYPE>DIRECTDEBIT</TRNTYPE>
+                        <DTPOSTED>20240108</DTPOSTED>
+                        <TRNAMT>-180.40</TRNAMT>
+                        <FITID>202401080001</FITID>
+                        <NAME>GOOGLE CLOUD EMEA</NAME>
+                        <MEMO>AABBCCDDEEFFGGHHIIJJ</MEMO>
+                    </STMTTRN>
+                    <STMTTRN>
+                        <TRNTYPE>XFER</TRNTYPE>
+                        <DTPOSTED>20240129</DTPOSTED>
+                        <TRNAMT>-10000.00</TRNAMT>
+                        <FITID>202401290001</FITID>
+                        <NAME>To A/C 23456789</NAME>
+                        <MEMO>SOME COMPANY LTD</MEMO>
+                    </STMTTRN>
+                </BANKTRANLIST>
+                <LEDGERBAL>
+                    <BALAMT>123.45</BALAMT>
+                    <DTASOF>20240930</DTASOF>
+                </LEDGERBAL>
+                <AVAILBAL>
+                    <BALAMT>0.00</BALAMT>
+                    <DTASOF>20240930</DTASOF>
+                </AVAILBAL>
+            </STMTRS>
+        </STMTTRNRS>
+        <STMTTRNRS>
+            <TRNUID>2</TRNUID>
+            <STATUS>
+                <CODE>0</CODE>
+                <SEVERITY>INFO</SEVERITY>
+            </STATUS>
+            <STMTRS>
+                <CURDEF>GBP</CURDEF>
+                <BANKACCTFROM>
+                    <BANKID>112233</BANKID>
+                    <ACCTID>23456789</ACCTID>
+                    <ACCTTYPE>SAVINGS</ACCTTYPE>
+                </BANKACCTFROM>
+
+                <BANKTRANLIST>
+                    <DTSTART>20240129</DTSTART>
+                    <DTEND>20240930</DTEND>
+                    <STMTTRN>
+                        <TRNTYPE>XFER</TRNTYPE>
+                        <DTPOSTED>20240129</DTPOSTED>
+                        <TRNAMT>10000.00</TRNAMT>
+                        <FITID>202401290001</FITID>
+                        <NAME>From A/C 12345678</NAME>
+                        <MEMO>SOME COMPANY LTD</MEMO>
+                    </STMTTRN>
+                    <STMTTRN>
+                        <TRNTYPE>INT</TRNTYPE>
+                        <DTPOSTED>20240131</DTPOSTED>
+                        <TRNAMT>386.46</TRNAMT>
+                        <FITID>202401310001</FITID>
+                        <NAME>31JAN GRS 23456789</NAME>
+                    </STMTTRN>
+                </BANKTRANLIST>
+                <LEDGERBAL>
+                    <BALAMT>1234.55</BALAMT>
+                    <DTASOF>20240930</DTASOF>
+                </LEDGERBAL>
+                <AVAILBAL>
+                    <BALAMT>0.00</BALAMT>
+                    <DTASOF>20240930</DTASOF>
+                </AVAILBAL>
+            </STMTRS>
+        </STMTTRNRS>
+    </BANKMSGSRSV1>
+</OFX>

@@ -45,6 +45,8 @@ class TypeParser:
             return "Faster Payment In"
         elif type_str in ["fpo", "faster payment out"]:
             return "Faster Payment Out"
+        elif type_str in ["debit"]:
+            return "Online Payment"
         elif type_str in ["directdep"]:
             return "Direct Deposit"
         elif type_str in ["other"]:

@@ -3,6 +3,7 @@ from decimal import Decimal
 from uuid import uuid4
 
 from django.db import models
+from loguru import logger
 from timezone_field import TimeZoneField
 
 from general_ledger.managers.bank import BankManager
@@ -151,3 +152,12 @@ class Bank(
 
     def get_unreconciled_count(self):
         return self.bankstatementline_set.filter(is_reconciled=False).count()
+
+    def save(self, *args, **kwargs):
+        logger.trace(f"BankAccount: [saving] {self._state}")
+        #if self._state.adding:
+        if len(self.sort_code) == 6:
+            self.sort_code = f"{self.sort_code[:2]}-{self.sort_code[2:4]}-{self.sort_code[4:]}"
+
+        super().save(*args, **kwargs)
+

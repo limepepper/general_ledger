@@ -1,17 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from loguru import logger
-from rich import inspect
 
 from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
-from general_ledger.helpers.matcher import MatcherHelper
 from general_ledger.management.utils import (
     get_book,
     get_or_create_banks,
 )
-from general_ledger.models import Bank, BankStatementLine, Payment, PaymentItem
+from general_ledger.models import Bank
 
-from django.db.models import Q
 
 class Command(BaseCommand):
     help = "generate Book data"

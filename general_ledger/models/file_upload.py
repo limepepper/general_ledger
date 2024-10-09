@@ -1,9 +1,12 @@
+import hashlib
+
 from django.db import models
 from django.urls import reverse
 import magic
 import uuid
 
 from general_ledger.managers.file_upload import FileUploadManager
+from general_ledger.validators import validate_file_size
 
 
 def generate_unique_filename(instance, filename):
@@ -22,6 +25,12 @@ class FileUpload(models.Model):
 
     objects = FileUploadManager()
 
+    class Meta:
+        verbose_name = "Uploaded file"
+        verbose_name_plural = "Uploaded files"
+        db_table = "gl_file_upload"
+        ordering = ["-uploaded_at"]
+
     book = models.ForeignKey(
         "Book",
         on_delete=models.CASCADE,
@@ -29,6 +38,7 @@ class FileUpload(models.Model):
 
     file = models.FileField(
         upload_to=generate_unique_filename,
+        validators=[validate_file_size],
     )
     uploaded_at = models.DateTimeField(
         auto_now_add=True,
@@ -58,14 +68,10 @@ class FileUpload(models.Model):
             self.original_file_name = self.file.name
 
         if self.file:
-            # temp_file_path = self.file.file.temporary_file_path()
             # print(f"Temporary file path: {temp_file_path}")
-            # self.sha256 = hashlib.sha256(open(temp_file_path, "rb").read()).hexdigest()
+            self.sha256 = hashlib.sha256(self.file.read()).hexdigest()
             self.file.seek(0)
             first_2048_bytes = self.file.read(2048)
-            # print(
-            #     f"First 2048 bytes: {first_2048_bytes[:100]}..."
-            # )
             filetype = magic.from_buffer(first_2048_bytes, mime=True)
             # print(f"Filetype: {filetype}")
             self.file_type = filetype
