@@ -95,7 +95,7 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             book=ledger.book,
             is_customer=False,
         )
-        inspect(contact)
+        # inspect(contact)
         invoice = Invoice.objects.create(
             ledger=ledger,
             contact=contact,
@@ -111,7 +111,7 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             quantity=1,
             unit_price=40.0000,
         )
-        inspect(invoice)
+        # inspect(invoice)
 
         with self.assertRaises(ValidationError) as _:
             invoice.full_clean()
@@ -138,7 +138,7 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             quantity=1,
             unit_price=40.0000,
         )
-        inspect(invoice)
+        # inspect(invoice)
 
         with self.assertRaises(ValidationError) as _:
             invoice.full_clean()
@@ -166,7 +166,7 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             quantity=1,
             unit_price=40.0000,
         )
-        inspect(invoice)
+        # inspect(invoice)
 
         with self.assertRaises(ValidationError) as _:
             invoice.full_clean()

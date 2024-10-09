@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.db.models import Q
 from loguru import logger
-from rich import print as rprint, inspect
+from rich import print as inspect
 
 from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.models import Invoice, BankStatementLine, Payment
@@ -44,7 +44,7 @@ class MatcherHelper:
 
         outstanding_invoices = Invoice.objects.awaiting_payment().order_by("due_date")
 
-        rprint(outstanding_invoices)
+        logger.trace(outstanding_invoices)
         logger.info(f"Outstanding invoices: {len(outstanding_invoices)}")
 
         bank_filter = Q(is_matched=False) & Q(is_reconciled=False)
@@ -56,12 +56,12 @@ class MatcherHelper:
             bank_filter
         ).order_by("date")
 
-        print(f"count is {unreconciled_bank_transactions.count()}")
+        logger.trace(f"count is {unreconciled_bank_transactions.count()}")
         # create a list, as can't pop from a queryset
         unreconciled_bank_transactions_list = list(unreconciled_bank_transactions)
 
-        rprint(f"outstanding_invoices count : {len(outstanding_invoices)}")
-        rprint(
+        logger.trace(f"outstanding_invoices count : {len(outstanding_invoices)}")
+        logger.trace(
             f"unreconciled_bank_transactions count : {unreconciled_bank_transactions.count()}"
         )
 
@@ -169,7 +169,7 @@ class MatcherHelper:
             payment_item.save()
         for candidate in self.candidates["transfer"]:
             logger.info("processing transfer match")
-            inspect(candidate)
+            # inspect(candidate)
             bsl_from, bsl_to = candidate
             # inspect(bsl_from)
             # inspect(bsl_to)
@@ -186,7 +186,7 @@ class MatcherHelper:
             bsl_from.save()
             bsl_to.is_matched = True
             bsl_to.save()
-            inspect(pb)
+            # inspect(pb)
 
         # for candidate in self.candidates["close"]:
         #     bank_transaction, invoices = candidate
@@ -209,7 +209,7 @@ class MatcherHelper:
             logger.info(f"Bank transaction {bank_transaction} has matched payments")
             return
 
-        rprint(bank_transaction, invoices)
+        logger.trace(bank_transaction, invoices)
 
         payment = Payment(
             # amount=bank_transaction.amount,
@@ -232,5 +232,4 @@ class MatcherHelper:
     def handle_unmatched_transactions(self):
         # Logic to deal with transactions that couldn't be automatically matched
         # This might involve creating a report for manual review
-        rprint("handle_unmatched_transactions")
-        pass
+        logger.debug("handle_unmatched_transactions")

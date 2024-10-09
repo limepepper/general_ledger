@@ -36,7 +36,7 @@ def trigger_invoice_processing(
     logger.trace("handling post save signal for invoice")
     if not created and hasattr(instance, "_previous_status"):
         if instance.status != instance._previous_status:
-            logger.info("handling state change for invoice")
+            logger.trace("handling state change for invoice")
             process_invoice_state_change(
                 instance.pk,
                 instance.status,
@@ -49,7 +49,7 @@ def process_invoice_state_change(
     current_status,
     previous_status,
 ):
-    logger.debug(
+    logger.trace(
         f"Invoice state change {invoice_pk} : {previous_status} -> {current_status}"
     )
     invoice_helper = InvoiceHelper(pk=invoice_pk)
@@ -60,7 +60,7 @@ def process_invoice_state_change(
 @receiver(post_save, sender=InvoiceLine)
 @receiver(post_delete, sender=InvoiceLine)
 def update_invoice_total(sender, instance, **kwargs):
-    logger.debug(f"calling post delete signal in invoice line")
+    logger.trace(f"calling post delete signal in invoice line")
     instance.invoice.recalculate_total()
     instance.invoice.save()
 

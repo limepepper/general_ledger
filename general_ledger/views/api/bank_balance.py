@@ -33,5 +33,5 @@ class BankBalanceViewSet(
             balance_date__lte=end_date,
             bank__id=bank_id,
         )
-        inspect(queryset, methods=False)
+        # inspect(queryset, methods=False)
         return queryset

@@ -9,8 +9,6 @@ In order to avoid the Invoice model from becoming too large, we have created a h
 various operations that can be performed on an invoice. This class will be used to handle the various operations
 """
 
-import logging
-
 from general_ledger.builders import TransactionBuilder
 from general_ledger.models import Invoice, Direction
 
@@ -18,8 +16,6 @@ from loguru import logger
 
 
 class InvoiceHelper:
-
-    logger = logging.getLogger(__name__)
 
     def __init__(self, pk):
         self.invoice = Invoice.objects.get(pk=pk)
@@ -31,7 +27,7 @@ class InvoiceHelper:
         :param current_status: The status of the invoice after the change
         :return:
         """
-        logger.info(
+        logger.trace(
             f"Invoice state change {self.invoice.pk} : {previous_status} -> {current_status}"
         )
         if (
@@ -55,7 +51,7 @@ class InvoiceHelper:
         ):
             self.unpost_related_records()
         else:
-            self.logger.debug(
+            logger.trace(
                 f"Invalid state change from {previous_status} to {current_status}"
             )
 
@@ -69,7 +65,7 @@ class InvoiceHelper:
             if tx.can_post():
                 tx.post()
             else:
-                self.logger.error(f"Cannot post transaction {tx}")
+                logger.error(f"Cannot post transaction {tx}")
 
     def unpost_related_records(self):
         """

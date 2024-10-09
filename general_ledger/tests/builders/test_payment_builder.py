@@ -34,7 +34,7 @@ class TestPaymentBuilder(GeneralLedgerBaseTest):
 
         assert isinstance(book, Book)
 
-        logger.info(f"{book=} {ledger=} {bank=}")
+        logger.debug(f"{book=} {ledger=} {bank=}")
 
         bank_statement_line = BankTransactionFactory(
             bank=bank,
@@ -54,7 +54,7 @@ class TestPaymentBuilder(GeneralLedgerBaseTest):
             tax_rate__slug="no-vat",
         )
 
-        logger.info(f"calling build on the invoice builder")
+        logger.debug(f"calling build on the invoice builder")
         invoice = ib.build()
         invoice.do_next()
 

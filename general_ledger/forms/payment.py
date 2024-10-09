@@ -1,4 +1,5 @@
 import logging
+from loguru import logger
 
 from django import forms
 from django_select2.forms import ModelSelect2Widget
@@ -26,7 +27,7 @@ class PaymentCreateForm(forms.Form):
 
     def is_valid(self):
         is_valid = super().is_valid()
-        print(f"{is_valid=}")
+        logger.trace(f"{is_valid=}")
         return is_valid
 
     def save(self):

@@ -221,7 +221,7 @@ class BankStatementLine(
         try:
             self.full_clean()
         except ValidationError as e:
-            inspect(self)
+            # inspect(self)
             raise e
 
         super().save(*args, **kwargs)

@@ -32,7 +32,7 @@ class TestPaymentSearching():
             Q(items__from_object_id__in=bank_1.bankstatementline_set.values_list('id', flat=True)) |
             Q(items__to_object_id__in=bank_2.bankstatementline_set.values_list('id', flat=True))
         )
-        print(qs.query)
+        # print(qs.query)
         #inspect(qs, title="payments")
         assert qs.count() == 2
 

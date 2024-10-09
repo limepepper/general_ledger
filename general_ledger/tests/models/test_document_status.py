@@ -33,10 +33,9 @@ class DocumentStatusTests(GeneralLedgerBaseTest):
         payment.refresh_from_db()
         # inspect(payment.state)
 
-        print(payment.state)
-        print(DocumentStatus.RECORDED)
-        print(payment.state == DocumentStatus.RECORDED)
-        print(payment.state == DocumentStatus.DRAFT)
+
+        assert (payment.state == DocumentStatus.RECORDED)
+        assert (payment.state != DocumentStatus.DRAFT)
 
         # payment.state = DocumentStatus.VOID
 

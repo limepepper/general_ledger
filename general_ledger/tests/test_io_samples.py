@@ -8,6 +8,7 @@ from general_ledger.io import ParserFactory
 from general_ledger.tests import GeneralLedgerBaseTest
 from ofxparse import OfxParser
 
+
 class TestIoSamples(GeneralLedgerBaseTest):
     """
     find the type of some file by inspecting it
@@ -21,8 +22,7 @@ class TestIoSamples(GeneralLedgerBaseTest):
         filepath = os.path.join(self.samples_path, "xero/ChartOfAccounts.csv")
         with open(filepath) as f:
             file_mime_type = magic.from_buffer(f.read(1024), mime=True)
-            print(file_mime_type)
-
+        assert file_mime_type == "text/csv"
 
     def test_multi_stmttrnrs_1(self):
         file_path = os.path.join(self.samples_path, "ofx/dual_accounts_1.ofx")
@@ -35,16 +35,19 @@ class TestIoSamples(GeneralLedgerBaseTest):
         parsed_data = parser.parse(file_path)
         # inspect(parser)
 
-
         with open(file_path, "r") as fileobj:
             ofx = OfxParser.parse(fileobj)
 
-        inspect(ofx)
+        # inspect(ofx)
 
         for account in parsed_data["accounts"]:
-            #statement = account[statement
-            inspect(account)
+            # statement = account[statement
+            # inspect(account)
+            assert account["account_number"] in [
+                "12345678",
+                "23456789",
+            ]
             for transaction in account["transactions"]:
                 # print(f"transaction ===> {transaction}")
                 assert transaction["amount"]
-                inspect(transaction)
+                # inspect(transaction)

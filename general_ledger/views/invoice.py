@@ -70,7 +70,7 @@ class InvoiceDetailView(
     def get_context_data(self, **kwargs):
         print("InvoiceDetailView - calling get_context_data")
         data = super().get_context_data(**kwargs)
-        inspect(self.object)
+        # inspect(self.object)
         # inspect(self.object.history.all())
         historical_records = HistoryView.get_history_queryset(
             self.request,
@@ -89,7 +89,7 @@ class InvoiceDetailView(
             "history_list_display": [],
         }
         data.update(context)
-        inspect(data)
+        # inspect(data)
         return data
 
     def get(self, request, *args, **kwargs):

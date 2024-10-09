@@ -52,7 +52,7 @@ class OFXParser(StatementParser):
             account_number = account.account_id
         account_type = account.account_type
 
-        inspect(account)
+        # inspect(account)
 
         #print(f"{sort_code=}")
         #print(f"{account_number=}")
@@ -101,7 +101,7 @@ class OFXParser(StatementParser):
 
             return data
         except Exception as e:
-            inspect(transaction)
+            # inspect(transaction)
             raise ParsingError(
                 f"Error parsing OFX file txs: {str(e)} for {transaction}"
             )

@@ -109,10 +109,10 @@ class Command(BaseCommand):
             10,
             banks=[self.bank1, self.bank2],
         )
-        inspect(txferss, title="txferss generated")
+        # inspect(txferss, title="txferss generated")
         matcher = MatcherHelper(banks=[self.bank1, self.bank2])
         matcher.reconcile_bank_statement()
-        inspect(matcher, title="matcher")
+        # inspect(matcher, title="matcher")
         matcher.process_matches()
 
     def other1(self, *args, **kwargs):

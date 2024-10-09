@@ -135,7 +135,7 @@ pyzmq==26.2.0
 # qifparse==0.5
 qifparse @ git+https://github.com/limepepper/qifparse@iso-date-fix
 referencing==0.35.1
-requests==2.31.0
+requests==2.32.3
 requests-oauthlib==2.0.0
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1

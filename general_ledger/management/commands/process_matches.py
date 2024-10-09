@@ -14,7 +14,7 @@ class Command(BaseCommand):
         logger.info("Processing matches")
         matcher = MatcherHelper()
         matcher.reconcile_bank_statement()
-        inspect(matcher.candidates)
+        # inspect(matcher.candidates)
 
         for candidate in matcher.candidates["exact"]:
             logger.info(candidate)

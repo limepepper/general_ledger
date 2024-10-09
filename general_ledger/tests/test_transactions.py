@@ -9,7 +9,7 @@ from loguru import logger
 
 
 # Create your tests here.
-class SomeTest(GeneralLedgerBaseTest):
+class TestTransactionCreatePost(GeneralLedgerBaseTest):
 
     # logger = logging.getLogger(__name__)
     # def test_something(self):
@@ -20,7 +20,7 @@ class SomeTest(GeneralLedgerBaseTest):
     def test_something_else(self):
 
         for acct in Account.objects.all():
-            logger.info(
+            logger.trace(
                 f"{acct.name} - {acct.type} {acct.code}",
                 extra={"user_id": 123, "username": "johndoe", "event": "login"},
             )
@@ -28,7 +28,7 @@ class SomeTest(GeneralLedgerBaseTest):
         book = Book.objects.first()
         ledger = book.get_default_ledger()
 
-        logger.debug(ledger)
+        logger.trace(ledger)
 
         lh = LedgerHelper(ledger)
         tx = lh.build_transaction(
@@ -46,7 +46,7 @@ class SomeTest(GeneralLedgerBaseTest):
                 },
             ],
         )
-        print(tx)
+        # print(tx)
         self.assertIsInstance(tx, Transaction)
         self.assertEqual(tx.description, "Test Transaction")
         # self.assertEqual(tx.ledger, self.ledger)
