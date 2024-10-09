@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from typing import List
 
 from django.db import transaction
@@ -47,9 +47,18 @@ class TransactionBuilder(TransactionBuilderAbstract):
     def add_entry(
         self,
         account: Account,
-        amount: Decimal,
+        amount: Decimal | int | str,
         tx_type: str,
     ):
+        if isinstance(amount, float):
+            raise TypeError("The 'amount' parameter cannot be a float. Use Decimal, int, or str instead.")
+
+        if not isinstance(amount, Decimal):
+            try:
+                amount = Decimal(amount)  # Convert to Decimal if needed
+            except InvalidOperation as e:
+                raise ValueError("Invalid 'amount' value. It must be convertible to a Decimal. {str(e)}")
+
         entry = Entry(
             account=account,
             amount=amount,

@@ -90,6 +90,7 @@ class TestBasicOperations(GeneralLedgerBaseTest):
         coa = book.get_default_coa()
         cash = Account.objects.get(name="Cash", coa=coa)
         capital = Account.objects.get(name="Capital", coa=coa)
+
         van, created = coa.account_set.get_or_create(
             coa=coa,
             name="Van",
@@ -134,7 +135,10 @@ class TestBasicOperations(GeneralLedgerBaseTest):
         tx1.post()
         self.assertEqual(LedgerHelper.get_account_balance(cash), 10_000)
 
-        tb2 = TransactionBuilder(ledger=ledger, description="Test Transaction - 2")
+        tb2 = TransactionBuilder(
+            ledger=ledger,
+            description="Test Transaction - 2",
+        )
         tb2.set_trans_date("2012-08-2")
         tb2.add_entry(van, 4_500, Direction.DEBIT)
         tb2.add_entry(cash, 4_500, Direction.CREDIT)

@@ -72,8 +72,8 @@ class AccountContextTests(GeneralLedgerBaseTest):
 
         tb4 = TransactionBuilder(ledger=ledger, description="Test Transaction - 4")
         tb4.set_trans_date("2012-08-17")
-        tb4.add_entry(accts_payable, 1_250.00, Direction.DEBIT)
-        tb4.add_entry(cash, 1_250.00, Direction.CREDIT)
+        tb4.add_entry(accts_payable, "1_250.00", Direction.DEBIT)
+        tb4.add_entry(cash, "1_250.00", Direction.CREDIT)
         tx4 = tb4.build()
         tx4.post()
         self.assertEqual(LedgerHelper.get_account_balance(cash), 4_250)

@@ -7,22 +7,38 @@
 <h1>Trial Balance</h1>
 
 <form action="/gl/reports/trial_balance/" method="post">
-{% csrf_token %}
-{{ form }}
-    <input type="submit" value="OK">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="OK">
 </form>
 
-<div class="container">
-    {% for account in accounts %}
-    {% if account.balance != 0 %}
-    <div class="row">
-        <div class="col-6">{{ account.name }}</div>
-        <div class="col-2 float-end text-end">  {% if account.balance > 0 %}{{ account.get_balance() }}{% else %}-{% endif %}</div>
-        <div class="col-2 float-end text-end">  {% if account.balance < 0 %}{{ account.get_balance() }}{% else %}-{% endif %}</div>
-    </div>
-    {% endif %}
-    {% endfor %}
 
+<div class="main-content-container">
+  <div class="container main-content">
+    <div class="col-12 col-md-11 mx-auto">
+      <div class="row">
+        <div class="card p-4">
+          <div class="card-body">
+            {% for account in accounts %}
+            {% if account.balance != 0 %}
+            <div class="row">
+              <div class="col-6">{{ account.name }}</div>
+              <div class="col-2 float-end text-end"> {% if account.balance > 0 %}{{ account.get_balance() }}{% else
+                %}-{%
+                endif %}
+              </div>
+              <div class="col-2 float-end text-end"> {% if account.balance < 0 %}{{ account.get_balance() }}{% else
+                  %}-{% endif %}</div>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 {% endblock %}

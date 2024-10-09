@@ -21,5 +21,8 @@ class AccountTypeManager(models.Manager):
             book=ledger.book,
         )
 
-    def natural_key(self):
-        return self.slug, self.book
+    def get_by_natural_key(self, slug, book):
+        return self.get(
+            slug=slug,
+            book=book,
+        )

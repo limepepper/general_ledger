@@ -30,7 +30,8 @@ class TaxRate(
         db_table = "gl_tax_rate"
         constraints = [
             models.UniqueConstraint(
-                fields=["slug", "tax_type"], name="slug_tax_type_uniq"
+                fields=["slug", "tax_type"],
+                name="slug_tax_type_uniq",
             ),
             models.UniqueConstraint(
                 fields=["slug", "book"],

@@ -122,7 +122,10 @@ class TestChap4Woods(GeneralLedgerBaseTest):
                 tax_type=book.taxtype_set.get(slug="no-vat"),
             )[0],
         )
-
+        purchases, _ = coa.account_set.get_or_create(
+            name="Purchases",
+            type__slug="direct-costs",
+        )
         tb1 = TransactionBuilder(ledger=ledger, description="Owner draws cash")
         tb1.set_trans_date("2024-06-25")
         tb1.add_entry(drawings, 50, Direction.DEBIT)
@@ -130,6 +133,14 @@ class TestChap4Woods(GeneralLedgerBaseTest):
         tx1 = tb1.build()
         self.assertTrue(tx1.can_post())
         tx1.post()
+
+        tb2 = TransactionBuilder(ledger=ledger, description="Owner draws from inventory")
+        tb2.set_trans_date("2024-06-28")
+        tb2.add_entry(drawings, 400, Direction.DEBIT)
+        tb2.add_entry(purchases, 400, Direction.CREDIT)
+        tx2 = tb2.build()
+        self.assertTrue(tx2.can_post())
+        tx2.post()
 
         #
         # self.assertEqual(LedgerHelper.get_account_balance(cash), 4_250)

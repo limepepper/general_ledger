@@ -6,7 +6,7 @@
     {% for entry in account["account"].entry_set.all() %}
     <div class="row">
         <div class="col-4 float-end text-end">{{ entry.transaction.trans_date }}</div>
-        <div class="col-2 float-end text-end">  {% if entry.amount > 0 %}{{ entry.amount }}{% else %}-{% endif %}</div>
+        <div class="col-2 float-end text-end">  {% if entry.amount > 0 %}{{ entry.amount|intcomma }}{% else %}-{% endif %}</div>
         <div class="col-2 float-end text-end">{{ account["entries"][entry.id] }}</div>
     </div>
     {% endfor %}

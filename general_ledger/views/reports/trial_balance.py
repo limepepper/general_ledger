@@ -18,7 +18,7 @@ class TrialBalanceView(
     FormView,
 ):
 
-    template_name = "gl/trial_balance.html.j2"
+    template_name = "gl/statements/trial_balance.html.j2"
     form_class = TrialBalanceDateForm
     # success_url = reverse_lazy('success')  # URL to redirect to after successful form submission
 
@@ -27,9 +27,9 @@ class TrialBalanceView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         accounts = Account.objects.all()
-        for account in accounts:
-            account.balance = account.get_balance()
-            account.save()
+        # for account in accounts:
+        #     account.balance = account.get_balance()
+        #     account.save()
         context["accounts"] = Account.objects.all()
         print("got here2")
         return context

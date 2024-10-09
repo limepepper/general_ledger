@@ -95,6 +95,7 @@ class Account(
 
     def __str__(self):
         # print(f"self.account_type: xxx {self.account_type}")
+        out = ""
         quote = "'"
         obrack = "("
         cbrack = ")"
@@ -102,8 +103,14 @@ class Account(
             name = getattr(self.type, "name", "None")
         except ObjectDoesNotExist:
             name = "None"
-        return f"{quote+self.name+quote: <25} {obrack+name+cbrack: <25}"
+        out += f"{quote+self.name+quote: <20} {obrack+name+cbrack: <25}"
 
+        try:
+            out += f" {self.slug: <20}"
+        except AttributeError:
+            pass
+
+        return out
         # constraints = [
         #     UniqueConstraint(
         #         fields=["code"],

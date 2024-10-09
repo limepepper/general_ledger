@@ -71,7 +71,7 @@ class BookHelper:
     def init_tax_rates(self):
         logger.debug("init tax rates")
         with open(
-            settings.BASE_DIR / "general_ledger/fixtures/tax_rates_2.yaml", "r"
+            settings.BASE_DIR / "general_ledger/fixtures/tax_rates.yaml", "r"
         ) as file:
             tax_rates = yaml.safe_load(file)
             for tax_rate in tax_rates:
@@ -80,22 +80,22 @@ class BookHelper:
                 logger.debug("==============")
                 logger.debug(tax_rate)
                 obj, created = TaxRate.objects.update_or_create(
-                    name=tax_rate["name"],
+                    name=tax_rate["fields"]["name"],
                     tax_type=TaxType.objects.get(
-                        slug=tax_rate["tax_type__slug"],
+                        slug=tax_rate["fields"]["tax_type"][0],
                         book=self.book,
                     ),
                     book=self.book,
                     defaults={
-                        "rate": tax_rate["rate"],
-                        "description": tax_rate["description"],
-                        "short_name": tax_rate["short_name"],
+                        "rate": tax_rate["fields"]["rate"],
+                        "description": tax_rate["fields"]["description"],
+                        "short_name": tax_rate["fields"]["short_name"],
                         "is_default": (
-                            tax_rate["is_default"]
-                            if "is_default" in tax_rate
+                            tax_rate["fields"]["is_default"]
+                            if "is_default" in tax_rate["fields"]
                             else False
                         ),
-                        "slug": tax_rate["slug"],
+                        "slug": tax_rate["fields"]["slug"],
                     },
                 )
                 logger.debug(f"created: {created} tax_rate: {obj}")
@@ -122,32 +122,40 @@ class BookHelper:
     def init_default_accounts(self):
         logger.debug("====== initializing default accounts ======")
         with open(
-            settings.BASE_DIR / "general_ledger/fixtures/Account-2024-08-27.yaml", "r"
+            settings.BASE_DIR / "general_ledger/fixtures/accounts.yaml", "r"
         ) as file:
             accounts = yaml.safe_load(file)
             for account in accounts:
                 logger.debug("==============")
                 logger.debug(account)
-                logger.debug(f"tax_rate__slug: {account['tax_rate__slug']}")
+                logger.debug(f"tax_rate__slug: {account["fields"]['tax_rate'][0]}")
                 logger.debug(f"self: {self}")
-                # @TODO this should be update or create
                 obj, created = Account.objects.update_or_create(
-                    name=account["name"],
+                    name=account["fields"]["name"],
                     type=AccountType.objects.get(
-                        slug=account["type__slug"], book=self.book
+                        slug=account["fields"]["type"][0],
+                        book=self.book,
                     ),
                     coa=self.book.get_default_coa(),
                     defaults={
-                        "description": account["description"],
-                        "is_system": account["is_system"],
-                        "is_hidden": account["is_hidden"],
-                        "is_placeholder": account["is_placeholder"],
-                        "currency": account["currency"],
-                        "code": account["code"],
-                        "tax_rate": TaxRate.objects.get(
-                            slug=account["tax_rate__slug"], book=self.book
+                        "description": account["fields"]["description"],
+                        "is_system": (
+                            account["fields"]["is_system"]
+                            if "is_system" in account["fields"]
+                            else None
                         ),
-                        "slug": account["slug"] if "slug" in account else None,
+                        "is_hidden": account["fields"]["is_hidden"],
+                        "is_placeholder": account["fields"]["is_placeholder"],
+                        "currency": account["fields"]["currency"],
+                        "code": account["fields"]["code"],
+                        "tax_rate": TaxRate.objects.get(
+                            slug=account["fields"]["tax_rate"][0], book=self.book
+                        ),
+                        "slug": (
+                            account["fields"]["slug"]
+                            if "slug" in account["fields"]
+                            else None
+                        ),
                     },
                 )
                 logger.debug(f"created: {created}")

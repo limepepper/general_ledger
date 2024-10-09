@@ -1,11 +1,12 @@
 - model: general_ledger.accounttype
   pk: 020d5c7a-9bd2-4840-96b4-3742b5286bc7
   fields:
-    description: ''
-    slug: current-asset
+    description: 'Accounts receivable type'
+    slug: accounts-receivable
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
-    name: Current Asset
-    category: A
+    name: Accounts Receivable
+    category: CA
+    liquidity: 80
 - model: general_ledger.accounttype
   pk: 0dfa4a29-09e5-4022-b855-404f10fe1c42
   fields:
@@ -21,7 +22,7 @@
     slug: prepayment
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Prepayment
-    category: A
+    category: CA
 - model: general_ledger.accounttype
   pk: 1c1f6254-0abb-426f-b92a-96a55ce1e1ac
   fields:
@@ -35,9 +36,10 @@
   fields:
     description: ''
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
-    name: Current Liability
-    slug: current-liability
-    category: L
+    name: Accounts Payable
+    slug: accounts-payable
+    category: CL
+    liquidity: 75
 - model: general_ledger.accounttype
   pk: 46dcba82-3bf0-4288-8c58-a90f917938cb
   fields:
@@ -53,7 +55,17 @@
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Bank
     slug: bank
-    category: A
+    category: CA
+    liquidity: 90
+- model: general_ledger.accounttype
+  pk: 5eb1f56a-abfc-122a-b215-f11861ff0a4e
+  fields:
+    description: 'Cash or cash equivalent'
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Cash
+    slug: cash
+    category: CA
+    liquidity: 100
 - model: general_ledger.accounttype
   pk: 6e79b603-ba41-4ff0-b4bf-a2ce6ee6828a
   fields:
@@ -77,7 +89,8 @@
     slug: unpaid-expense-claim
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Unpaid Expense Claims
-    category: L
+    category: CL
+    liquidity: 71
 - model: general_ledger.accounttype
   pk: bbef0fa2-1b61-4bce-8631-976d8e82e944
   fields:
@@ -93,7 +106,8 @@
     slug: inventory
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Inventory
-    category: A
+    category: CA
+    liquidity: 70
 - model: general_ledger.accounttype
   pk: dab895be-e395-4fb9-a946-9a1d4add9d6b
   fields:
@@ -103,18 +117,34 @@
     name: Overhead
     category: X
 - model: general_ledger.accounttype
+  pk: e6ec274d-4b49-4a20-99c2-997a41384125
+  fields:
+    description: 'Generic type for current assets'
+    slug: current-asset
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Current Asset
+    category: CA
+- model: general_ledger.accounttype
   pk: e6ec274d-4b49-4a20-99c2-997a41fb5125
   fields:
     description: ''
     slug: non-current-asset
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Non-current Asset
-    category: A
+    category: NCA
 - model: general_ledger.accounttype
   pk: fb4547f5-50be-4723-a05e-debf20eb5905
   fields:
-    description: ''
+    description: 'Generic type for non-current liabilities'
     slug: non-current-liability
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Non-current Liability
-    category: L
+    category: NCL
+- model: general_ledger.accounttype
+  pk: fb4517f5-10be-4723-a05e-debf20eb5905
+  fields:
+    description: 'Generic type for current liabilities'
+    slug: current-liability
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Current Liability
+    category: CL
