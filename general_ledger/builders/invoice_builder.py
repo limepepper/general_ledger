@@ -34,7 +34,7 @@ class InvoiceBuilder:
         self,
         **kwargs,
     ):
-        logger.info(f"Adding memo invoice {kwargs=}")
+        logger.trace(f"Adding memo invoice {kwargs=}")
         if not kwargs.get("contact"):
             raise ValueError("contact is required")
         self._create_invoice(**kwargs)
@@ -96,7 +96,7 @@ class InvoiceBuilder:
         return sales_account, vat_rate
 
     def add_line(self, **kwargs):
-        logger.info(f"Adding line {kwargs=}")
+        logger.trace(f"Adding line {kwargs=}")
         sales_account, tax_rate = self._parse_kwargs(**kwargs)
         self.entries.append(
             {
@@ -110,7 +110,7 @@ class InvoiceBuilder:
 
     def build(self):
         if not self.invoice:
-            logger.info("Creating invoice")
+            logger.trace("Creating invoice")
             self._create_invoice(**self.kwargs)
         self.invoice.save()
         for entry in self.entries:

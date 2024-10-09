@@ -14,11 +14,11 @@ from general_ledger.models.bank_statement_line_type import BankStatementLineType
 
 @pytest.fixture()
 def resources():
-    print("setup")
+    #print("setup")
     book = BookFactory()
     bank = BankAccountFactory(book=book)
     yield book, bank
-    print("teardown")
+    #print("teardown")
 
 
 class TestMatcherHelper:
@@ -123,7 +123,7 @@ class TestMatcherHelper:
         )
         matcher = MatcherHelper(book=book)
         matcher.reconcile_bank_statement()
-        inspect(matcher.candidates)
+        # inspect(matcher.candidates)
         assert len(matcher.candidates["combination"]) == 1
 
     @pytest.mark.django_db
@@ -165,4 +165,4 @@ class TestMatcherHelper:
                 to_object=bsl_to,
             )
             payment = pb.build()
-            inspect(pb)
+            # inspect(pb)

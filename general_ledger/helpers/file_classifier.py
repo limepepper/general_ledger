@@ -49,7 +49,7 @@ class FileClassifier:
                     ofx = OfxParser.parse(file)
                     return FileType.OFXV1
                 except Exception as e:
-                    logger.info("OFXV1 parse failed")
+                    logger.trace("OFXV1 parse failed")
                     pass
 
             with open(self.file_path) as file:
@@ -58,7 +58,7 @@ class FileClassifier:
                     qif = QifParser.parse(file)
                     return FileType.QIF
                 except Exception as e:
-                    logger.info("QIF parse failed {}", str(e))
+                    logger.trace("QIF parse failed {}", str(e))
                     pass
 
         elif file_type == 'text/csv':
@@ -66,10 +66,10 @@ class FileClassifier:
 
             try:
                 df = pd.read_csv(self.file_path)
-                print('File is a CSV.')
+                logger.trace('File is a CSV.')
                 return FileType.CSV
             except pd.errors.ParserError as e:
-                logger.error('File is not a valid CSV.')
+                logger.error('File is not a valid CSV. error: {}', str(e))
                 raise Exception(f"File is not a valid CSV: {self.file_path} for reason {e}")
 
 

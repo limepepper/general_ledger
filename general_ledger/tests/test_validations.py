@@ -27,9 +27,9 @@ class TestValidations(GeneralLedgerBaseTest):
         )
 
         # print(invoice.is_overdue)
-        print(invoice.is_valid)
-        print(invoice.is_overdue)
-        inspect(invoice)
+        assert invoice.is_valid
+        assert invoice.is_overdue is False
+        # inspect(invoice)
         # inspect(invoice.date)
         # inspect(invoice.due_date)
 

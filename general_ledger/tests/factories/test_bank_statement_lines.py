@@ -20,7 +20,8 @@ class TestBankStatementLineFactory:
         )
 
         for tx in txs:
-            print(f"{tx.type:<18} '{tx.date}' '{tx.datetime}' '{tx.tz}' {tx.amount:>8}")
+            pass
+            # print(f"{tx.type:<18} '{tx.date}' '{tx.datetime}' '{tx.tz}' {tx.amount:>8}")
 
         # columns = Columns(list(txs), equal=True, expand=True)
         # inspect(list(txs))

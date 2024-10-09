@@ -43,5 +43,5 @@ class TestInvoiceBuilder():
         assert invoice2.is_valid
         invoice2.do_posted()
         assert invoice2.is_valid
-        inspect(invoice2)
+        # inspect(invoice2)
 

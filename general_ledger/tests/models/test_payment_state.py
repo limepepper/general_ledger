@@ -33,8 +33,8 @@ class PaymentStateTests(GeneralLedgerBaseTest):
             ledger=ledger,
         )
         # inspect(invoice)
-        for il in invoice.invoice_lines.all():
-            inspect(il)
+        # for il in invoice.invoice_lines.all():
+        #     inspect(il)
 
         print(invoice.full_clean())
 

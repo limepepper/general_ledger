@@ -1,5 +1,5 @@
 from .base import GeneralLedgerBaseTest
-from .test_transactions import SomeTest
+from .test_transactions import TestTransactionCreatePost
 from .test_chap2 import TestBasicOperations
 from .test_chap3 import TestBasicOperations2
 from .test_chap4 import TestChap4Woods
