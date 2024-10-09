@@ -100,6 +100,11 @@ LOGGING = {
             "level": "WARNING",
             "propagate": False,
         },
+        "general_ledger.tests": {
+            "handlers": ["general_ledger"],
+            "level": "INFO",
+            "propagate": False,
+        },
         "factory.generate": {
             "handlers": ["file", "console"],
             "level": "WARNING",

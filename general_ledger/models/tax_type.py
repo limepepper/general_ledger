@@ -7,6 +7,7 @@ from .mixins import (
     CreatedUpdatedMixin,
     SlugMixin,
 )
+from ..managers.tax_type import TaxTypeManager
 
 
 class TaxType(
@@ -22,6 +23,8 @@ class TaxType(
 
     logger = logging.getLogger(__name__)
 
+    objects = TaxTypeManager()
+
     class Meta:
         verbose_name = "Tax Type"
         verbose_name_plural = "Tax Type"
@@ -30,6 +33,9 @@ class TaxType(
             ["slug", "book"],
             ["name", "book"],
         ]
+
+    def natural_key(self):
+        return self.slug, self.book
 
     book = models.ForeignKey(
         "Book",

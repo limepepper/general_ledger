@@ -179,7 +179,7 @@ class TestBasicOperations2:
 
         # self.logger.info(f"calling save in transaction: {ledger}")
         lh = LedgerHelper(ledger)
-        self.logger.info(lh.get_account_summary())
+        print(lh.get_account_summary())
 
         from django.core import serializers
 

@@ -21,5 +21,5 @@ class TaxRateManager(models.Manager):
             book=ledger.book,
         )
 
-    def natural_key(self):
-        return self.slug, self.coa
+    def get_by_natural_key(self, slug, book):
+        return self.get(slug=slug, book=book)
