@@ -27,7 +27,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        pytest
+        pytest --exitfirst
     - name: Install docs Dependencies
       run: |
         python -m pip install --upgrade pip

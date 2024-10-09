@@ -10,6 +10,7 @@ babel==2.16.0
 beautifulsoup4==4.12.3
 black==24.8.0
 bleach==6.1.0
+bs4==0.0.2
 build==1.2.2
 certifi==2024.8.30
 cffi==1.17.1
@@ -41,6 +42,7 @@ django-select2==8.2.1
 django-simple-history==3.7.0
 django-timezone-field==7.0
 djangorestframework==3.15.2
+docutils==0.21.2
 drf-spectacular==0.27.2
 executing==2.1.0
 factory_boy==3.3.1
@@ -85,6 +87,7 @@ lxml==5.3.0
 Markdown==3.7
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
+matplotlib==3.9.2
 matplotlib-inline==0.1.7
 mdurl==0.1.2
 mistune==3.0.2
@@ -95,7 +98,7 @@ nbformat==5.10.4
 nest-asyncio==1.6.0
 notebook==7.2.2
 notebook_shim==0.2.4
-numpy==2.1.1
+numpy==2.1.2
 oauthlib==3.2.2
 ofxparse==0.21
 overrides==7.7.0
@@ -129,8 +132,10 @@ pytz==2024.2
 pywatchman==2.0.0
 PyYAML==6.0.2
 pyzmq==26.2.0
+# qifparse==0.5
+qifparse @ git+https://github.com/limepepper/qifparse@iso-date-fix
 referencing==0.35.1
-requests==2.32.3
+requests==2.31.0
 requests-oauthlib==2.0.0
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
@@ -142,7 +147,6 @@ simplejson==3.19.3
 six==1.16.0
 sniffio==1.3.1
 soupsieve==2.6
-Sphinx==8.0.2
 sqlparse==0.5.1
 stack-data==0.6.3
 swapper==1.4.0
