@@ -8,7 +8,7 @@ from loguru import logger
 
 from general_ledger.forms.formset.invoice_collection import InvoiceCollection
 
-from general_ledger.models import Invoice
+from general_ledger.django.models import Invoice
 from general_ledger.views.formset.formset_mixins import (
     CollectionViewMixin,
     SessionFormCollectionMixin,

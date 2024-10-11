@@ -1,16 +1,14 @@
-from decimal import Decimal
+# from rich import print
+from datetime import date
 
 import pytest
-from django.template.loader import get_template
-from rich import inspect
-
-# from rich import print
 from rich.console import Console
 
-from general_ledger.builders.income_statement import IncomeStatementBuilder
-from general_ledger.helpers import LedgerHelper
-from general_ledger.models import Account
-from general_ledger.tests.book.test_chap7 import load_exhibit_7_1
+from general_ledger.factories import TransactionFactory
+from general_ledger.helpers.ledger_helper import LedgerHelper
+from general_ledger.tests.book.test_chap7 import load_chapter_7_exhibit_7_1
+
+# from rich import print
 
 console = Console()
 
@@ -20,46 +18,55 @@ class TestIncomeStatementBuilder:
     @pytest.mark.django_db
     def test_simple_income_statement_builder_1(self):
 
-        ledger = load_exhibit_7_1()
+        ledger = load_chapter_7_exhibit_7_1()
+        ledger_accounts = LedgerHelper.ledger_accounts(ledger)
 
-        assert ledger.balance_by_type_slug("sales") == Decimal("38500")
-        assert ledger.balance_by_type_slug("overhead") == Decimal("4500")
-        assert ledger.balance_by_type_slug("inventory") == Decimal("3000.00")
-        assert ledger.balance_by_type_slug(
-            "inventory",
-            balance_date="2012-11-30",
-        ) == Decimal("0.00")
-
-    @pytest.mark.django_db
-    def test_simple_income_statement_builder_2(self):
-
-        ledger = load_exhibit_7_1()
-
-        builder = IncomeStatementBuilder(
-            ledger=ledger,
-            start_date="2012-12-01",
-            end_date="2012-12-31",
+        accounts = ledger.account_set.filter(
+            slug__in=[
+                "bank-account",
+                "sales",
+                "accounts-receivable",
+            ]
         )
 
-        income_statement = builder.build()
+        transactions = TransactionFactory.create_batch(
+            100,
+            ledger=ledger,
+            trans_date__start_date=date(2018, 11, 15),
+            trans_date__end_date=date(2021, 1, 15),
+            create_transaction_entry_lines__accounts=accounts,
+        )
 
-        # lh = LedgerHelper(ledger)
-        # print(lh.get_account_summary())
-
-        template = get_template("gl/console/three_col_accounts.j2")
-
-        context = {
-            "ledger": ledger,
-            "accounts": Account.objects.filter(coa=ledger.coa),
+        kwargs = {
+            "start_date": "2018-01-01",
+            "end_date": "2019-12-31",
+            "balance_interval": "year",
         }
 
-        # self.logger.info(template.render(context=context))
+        summary_set = LedgerHelper.do_stuff1(
+            ledger_accounts,
+            do_print=False,
+            **kwargs,
+        )
 
-        print(template.render(context=context))
+        # console.print(summary_set)
 
-        inspect(income_statement)
+        console.print(summary_set.summary_set)
 
-        # inspect(ledger)
+        # provider = DjangoProvider(ledger=ledger)
+        #
+        # trading_account = TradingAccountNode(
+        #     provider=provider,
+        #     meta=NodeMeta(
+        #         show_subtotal=True,
+        #     ),
+        #     **kwargs,
+        # )
+        #
+        # income_statement = IncomeStatement(
+        #     ledger=ledger,
+        #     trading_account=summary_set.summary_set["sales"],
+        #     **kwargs,
+        # )
 
-        # ac = AccountContext(cash)
-        # self.logger.info(ac.get_context_report())
+        # inspect(summary_set, dunder=True)

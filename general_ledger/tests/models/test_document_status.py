@@ -9,8 +9,8 @@ from rich import inspect
 from general_ledger.factories import BookFactory, BankAccountFactory
 from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.factories.invoice import InvoiceFactory
-from general_ledger.models import Book, Ledger, Payment, Bank
-from general_ledger.models.document_status import DocumentStatus
+from general_ledger.django.models import Book, Ledger, Payment, Bank
+from general_ledger.django.models.document_status import DocumentStatus
 from general_ledger.tests import GeneralLedgerBaseTest
 
 
@@ -33,9 +33,8 @@ class DocumentStatusTests(GeneralLedgerBaseTest):
         payment.refresh_from_db()
         # inspect(payment.state)
 
-
-        assert (payment.state == DocumentStatus.RECORDED)
-        assert (payment.state != DocumentStatus.DRAFT)
+        assert payment.state == DocumentStatus.RECORDED
+        assert payment.state != DocumentStatus.DRAFT
 
         # payment.state = DocumentStatus.VOID
 

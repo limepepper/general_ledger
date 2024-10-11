@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import AlreadyRegistered
 from django.apps import apps
 
-# from general_ledger.models.account_dl_treebeard import AccountClass
+# from general_ledger.django.models.account_dl_treebeard import AccountClass
 
 
 class Command(BaseCommand):

@@ -1,6 +1,6 @@
 from django import forms
 
-from general_ledger.models import Contact
+from general_ledger.django.models import Contact
 
 
 class ContactFilterForm(forms.ModelForm):

@@ -3,12 +3,11 @@ from decimal import Decimal
 from django.db import connection
 from django.db.models import Sum
 from django.db.models.functions import TruncDate
-from rest_framework import generics, viewsets
+from rest_framework import viewsets
 from rest_framework.response import Response
-from rich import inspect
 
-from general_ledger.filters.bank_transaction import BankStatementFilter
-from general_ledger.models import BankStatementLine
+from general_ledger.django.filters import BankStatementFilter
+from general_ledger.django.models import BankStatementLine
 from general_ledger.serializers.bank_transaction import BankStatementGroupedSerializer
 from datetime import datetime, timedelta
 
@@ -62,20 +61,14 @@ class BankStatementGroupedView(
                 for item in queryset
             }
 
-            # inspect(data_dict, methods=False)
-
             # Generate a complete date range and fill in missing dates with zero
             complete_data = []
             current_date = start_date
             while current_date <= end_date:
                 date_str = current_date.strftime("%Y-%m-%d")
                 amount = data_dict.get(date_str, Decimal("0"))
-                # inspect(f"{current_date=}, {amount=}")
-                # print(f"{current_date=}, {amount=}")
                 complete_data.append({"date": date_str, "amount": amount})
                 current_date += timedelta(days=1)
-
-            # inspect(complete_data, methods=False)
 
             serializer = self.get_serializer(complete_data, many=True)
         else:

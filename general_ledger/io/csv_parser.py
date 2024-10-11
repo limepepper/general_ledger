@@ -92,13 +92,11 @@ class CSVParser(StatementParser):
                 # balance and balance date.
                 if data["transactions"]:
                     final_transaction = data["transactions"][-1]
-                    # inspect(final_transaction)
                     if "balance" in final_transaction and final_transaction["balance"]:
                         data["balance"] = final_transaction["balance"]
                         data["balance_date"] = final_transaction["date"]
                         data["balance_source"] = "csv"
                 else:
-                    # inspect(data)
                     raise ParsingError("No transactions found")
                 return data
         except Exception as e:
@@ -197,7 +195,6 @@ class CSVParser(StatementParser):
                     "balance": None,
                 }
             )
-            # inspect(row)
             data["account_number"] = row["Account"].split(" ")[-1]
             data["sort_code"] = row["Account"].split(" ")[0].replace("-", "")
         # csv files are in reverse order

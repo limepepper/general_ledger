@@ -8,7 +8,7 @@ from formset.views import FormViewMixin
 
 from general_ledger.forms.bank import BankForm
 from general_ledger.forms.bank_transaction import BankTransactionForm
-from general_ledger.models import Bank, BankStatementLine
+from general_ledger.django.models import Bank, BankStatementLine
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,
     ActiveBookRequiredMixin,
@@ -27,7 +27,7 @@ class BankTransactionsListView(
         return BankStatementLine.objects.filter(bank_id=bank_id)
 
     model = BankStatementLine
-    template_name = "gl/bank_transaction_list.html.j2"
+    template_name = "gl/bank/bank_transaction_list.html.j2"
     context_object_name = "transactions"
     # filterset_class = BankFilter
 

@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets
 
-from general_ledger.models import Invoice, Payment
+from general_ledger.django.models import Invoice, Payment
 from general_ledger.serializers.invoice import InvoiceSerializer
 from general_ledger.serializers.payment import PaymentSerializer
 

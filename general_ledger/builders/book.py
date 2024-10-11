@@ -2,7 +2,8 @@ import logging
 from abc import ABC, abstractmethod
 from typing import List
 from django.contrib.auth import get_user_model
-from general_ledger.models import Transaction, Book
+from general_ledger.django.models.transaction import Transaction
+from general_ledger.django.models.book import Book
 
 
 class BookBuilderAbstract(ABC):

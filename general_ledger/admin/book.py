@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import redirect, render
 from django.urls import path
 from django.contrib.auth import get_user_model
-from general_ledger.models import Book, Ledger
+from general_ledger.django.models import Book, Ledger
 from general_ledger.resources import TaxTypeResource
 
 

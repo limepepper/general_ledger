@@ -1,7 +1,9 @@
 from general_ledger.factories import LedgerFactory, ContactFactory
-from general_ledger.models import PurchaseInvoice, InvoiceLine
-from general_ledger.models.invoice_purchaseinvoice_line import PurchaseInvoiceLine
-from general_ledger.models.tax_inclusive import TaxInclusive
+from general_ledger.django.models import PurchaseInvoice
+from general_ledger.django.models.invoice_purchaseinvoice_line import (
+    PurchaseInvoiceLine,
+)
+from general_ledger.django.models.tax_inclusive import TaxInclusive
 from general_ledger.tests import GeneralLedgerBaseTest
 
 

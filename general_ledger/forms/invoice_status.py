@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from general_ledger.models import Invoice
+from general_ledger.django.models import Invoice
 
 
 class InvoiceStatusForm(ModelForm):

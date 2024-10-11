@@ -5,6 +5,9 @@ from pathlib import Path
 import graypy
 from django.contrib.messages import constants as messages
 from loguru import logger
+import re
+from django.utils.translation import gettext as _
+from general_ledger.utils.utility import bool_colorize
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,9 +32,61 @@ filter_dict = {
     "general_ledger.helpers": "DEBUG",
     "general_ledger.helpers.book": "INFO",
     "general_ledger.helpers.invoice": "DEBUG",
-    "general_ledger.models.transaction": "INFO",
+    "general_ledger.django.models.transaction": "INFO",
     "general_ledger.managers.transaction_entry": "DEBUG",
+    "general_ledger.statements": "DEBUG",
+    "general_ledger.utils.utility": "DEBUG",
 }
+
+
+def boolval(record):
+    """Custom markup handler for boolean values"""
+    return (
+        record["message"]
+        .replace("<boolval>True</boolval>", "<green>True</green>")
+        .replace("<boolval>False</boolval>", "<red>False</red>")
+    )
+
+
+# logger = logger.patch(boolval)
+
+max_line_no = 3
+max_file_name = 0
+
+
+def custom_formatter(record):
+    global max_line_no, max_file_name
+    # print(f"record is {record}")
+    # message = record["message"]
+    # message = re.sub(r"<bool>(True|False)</bool>", bool_colorize, message)
+    max_line_no = max(max_line_no, len(str(record["line"])))
+    max_file_name = max(max_file_name, len(record["file"].name))
+    message_format = ""
+    message_format += (
+        "<red>{time:HH:mm:ss}</red> "
+        "<level>{level: <5}</level> "
+        "<c>{file.name: >{max_file_name}}</c>:<c>{line:<{max_line_no}}</c> "
+    )
+    message_format += "<k>{message}</k>"
+    # if "extra" in record and record["extra"]:
+    #     message_format += " | {extra}"
+    record["extra"].update({"max_line_no": max_line_no, "max_file_name": max_file_name})
+    record["max_line_no"] = max_line_no
+    record["max_file_name"] = max_file_name
+    return message_format + "\n"
+
+
+logger.add(
+    sys.stderr,
+    colorize=True,
+    level="TRACE",
+    filter=filter_dict,
+    # format="<red>{time:HH:mm:ss}</red> "
+    # "<level>{level: <5}</level> "
+    # "<cyan>{file.name}</cyan>:<m>{line}</m> <b>{message}</b>"
+    # " | {extra}",
+    format=custom_formatter,
+)
 
 
 logger.add(
@@ -39,19 +94,11 @@ logger.add(
     colorize=True,
     level="TRACE",
     format="<yellow>{time:HH:mm:ss}</yellow> "
-    "<level>{level: <5}</level> |{module}|{name}|"
-    "<cyan>{file.name}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
+    "<level>{level: <5}</level> |{module}|"
+    "<cyan>{file.name}</cyan>:<cyan>{line}</cyan> <level>{message}</level> | {extra}",
+    retention="3 days",
 )
 
-logger.add(
-    sys.stderr,
-    colorize=True,
-    level="TRACE",
-    filter=filter_dict,
-    format="<red>{time:HH:mm:ss}</red> "
-    "<level>{level: <5}</level> |"
-    "<cyan>{file.name}</cyan>:<cyan>{line}</cyan> <level>{message}</level>",
-)
 
 # logger.add(handler, serialize=True)
 # logger.add(
@@ -84,7 +131,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "root": {
         # "handlers": ["file", "console"],
-        "handlers": ["file", "richconsole"],
+        "handlers": ["file", "console"],
         "level": "DEBUG",
     },
     "loggers": {
@@ -216,7 +263,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",
+    # "allauth.socialaccount",
     "formset",
     # "notifications",
     "import_export",
@@ -307,7 +354,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en-gb"
 
 TIME_ZONE = "UTC"
 

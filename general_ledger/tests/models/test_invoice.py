@@ -6,8 +6,8 @@ from faker import Faker
 
 from general_ledger.factories import LedgerFactory, ContactFactory
 from general_ledger.factories.invoice import InvoiceFactory
-from general_ledger.models import Invoice, Ledger, Contact, InvoiceLine, TaxRate
-from general_ledger.models.tax_inclusive import TaxInclusive
+from general_ledger.django.models import Invoice, Ledger, Contact, InvoiceLine, TaxRate
+from general_ledger.django.models.tax_inclusive import TaxInclusive
 from general_ledger.tests import GeneralLedgerBaseTest
 
 
@@ -56,7 +56,6 @@ class TestInvoice(GeneralLedgerBaseTest):
         template = get_template("gl/console/invoice-lines.j2")
         print(template.render(context={"invoice": invoice}))
 
-        # inspect(invoice)
         print(f"{invoice.tax_inclusive=}")
         print(f"invoice_line: {invoice_line}")
         print(f"line_total_exclusive: {invoice_line.line_total_exclusive()}")

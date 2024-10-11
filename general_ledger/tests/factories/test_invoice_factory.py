@@ -2,7 +2,7 @@ import pytest
 from rich import inspect
 
 from general_ledger.factories.invoice import InvoiceFactory
-from general_ledger.models import Invoice
+from general_ledger.django.models import Invoice
 
 
 class TestInvoiceFactory:
@@ -15,3 +15,5 @@ class TestInvoiceFactory:
         invoices = InvoiceFactory.create_batch(
             10,
         )
+
+        assert len(invoices) == 10

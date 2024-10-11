@@ -2,7 +2,7 @@ import hashlib
 
 from import_export import resources
 
-from general_ledger.models import BankStatementLine
+from general_ledger.django.models import BankStatementLine
 
 
 def check_unique_transaction(**kwargs):

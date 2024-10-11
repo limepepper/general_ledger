@@ -4,7 +4,7 @@ from loguru import logger
 from django import forms
 from django_select2.forms import ModelSelect2Widget
 
-from general_ledger.models import (
+from general_ledger.django.models import (
     TaxRate,
     Account,
     Contact,

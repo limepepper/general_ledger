@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from django.test import TestCase
 
-from general_ledger.models import Book, Ledger
+from general_ledger.django.models import Book, Ledger
 
 
 import logging

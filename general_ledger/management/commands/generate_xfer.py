@@ -9,9 +9,10 @@ from general_ledger.management.utils import (
     get_book,
     get_or_create_banks,
 )
-from general_ledger.models import Bank, BankStatementLine, Payment, PaymentItem
+from general_ledger.django.models import Bank, BankStatementLine, Payment, PaymentItem
 
 from django.db.models import Q
+
 
 class Command(BaseCommand):
     help = "generate Book data"
@@ -97,13 +98,20 @@ class Command(BaseCommand):
         self.bank2.bankstatementline_set.all().delete()
 
         qs = Payment.objects.filter(
-            Q(items__from_object_id__in=self.bank1.bankstatementline_set.values_list('id', flat=True)) |
-            Q(items__to_object_id__in=self.bank2.bankstatementline_set.values_list('id', flat=True))
+            Q(
+                items__from_object_id__in=self.bank1.bankstatementline_set.values_list(
+                    "id", flat=True
+                )
+            )
+            | Q(
+                items__to_object_id__in=self.bank2.bankstatementline_set.values_list(
+                    "id", flat=True
+                )
+            )
         )
         # print(qs.query)
         print(qs.count())
         qs.delete()
-
 
         txferss = BankTransactionFactory.create_transfers(
             10,

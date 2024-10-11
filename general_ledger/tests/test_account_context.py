@@ -1,21 +1,13 @@
-import logging
-from loguru import logger
-from general_ledger import constants
+from general_ledger.builders.transaction import TransactionBuilder
+from general_ledger.builders.account_summary_builder import AccountSummaryBuilder
 from general_ledger.factories import BookFactory
-from general_ledger.helpers import LedgerHelper
-from general_ledger.models import (
-    Transaction,
+from general_ledger.helpers.ledger_helper import LedgerHelper
+from general_ledger.django.models import (
     Account,
-    Ledger,
     Direction,
-    AccountType,
-    TaxRate,
 )
 from general_ledger.tests import GeneralLedgerBaseTest
-
-from general_ledger.builders import TransactionBuilder
-from general_ledger.utils.account_balanced import AccountBalancer
-from general_ledger.utils.consoler import pr_account_balanced
+from general_ledger.render.consoler import pr_account_balanced
 
 
 class AccountContextTests(GeneralLedgerBaseTest):
@@ -82,10 +74,13 @@ class AccountContextTests(GeneralLedgerBaseTest):
         lh = LedgerHelper(ledger)
         # self.logger.info(lh.get_account_summary())
 
-        cash_balanced = AccountBalancer(
-            account=computer_software,
-            ledger=ledger,
+        cash_balanced = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_account(computer_software)
+            .with_ledger(ledger)
+            .build()
         )
+        cash_balanced.balance_off()
         # inspect(test)
 
-        print(pr_account_balanced(cash_balanced.grouped_entries))
+        print(pr_account_balanced(cash_balanced.entries_grouped))

@@ -5,7 +5,7 @@ from django.db import models
 from django.forms import TextInput
 from django.utils.html import format_html
 
-from general_ledger.models import ChartOfAccounts, Account
+from general_ledger.django.models import ChartOfAccounts, Account
 from general_ledger.utils import update_items
 
 

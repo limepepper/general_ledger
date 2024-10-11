@@ -1,7 +1,6 @@
 from import_export import resources
 
-from general_ledger.models import Transaction
-from general_ledger.models.xero_gl_import import XeroGlImport
+from general_ledger.django.models.xero_gl_import import XeroGlImport
 from import_export.fields import Field
 from import_export.widgets import DateWidget, DecimalWidget
 

@@ -2,7 +2,7 @@ from django.test import TestCase
 from rich import inspect
 
 from general_ledger.factories import BankAccountFactory, BookFactory
-from general_ledger.models import Bank, Account, Book
+from general_ledger.django.models import Bank, Account, Book
 
 
 class TestBookFactory(TestCase):

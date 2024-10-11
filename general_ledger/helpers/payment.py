@@ -10,12 +10,9 @@ various operations that can be performed on a Payment. This class will be used t
 """
 
 import logging
-from loguru import logger
-from rich import inspect
 
-from general_ledger.builders import TransactionBuilder
-from general_ledger.models import Direction
-from general_ledger.models.document_status import DocumentStatus
+from general_ledger.builders.transaction import TransactionBuilder
+from general_ledger.django.models.direction import Direction
 
 
 class PaymentHelper:

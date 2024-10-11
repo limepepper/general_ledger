@@ -1,6 +1,11 @@
 from datetime import timezone, datetime
 
 from django.db import models
+from rich.console import Console
+from rich.console import ConsoleOptions, RenderResult
+from rich.table import Table
+
+from general_ledger.render.utility_rich import model_table_generator
 
 
 class InvoiceQuerySet(models.QuerySet):
@@ -34,6 +39,11 @@ class InvoiceQuerySet(models.QuerySet):
             status=self.model.InvoiceStatus.AWAITING_PAYMENT,
             due_date__lt=datetime.today(),
         )
+
+    def __rich_console__(
+        self, console: Console, options: ConsoleOptions
+    ) -> RenderResult:
+        yield from model_table_generator(self, self.model)
 
 
 class InvoiceManager(models.Manager):

@@ -3,7 +3,7 @@ import sys
 from loguru import logger
 
 from general_ledger.factories import ContactFactory, BankAccountFactory
-from general_ledger.models import Book, Contact
+from general_ledger.django.models import Book, Contact
 
 
 def get_book(book_str: str) -> Book:

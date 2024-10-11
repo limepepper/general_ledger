@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from general_ledger.models import BankStatementLine
+from general_ledger.django.models import BankStatementLine
 
 
 @admin.register(BankStatementLine)

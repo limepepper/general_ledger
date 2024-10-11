@@ -5,14 +5,14 @@ from rich import inspect
 from xstate_machine import pre_transition
 
 from general_ledger.helpers.invoice import InvoiceHelper
-from general_ledger.models import (
+from general_ledger.django.models import (
     Invoice,
     InvoiceLine,
     PaymentItem,
     Payment,
     Transaction,
 )
-from general_ledger.models.invoice_transaction import InvoiceTransaction
+from general_ledger.django.models.invoice_transaction import InvoiceTransaction
 
 
 # @TODO replace this with xstate machine

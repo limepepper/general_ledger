@@ -2,7 +2,7 @@ from loguru import logger
 
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 
 
 class Command(BaseCommand):

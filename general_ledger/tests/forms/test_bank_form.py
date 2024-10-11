@@ -4,7 +4,7 @@ from rich import inspect
 
 from general_ledger.factories import BookFactory
 from general_ledger.forms.bank import BankForm
-from general_ledger.models import Bank, Account
+from general_ledger.django.models import Bank, Account
 
 
 class AddBankFormTests(TestCase):

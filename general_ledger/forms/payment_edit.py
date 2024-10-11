@@ -1,7 +1,7 @@
 from django import forms
 from rich import inspect
 
-from general_ledger.models import (
+from general_ledger.django.models import (
     Payment,
 )
 
@@ -17,7 +17,6 @@ class PaymentEditForm(forms.ModelForm):
         return super().is_valid()
 
     def save(self, commit=True):
-        # inspect(self.instance)
         if "promote" in self.data:
             self.instance.promote()
         elif "demote" in self.data:

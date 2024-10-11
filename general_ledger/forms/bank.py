@@ -4,7 +4,7 @@ from django import forms
 from django.db import transaction
 from rich import inspect
 
-from general_ledger.models import (
+from general_ledger.django.models import (
     Bank,
 )
 
@@ -37,16 +37,9 @@ class BankForm(
     def save(self, commit=True):
         if not commit:
             raise ValueError("Cannot save without commit=True")
-        # inspect(self.instance, title=f"self.instance {self.instance._meta.model=}")
-
-        # inspect(self.instance, title="self.instance1")
 
         # @TODO can just call is valid?
         bank_account = super().save(commit=False)
-
-        # inspect(self.instance, title="self.instance2")
-
-        # inspect(bank_account, title="bank_account")
 
         # is_new = not Bank.objects.filter(pk=self.instance.pk).exists()
 

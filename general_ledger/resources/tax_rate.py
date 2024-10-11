@@ -3,7 +3,7 @@ import logging
 from import_export import fields, resources
 from import_export.widgets import ForeignKeyWidget
 
-from general_ledger.models import TaxType, TaxRate
+from general_ledger.django.models import TaxType, TaxRate
 
 
 class TaxRateResource(resources.ModelResource):

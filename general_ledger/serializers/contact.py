@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 
-from general_ledger.models import Contact
+from general_ledger.django.models import Contact
 
 
 # Serializers define the API representation.

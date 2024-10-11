@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from timezone_field.rest_framework import TimeZoneSerializerField
 
-from general_ledger.models import Contact, Bank
+from general_ledger.django.models import Contact, Bank
 
 
 class BankAccountSerializer(serializers.HyperlinkedModelSerializer):
-    #tz = TimeZoneSerializerField()
+    # tz = TimeZoneSerializerField()
 
     class Meta:
         model = Bank

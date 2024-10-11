@@ -1,0 +1,15 @@
+
+dashboard/
+log/
+dist/
+venv/
+node_modules/
+docs/
+uploads/
+workdir/
+.env
+pytest.ini
+general_ledger/data
+general_ledger/scripts
+general_ledger/static
+

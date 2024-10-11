@@ -2,7 +2,7 @@ import factory
 from factory import LazyAttribute
 from factory.django import DjangoModelFactory
 
-from general_ledger.models import Account
+from general_ledger.django.models import Account
 from factory import post_generation, SubFactory
 
 

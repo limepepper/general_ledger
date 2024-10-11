@@ -1,9 +1,7 @@
 from datetime import date
 
-from general_ledger.utils.balance_sheet import BalanceSheet
 
-
-class BalanceSheetBuilder():
+class BalanceSheetBuilder:
     def __init__(
         self,
         *,
@@ -21,4 +19,4 @@ class BalanceSheetBuilder():
         return self
 
     def build(self):
-        return BalanceSheet(self.ledger)
+        return None

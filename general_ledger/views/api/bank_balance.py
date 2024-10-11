@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rich import inspect
 
-from general_ledger.models import BankBalance
+from general_ledger.django.models import BankBalance
 from general_ledger.serializers.bank_balance import BankBalanceSerializer
 from datetime import datetime, timedelta
 

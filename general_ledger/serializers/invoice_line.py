@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from general_ledger.models import InvoiceLine
+from general_ledger.django.models import InvoiceLine
 
 
 class InvoiceLineSerializer(serializers.ModelSerializer):

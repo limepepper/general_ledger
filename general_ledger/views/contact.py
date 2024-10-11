@@ -4,16 +4,14 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import (
-    ListView,
     UpdateView,
-    DetailView,
 )
 from django_filters.views import FilterView
 from formset.views import IncompleteSelectResponseMixin, FormViewMixin
 
-from general_ledger.filters import ContactFilter
+from general_ledger.django.filters import ContactFilter
 from general_ledger.forms.contact import ContactUpdateForm
-from general_ledger.models import Contact
+from general_ledger.django.models import Contact
 from general_ledger.views.generic import GenericListView, GenericDetailView
 from general_ledger.views.mixins import ActiveBookRequiredMixin, FormsetifyMixin
 from general_ledger.views.mixins import GeneralLedgerSecurityMixIn

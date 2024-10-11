@@ -5,7 +5,7 @@ from loguru import logger
 from rich import print as inspect
 
 from general_ledger.builders.payment import PaymentBuilder
-from general_ledger.models import Invoice, BankStatementLine, Payment
+from general_ledger.django.models import Invoice, BankStatementLine, Payment
 
 
 class MatcherHelper:
@@ -67,7 +67,6 @@ class MatcherHelper:
 
         # match transfers. find the from account first
         for bank_transaction in unreconciled_bank_transactions.filter(amount__lt=0):
-            # inspect(bank_transaction)
             if bank_transaction in self.candidates["matched_bank_statement_lines"]:
                 logger.trace("already matched")
                 continue
@@ -169,10 +168,7 @@ class MatcherHelper:
             payment_item.save()
         for candidate in self.candidates["transfer"]:
             logger.info("processing transfer match")
-            # inspect(candidate)
             bsl_from, bsl_to = candidate
-            # inspect(bsl_from)
-            # inspect(bsl_to)
             pb = PaymentBuilder(
                 ledger=bsl_from.bank.book.get_default_ledger(),
                 date=bsl_from.date,

@@ -1,7 +1,7 @@
 import pytest
 
 from general_ledger.factories import BankAccountFactory
-from general_ledger.models import Bank
+from general_ledger.django.models import Bank
 
 
 class TestBankAccountManager:

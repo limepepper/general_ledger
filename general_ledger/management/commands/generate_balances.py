@@ -7,7 +7,7 @@ from loguru import logger
 import pytz
 
 from general_ledger.helpers.bank_balance_helper import BankBalanceHelper
-from general_ledger.models import BankBalance, Bank
+from general_ledger.django.models import BankBalance, Bank
 
 
 class Command(BaseCommand):
@@ -51,6 +51,5 @@ class Command(BaseCommand):
 
         bbh = BankBalanceHelper(self.bank1)
         balance = bbh.get_balance()
-
 
         self.stdout.write(self.style.SUCCESS("Successfully inserted running balances"))

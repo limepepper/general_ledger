@@ -4,7 +4,7 @@ from django.http import Http404
 from django.views.generic.edit import FormView
 
 from general_ledger.forms.trial_balance_date_form import TrialBalanceDateForm
-from general_ledger.models import Account
+from general_ledger.django.models import Account
 
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,

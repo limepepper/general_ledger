@@ -6,7 +6,7 @@ from django.forms import (
 )
 from django.forms import models
 
-from general_ledger.models import Contact
+from general_ledger.django.models import Contact
 
 
 class ContactInlineForm(

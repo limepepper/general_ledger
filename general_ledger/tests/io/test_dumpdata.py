@@ -5,7 +5,7 @@ from django.core.management import call_command
 from rich import inspect
 
 from general_ledger.factories import BookFactory
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 
 
 @pytest.mark.django_db

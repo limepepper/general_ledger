@@ -9,7 +9,7 @@ from general_ledger.builders.invoice_builder import InvoiceBuilder
 from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import ContactFactory
 from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
-from general_ledger.models import (
+from general_ledger.django.models import (
     Book,
     Bank,
     Invoice,

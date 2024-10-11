@@ -8,8 +8,8 @@ from rich import inspect
 
 from general_ledger.factories import LedgerFactory, ContactFactory
 from general_ledger.factories.invoice import InvoiceFactory
-from general_ledger.models import Invoice, Ledger, Contact, InvoiceLine, TaxRate
-from general_ledger.models.tax_inclusive import TaxInclusive
+from general_ledger.django.models import Invoice, Ledger, Contact, InvoiceLine, TaxRate
+from general_ledger.django.models.tax_inclusive import TaxInclusive
 from general_ledger.tests import GeneralLedgerBaseTest
 
 
@@ -111,13 +111,11 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             quantity=1,
             unit_price=40.0000,
         )
-        # inspect(invoice)
 
         with self.assertRaises(ValidationError) as _:
             invoice.full_clean()
 
         self.assertFalse(invoice.is_valid)
-
 
     def test_customer_due_date_required(self):
         ledger = LedgerFactory()
@@ -144,7 +142,6 @@ class TestInvoiceWorkflowConstraints(GeneralLedgerBaseTest):
             invoice.full_clean()
 
         self.assertFalse(invoice.is_valid)
-
 
     def test_customer_due_date_before_date(self):
         ledger = LedgerFactory()

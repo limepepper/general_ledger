@@ -1,9 +1,9 @@
 import logging
 
-from general_ledger.builders import TransactionBuilder
+from general_ledger.builders.transaction import TransactionBuilder
 from general_ledger.factories import BookFactory
-from general_ledger.helpers import LedgerHelper
-from general_ledger.models import (
+from general_ledger.helpers.ledger_helper import LedgerHelper
+from general_ledger.django.models import (
     Account,
     Direction,
 )
@@ -134,7 +134,9 @@ class TestChap4Woods(GeneralLedgerBaseTest):
         self.assertTrue(tx1.can_post())
         tx1.post()
 
-        tb2 = TransactionBuilder(ledger=ledger, description="Owner draws from inventory")
+        tb2 = TransactionBuilder(
+            ledger=ledger, description="Owner draws from inventory"
+        )
         tb2.set_trans_date("2024-06-28")
         tb2.add_entry(drawings, 400, Direction.DEBIT)
         tb2.add_entry(purchases, 400, Direction.CREDIT)

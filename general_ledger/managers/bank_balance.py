@@ -2,7 +2,7 @@ import logging
 
 from django.db import models
 
-from general_ledger.models.mixins import (
+from general_ledger.django.models.mixins import (
     UuidMixin,
     CreatedUpdatedMixin,
 )
@@ -19,4 +19,3 @@ class BankBalanceManager(models.Manager):
         return self.get_queryset().filter(
             bank=bank,
         )
-

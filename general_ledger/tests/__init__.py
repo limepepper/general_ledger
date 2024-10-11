@@ -1,5 +1,4 @@
 from .base import GeneralLedgerBaseTest
-from general_ledger.tests.models.test_transactions import TestTransactionCreatePost
 from general_ledger.tests.book.test_chap2 import TestBasicOperations
 from general_ledger.tests.book.test_chap3 import TestBasicOperations2
 from general_ledger.tests.book.test_chap4 import TestChap4Woods

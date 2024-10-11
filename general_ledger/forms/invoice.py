@@ -6,10 +6,12 @@ from loguru import logger
 
 from general_ledger.forms.invoice_line import InvoiceLineForm
 from general_ledger.forms_widgets.contact_widget import ContactWidget
-from general_ledger.models import (
+from general_ledger.django.models import (
     Invoice,
     InvoiceLine,
-    Ledger, Account, TaxRate,
+    Ledger,
+    Account,
+    TaxRate,
 )
 
 
@@ -27,7 +29,7 @@ def create_invoice_line_formset(book, data=None, instance=None):
         formset=BaseInvoiceLineFormSet,
         form=InvoiceLineForm,
         extra=1,
-        can_delete=True
+        can_delete=True,
     )
 
     class InvoiceLineFormSetWithBook(InvoiceLineFormSet):
@@ -35,9 +37,10 @@ def create_invoice_line_formset(book, data=None, instance=None):
             super().__init__(*args, **kwargs)
             for form in self.forms:
                 # form.fields['account'].queryset = Account.objects.filter(coa=book.get_default_coa())
-                form.fields['vat_rate'].queryset = TaxRate.objects.filter(book=book)
+                form.fields["vat_rate"].queryset = TaxRate.objects.filter(book=book)
 
     return InvoiceLineFormSetWithBook(data=data, instance=instance)
+
 
 class InvoiceForm(forms.ModelForm):
 
@@ -80,9 +83,7 @@ class InvoiceForm(forms.ModelForm):
         self.fields["contact"].extra_classes = "form-control"
 
         if book:
-            self.fields["ledger"].queryset = Ledger.objects.filter(
-                book=book
-            )
+            self.fields["ledger"].queryset = Ledger.objects.filter(book=book)
 
     def get_context(self):
         context = super().get_context()

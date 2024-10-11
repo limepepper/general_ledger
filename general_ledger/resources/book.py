@@ -3,7 +3,7 @@ import logging
 from import_export import fields, resources
 from import_export.widgets import ForeignKeyWidget
 
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 from django.contrib.auth import get_user_model
 
 

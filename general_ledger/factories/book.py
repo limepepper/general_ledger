@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from factory import post_generation, SubFactory
 from faker import Faker
 
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 import sys
 
 fake = Faker()

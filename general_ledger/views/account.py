@@ -3,8 +3,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from django_filters.views import FilterView
 
-from general_ledger.filters import AccountFilter
-from general_ledger.models import Account
+from general_ledger.django.filters import AccountFilter
+from general_ledger.django.models import Account
 from general_ledger.views.generic import GenericDetailView, GenericUpdateView
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,

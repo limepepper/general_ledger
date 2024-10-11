@@ -4,9 +4,12 @@
 mysite/settings/prod.py
 mysite/settings/dev.py
 general_ledger/data
+general_ledger/guff
 .env.*
 .env
 /run
+stuff
+guff
 
 # Django #
 *.log

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.shortcuts import render, redirect
 from django.urls import path
 
-from general_ledger.models import Ledger
+from general_ledger.django.models import Ledger
 from general_ledger.resources.transaction import TransactionResource
 from general_ledger.utils import update_items
 

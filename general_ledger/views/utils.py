@@ -2,7 +2,7 @@ import logging
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 
 from django.views import View
 
@@ -43,6 +43,7 @@ def select_active_entity(request):
             "next": request.GET.get("next"),
         },
     )
+
 
 class ServerResponseSimulator(View):
     def get(self, request):

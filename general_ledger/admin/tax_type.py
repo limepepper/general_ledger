@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from general_ledger.models import TaxType
+from general_ledger.django.models import TaxType
 from general_ledger.resources import TaxTypeResource
 from general_ledger.utils import update_items
 from general_ledger.utils import PrettyYAML

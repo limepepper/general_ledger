@@ -1,12 +1,9 @@
 import pytest
 from rich import inspect
-from rich.pretty import pprint
-from colorama import Fore, Style, Back
 
 from general_ledger.factories import TransactionFactory, LedgerFactory
-from general_ledger.factories.invoice import InvoiceFactory
-from general_ledger.models import Invoice, Transaction
-from general_ledger.utils.consoler import pr_tx_list
+from general_ledger.django.models import Transaction
+from general_ledger.render.consoler import pr_tx_list
 
 
 class TestTransactionFactory:

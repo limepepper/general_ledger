@@ -1,16 +1,37 @@
 {% extends 'gl/base.html.j2' %}
 
-{% block title %}Stocks{% endblock %}
+{% block title %}Income Statement{% endblock %}
 
 {% block main %}
 
-<h1>Income Statement</h1>
 
-<form action="{{ url('general_ledger:income_statement') }}" method="get" class="mb-4">
-{% csrf_token %}
-{% include 'gl/widgets/datepicker.html.j2' %}
+    <div class="main-content-container">
+        <!-- Main Content -->
+        <div class="container main-content">
+            <div class="row">
+                <div class="col-12 col-md-11 mx-auto">
+                    <div class="card p-4">
+                        <div class="row">
+                            <form action="{{ url('general_ledger:income_statement') }}" method="get" class="mb-4">
+                                {% csrf_token %}
+                                {% include 'gl/widgets/datepicker.html.j2' %}
 
-</form>
+
+                            </form>
+
+                        </div>
+
+                        <div class="row">
+                            {{ statement|safe }}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end of Main Content -->
+    </div>
 
 {% endblock %}
 

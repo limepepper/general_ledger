@@ -10,6 +10,18 @@ class HomeView(
     ActiveBookRequiredMixin,
     TemplateView,
 ):
+
+    def get_context_data(self, **kwargs):
+        # print(f"caling get_context_data in HomeView")
+        context = super().get_context_data(**kwargs)
+        # print(f"{context=}")
+        user = self.request.user
+
+        context["layout"] = user.preferences.get("layout__dashboard_layout_json")
+
+        # print(context["layout"])
+        return context
+
     template_name = "gl/home.html.j2"
 
 

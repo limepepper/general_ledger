@@ -33,12 +33,9 @@ class TestIoSamples(GeneralLedgerBaseTest):
 
         parser = ParserFactory.get_parser(file_path)
         parsed_data = parser.parse(file_path)
-        # inspect(parser)
 
         with open(file_path, "r") as fileobj:
             ofx = OfxParser.parse(fileobj)
-
-        # inspect(ofx)
 
         for account in parsed_data["accounts"]:
             # statement = account[statement
