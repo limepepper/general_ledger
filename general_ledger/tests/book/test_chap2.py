@@ -11,10 +11,11 @@ from general_ledger.models import (
     AccountType,
     TaxRate,
 )
-from general_ledger.reports import AccountContext
 from general_ledger.tests import GeneralLedgerBaseTest
 
 from general_ledger.builders import TransactionBuilder
+from general_ledger.utils.account_balanced import AccountBalancer
+from general_ledger.utils.consoler import pr_account_balanced
 
 
 # Create your tests here.
@@ -176,5 +177,10 @@ class TestBasicOperations(GeneralLedgerBaseTest):
         lh = LedgerHelper(ledger)
         self.logger.info(lh.get_account_summary())
 
-        ac = AccountContext(cash)
-        self.logger.info(ac.get_context_report())
+        cash_balanced = AccountBalancer(
+            account=cash,
+            ledger=ledger,
+        )
+        # inspect(test)
+
+        print(pr_account_balanced(cash_balanced.grouped_entries))

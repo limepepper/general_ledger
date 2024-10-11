@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from general_ledger.models.mixins import NameDescriptionMixin, UuidMixin, SlugMixin
 from .direction import Direction
-from ..managers.account_type import AccountTypeManager
+from ..managers.account_type import AccountTypeManager, AccountTypeQuerySet
 
 
 class AccountType(
@@ -15,13 +15,14 @@ class AccountType(
 ):
 
     logger = logging.getLogger(__name__)
-    objects = AccountTypeManager()
+    objects = AccountTypeManager.from_queryset(queryset_class=AccountTypeQuerySet)()
+
 
     class Meta:
         verbose_name = "Account Type"
         verbose_name_plural = "Account Types"
         db_table = "gl_account_type"
-        ordering = ["name"]
+        ordering = ["category", "liquidity", "name"]
         unique_together = [
             [
                 "slug",
@@ -44,8 +45,7 @@ class AccountType(
         if self.category in [
             self.Category.ASSET_NON_CURRENT,
             self.Category.ASSET_CURRENT,
-            self.Category.LIABILITY_NON_CURRENT,
-            self.Category.LIABILITY_CURRENT,
+            self.Category.EXPENSE,
         ]:
             return Direction.DEBIT
         return Direction.CREDIT

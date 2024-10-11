@@ -85,3 +85,18 @@
     is_default: false
     effective_date: null
     end_date: null
+- model: general_ledger.taxrate
+  pk: b133308f-207a-4598-aae4-53e48e3ee9fb
+  fields:
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    created_at: 2024-08-05 06:21:54.112603+00:00
+    updated_at: 2024-08-05 06:21:54.112634+00:00
+    description: ''
+    name: 0% (VAT on Expenses)
+    short_name: 0%
+    slug: 0-vat-on-expenses
+    tax_type:
+      - purchases
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    rate: '0.00'
+    is_default: true

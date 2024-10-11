@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import date
 from decimal import Decimal
+from typing import Optional
 
 from loguru import logger
 from rich import print, inspect
@@ -56,7 +57,7 @@ class PaymentBuilder(PaymentBuilderAbstract):
         self.date = kwargs.get("date", date.today())
         self.kwargs = kwargs
         self.items: list = []
-        self.payment: Payment = None
+        self.payment: Optional[Payment] = None
         logger.info(f"{kwargs=} {ledger=} {self.book=}")
 
     def add_memo_payment(self, **kwargs):
