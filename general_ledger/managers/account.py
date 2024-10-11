@@ -16,18 +16,46 @@ from general_ledger.models.mixins import (
 )
 
 
-class AccountManager(models.Manager):
-    # @TODO this dumb. move to helper
-    def get_or_create2(self, defaults={}, **kwargs):
-        defaults.update(
-            {
-                "type": AccountType.objects.get(name__iexact=kwargs.get("type__name")),
-                "tax_rate": TaxRate.objects.get(name="No VAT"),
-            }
+class AccountQuerySet(models.QuerySet):
+
+    def current_asset(self):
+        return self.filter(
+            type__category=AccountType.Category.ASSET_CURRENT,
         )
 
-        return super().get_or_create(defaults, **kwargs)
+    def non_current_asset(self):
+        return self.filter(
+            type__category=AccountType.Category.ASSET_NON_CURRENT,
+        )
 
+    def asset(self):
+        return self.filter(
+            type__category__in=[
+                AccountType.Category.ASSET_CURRENT,
+                AccountType.Category.ASSET_NON_CURRENT,
+            ],
+        )
+
+    def current_liability(self):
+        return self.filter(
+            type__category=AccountType.Category.LIABILITY_CURRENT,
+        )
+
+    def non_current_liability(self):
+        return self.filter(
+            type__category=AccountType.Category.LIABILITY_NON_CURRENT,
+        )
+
+    def liability(self):
+        return self.filter(
+            type__category__in=[
+                AccountType.Category.LIABILITY_CURRENT,
+                AccountType.Category.LIABILITY_NON_CURRENT,
+            ],
+        )
+
+
+class AccountManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.select_related(

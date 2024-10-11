@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from general_ledger.models.mixins import CreatedUpdatedMixin
 from .direction import Direction
+from ..managers.transaction_entry import EntryQuerySet, EntryManager
 
 
 class Entry(
@@ -15,6 +16,7 @@ class Entry(
 ):
 
     logger = logging.getLogger(__name__)
+    objects = EntryManager.from_queryset(queryset_class=EntryQuerySet)()
 
     class Meta:
         verbose_name = "Entry"

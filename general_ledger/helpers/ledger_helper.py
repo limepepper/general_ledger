@@ -227,7 +227,7 @@ class LedgerHelper:
             # print(self.get_counter_entry(entry))
             tmp = self.get_counter_entry(entry)
             # print(f"tmp: '{tmp}'")
-            output += f" {entry.transaction.trans_date.strftime('%b %e'): <8}{tmp: <19} {entry.amount : >10} "
+            output += f" {entry.transaction.trans_date.strftime('%b %e'): <8}{tmp: <19} {entry.amount : >10.2f} "
         else:
             output += f" {' '*38} "
         return output

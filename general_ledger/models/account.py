@@ -4,8 +4,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import F, Window, Sum
 from forex_python.converter import CurrencyCodes
+from loguru import logger
 
-from general_ledger.managers.account import AccountManager
+from general_ledger.managers.account import AccountManager, AccountQuerySet
 from general_ledger.models.direction import Direction
 from general_ledger.models.mixins import (
     NameDescriptionMixin,
@@ -26,16 +27,30 @@ class Account(
 
     logger = logging.getLogger(__name__)
 
-    objects = AccountManager()
+    objects = AccountManager.from_queryset(queryset_class=AccountQuerySet)()
 
     class Meta:
         db_table = "gl_account"
         verbose_name_plural = "accounts"
-        ordering = ["name"]
+        ordering = ["type__category", "type__liquidity", "name"]
         constraints = [
-            models.UniqueConstraint(fields=["name", "coa"], name="name_coa_uniq"),
-            models.UniqueConstraint(fields=["slug", "coa"], name="slug_coa_uniq"),
+            models.UniqueConstraint(
+                fields=["name", "coa"],
+                name="name_coa_uniq",
+            ),
+            models.UniqueConstraint(
+                fields=["slug", "coa"],
+                name="slug_coa_uniq",
+            ),
         ]
+        # @TODO if provided, code must be unique per coa
+        # constraints = [
+        #     UniqueConstraint(
+        #         fields=["code"],
+        #         condition=Q(code__isnull=False) & ~Q(code=""),
+        #         name="unique_non_empty_code",
+        #     )
+        # ]
 
     # generic view class attributes
     links_detail = "general_ledger:account-detail"
@@ -68,6 +83,7 @@ class Account(
         currency_codes = CurrencyCodes()
         return currency_codes.get_symbol(self.currency)
 
+
     tax_rate = models.ForeignKey(
         "TaxRate",
         on_delete=models.CASCADE,
@@ -80,10 +96,13 @@ class Account(
     type = models.ForeignKey(
         "AccountType",
         on_delete=models.CASCADE,
+        # @TODO failed attempt to limit choices to book in admin
         # limit_choices_to=Q(book=OuterRef("book")),
         # limit_choices_to=limit1,
     )
 
+    # @TODO this makes no sense if the coa that the account
+    # belongs to is attached to other ledgers.
     balance = models.DecimalField(
         max_digits=12,
         decimal_places=2,
@@ -111,42 +130,16 @@ class Account(
             pass
 
         return out
-        # constraints = [
-        #     UniqueConstraint(
-        #         fields=["code"],
-        #         condition=Q(code__isnull=False) & ~Q(code=""),
-        #         name="unique_non_empty_code",
-        #     )
-        # ]
 
-    def get_debit_balance(self):
-        return sum(
-            [entry.amount for entry in self.entry_set.filter(tx_type=Direction.DEBIT)]
-        )
+    # entries = self.entry_set.select_related('transaction').annotate(
+    #     running_balance=Window(
+    #         expression=Sum('amount'),
+    #         #expression=Coalesce(Sum('amount'), 0),
+    #         order_by=[F('transaction__trans_date').asc()],
+    #         #frame=Window.frames.RowRange(start=Window.start, end=0)
+    #     )
+    # )
 
-    def get_credit_balance(self):
-        return sum(
-            [entry.amount for entry in self.entry_set.filter(tx_type=Direction.CREDIT)]
-        )
-
-    def get_balance(self):
-        debit_balance = self.get_debit_balance()
-        credit_balance = self.get_credit_balance()
-        amount = debit_balance - credit_balance
-
-        # entries = self.entry_set.select_related('transaction').annotate(
-        #     running_balance=Window(
-        #         expression=Sum('amount'),
-        #         #expression=Coalesce(Sum('amount'), 0),
-        #         order_by=[F('transaction__trans_date').asc()],
-        #         #frame=Window.frames.RowRange(start=Window.start, end=0)
-        #     )
-        # )
-
-        print(f"debit sum{self.entry_set.filter(tx_type=Direction.DEBIT)}")
-
-        # print(amount)
-        return amount
 
     def calculate_running_balance(self):
         running_balance = 0

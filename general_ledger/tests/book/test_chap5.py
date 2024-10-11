@@ -1,16 +1,11 @@
 import logging
-from decimal import Decimal
 
-from django.db import connection
-from django.shortcuts import render
 from django.template.loader import get_template
 
 from general_ledger.builders import TransactionBuilder
 from general_ledger.factories import BookFactory
-from general_ledger.helpers import LedgerHelper
 from general_ledger.models import (
     Account,
-    Ledger,
     Direction,
 )
 from general_ledger.tests import GeneralLedgerBaseTest
@@ -117,8 +112,8 @@ def load_chapter_5_data():
 
     tb = TransactionBuilder(ledger=ledger, description="sales to C Lee on credit")
     tb.set_trans_date("2012-08-19")
-    tb.add_entry(sales, Decimal(203.00), Direction.CREDIT)
-    tb.add_entry(c_lee, Decimal(203.00), Direction.DEBIT)
+    tb.add_entry(sales, "203.00", Direction.CREDIT)
+    tb.add_entry(c_lee, "203.00", Direction.DEBIT)
     tx = tb.build()
     assert tx.can_post()
     tx.post()

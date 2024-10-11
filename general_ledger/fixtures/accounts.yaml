@@ -212,3 +212,41 @@
     is_placeholder: false
     is_hidden: false
     currency: GBP
+- model: general_ledger.account
+  pk: f80a932e-0518-1111-a111-1115c7d7785e
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
+    name: Opening Balances
+    description: 'Opening balances'
+    code: '0000'
+    type:
+      - opening-balances
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_rate:
+      - no-vat
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    is_system: true
+    is_placeholder: false
+    is_hidden: true
+    currency: GBP
+- model: general_ledger.account
+  pk: 111a932e-0518-1111-a111-1115c7d7785e
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
+    name: Inventory
+    description: 'Stock on hand'
+    code: '10100'
+    type:
+      - current-asset
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_rate:
+      - no-vat
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    is_system: true
+    is_placeholder: false
+    is_hidden: false
+    currency: GBP

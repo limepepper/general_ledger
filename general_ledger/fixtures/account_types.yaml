@@ -1,4 +1,12 @@
 - model: general_ledger.accounttype
+  pk: 020d5c7a-9bd2-4840-96b4-374273286bc7
+  fields:
+    description: 'Opening Balances'
+    slug: opening-balances
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Opening Balances
+    category: E
+- model: general_ledger.accounttype
   pk: 020d5c7a-9bd2-4840-96b4-3742b5286bc7
   fields:
     description: 'Accounts receivable type'
@@ -77,10 +85,10 @@
 - model: general_ledger.accounttype
   pk: 75a2d05a-cb0e-417c-bb70-66abb1e7af4a
   fields:
-    description: ''
-    slug: equity
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Equity
+    slug: equity
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: E
 - model: general_ledger.accounttype
   pk: afbc808b-78d2-4fdc-8eb9-83db3d30e83e
@@ -127,10 +135,10 @@
 - model: general_ledger.accounttype
   pk: e6ec274d-4b49-4a20-99c2-997a41fb5125
   fields:
-    description: ''
-    slug: non-current-asset
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Non-current Asset
+    slug: non-current-asset
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: NCA
 - model: general_ledger.accounttype
   pk: fb4547f5-50be-4723-a05e-debf20eb5905

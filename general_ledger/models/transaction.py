@@ -6,22 +6,9 @@ from django.utils import timezone
 from django.db import models
 from django.db import transaction
 
+from general_ledger.managers.transaction import TransactionQuerySet
 from general_ledger.models import Direction
 from general_ledger.models.mixins import UuidMixin
-
-
-class TransactionQuerySet(models.QuerySet):
-    def posted(self):
-        return self.filter(is_posted=True)
-
-    def unposted(self):
-        return self.filter(is_posted=False)
-
-    def locked(self):
-        return self.filter(is_locked=True)
-
-    def unlocked(self):
-        return self.filter(is_locked=False)
 
 
 class Transaction(
@@ -182,7 +169,7 @@ class Transaction(
             self.post_date = timezone.now()
             self.save()
             return True
-        return False
+        raise ValueError("Transaction cannot be posted")
 
     @transaction.atomic
     def unpost(self):
@@ -193,4 +180,4 @@ class Transaction(
             self.is_posted = False
             self.save()
             return True
-        return False
+        raise ValueError("Transaction cannot be unposted")

@@ -8,16 +8,23 @@ class BalanceSheet:
             raise ValueError("Ledger is required")
 
     def get_non_current_asset_accounts(self):
-        return self.ledger.coa.account_set.filter(type__slug="non-current-asset")
+        return self.ledger.coa.account_set.non_current_asset()
 
     def get_current_asset_accounts(self):
-        return self.ledger.coa.account_set.filter(type__slug="current-asset")
+        return self.ledger.coa.account_set.current_asset()
+
+    def get_entries_for_transactions_for_account(self, account):
+        return self.ledger.entries.filter(account=account)
 
     def get_current_liabilities_accounts(self):
-        return self.ledger.coa.account_set.filter(type__slug="current-liability")
+        return self.ledger.coa.account_set.current_liability().order_by(
+            "-type__liquidity"
+        )
 
     def get_non_current_liabilities_accounts(self):
-        return self.ledger.coa.account_set.filter(type__slug="non-current-liability")
+        return self.ledger.coa.account_set.non_current_liability().order_by(
+            "-type__liquidity"
+        )
 
     def get_total_equity(self):
         return self.equity
