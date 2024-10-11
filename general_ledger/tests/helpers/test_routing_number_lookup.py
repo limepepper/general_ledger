@@ -23,3 +23,5 @@ class TestRoutingNumberLookup:
         assert self.trie.lookup("20-48-95") == "Barclays Bank"
         assert self.trie.lookup("99-99-99") is None
         assert self.trie.lookup("02-00-00") is None
+        print(self.trie.lookup("938616"))
+        print(self.trie.lookup("938654"))

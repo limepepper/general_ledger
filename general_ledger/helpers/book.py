@@ -115,6 +115,11 @@ class BookHelper:
                     defaults={
                         "category": account_type["fields"].get("category", True),
                         "slug": account_type["fields"].get("slug", None),
+                        "liquidity": (
+                            account_type["fields"]["liquidity"]
+                            if "liquidity" in account_type["fields"]
+                            else 0
+                        ),
                     },
                 )
                 logger.debug(f"created: {created}")

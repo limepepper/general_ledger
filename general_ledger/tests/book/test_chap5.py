@@ -1,19 +1,22 @@
+import datetime
 import logging
-from decimal import Decimal
 
-from django.db import connection
-from django.shortcuts import render
+import pytest
 from django.template.loader import get_template
+from rich import inspect
+from rich.pretty import pprint
 
 from general_ledger.builders import TransactionBuilder
 from general_ledger.factories import BookFactory
+from general_ledger.factories import TransactionFactory, LedgerFactory
 from general_ledger.helpers import LedgerHelper
 from general_ledger.models import (
     Account,
-    Ledger,
     Direction,
 )
 from general_ledger.tests import GeneralLedgerBaseTest
+from general_ledger.utils.account_balanced import AccountBalancer
+from general_ledger.utils.consoler import pr_entry_set, pr_account_balanced
 
 
 def load_chapter_5_data():
@@ -117,8 +120,8 @@ def load_chapter_5_data():
 
     tb = TransactionBuilder(ledger=ledger, description="sales to C Lee on credit")
     tb.set_trans_date("2012-08-19")
-    tb.add_entry(sales, Decimal(203.00), Direction.CREDIT)
-    tb.add_entry(c_lee, Decimal(203.00), Direction.DEBIT)
+    tb.add_entry(sales, "203.00", Direction.CREDIT)
+    tb.add_entry(c_lee, "203.00", Direction.DEBIT)
     tx = tb.build()
     assert tx.can_post()
     tx.post()
@@ -176,18 +179,14 @@ def load_chapter_5_data():
     tx2 = tb2.build()
     tx2.post()
 
-    tb = TransactionBuilder(
-        ledger=ledger, description="receive payment from k knight"
-    )
+    tb = TransactionBuilder(ledger=ledger, description="receive payment from k knight")
     tb.set_trans_date("2012-08-28")
     tb.add_entry(bank, 158, Direction.DEBIT)
     tb.add_entry(d_knight, 158, Direction.CREDIT)
     tx = tb.build()
     tx.post()
 
-    tb = TransactionBuilder(
-        ledger=ledger, description="receive payment from k knight"
-    )
+    tb = TransactionBuilder(ledger=ledger, description="receive payment from k knight")
     tb.set_trans_date("2012-08-18")
     tb.add_entry(sales, 51, Direction.CREDIT)
     tb.add_entry(b_walters, 51, Direction.DEBIT)
@@ -201,12 +200,11 @@ def load_chapter_5_data():
     tx = tb.build()
     tx.post()
 
-    tb = TransactionBuilder(ledger=ledger, description="Purchases from E williams")
-    tb.set_trans_date("2012-08-18")
-    tb.add_entry(purchases, 116, Direction.DEBIT)
-    tb.add_entry(e_williams, 116, Direction.CREDIT)
-    tx = tb.build()
-    tx.post()
+    TransactionBuilder(
+        ledger=ledger, description="Purchases from E williams"
+    ).set_trans_date("2012-08-18").add_entry(purchases, 116, Direction.DEBIT).add_entry(
+        e_williams, 116, Direction.CREDIT
+    ).build().post()
 
     tb = TransactionBuilder(ledger=ledger, description="Test Transaction - 12")
     tb.set_trans_date("2012-08-21")
@@ -250,8 +248,6 @@ def load_chapter_5_data():
 class TestChap5Woods(GeneralLedgerBaseTest):
 
     logger = logging.getLogger(__name__)
-
-    
 
     def test_5_1(self):
 
@@ -309,3 +305,40 @@ class TestChap5Woods(GeneralLedgerBaseTest):
         #     name="Accounts Receivable",
         #     type__name="Current Asset",
         # )
+
+
+class TestChap5WoodsPyTests:
+    @pytest.mark.django_db
+    def test_balancing_off_simple_1(self):
+        print("")
+        print(f"This statement gets mixed with pytest output")
+        ledger = LedgerFactory()
+        coa = ledger.coa
+        accounts_receivable = coa.account_set.get(name="Accounts Receivable")
+        transactions = TransactionFactory.create_batch(
+            50,
+            ledger=ledger,
+            create_transaction_entry_lines__accounts=ledger.coa.account_set.filter(
+                slug__in=[
+                    "bank-account",
+                    "sales",
+                    "accounts-receivable",
+                ]
+            ),
+        )
+
+        # lh = LedgerHelper(ledger)
+        # print(lh.get_account_summary())
+
+        entry_set = accounts_receivable.entry_set.filter(
+            transaction__ledger=ledger,
+        )
+
+        test = AccountBalancer(
+            entry_set=entry_set,
+            # start_date="2023-01-01",
+            balance_interval="week",
+        )
+        # inspect(test)
+
+        print(pr_account_balanced(test.grouped_entries))
