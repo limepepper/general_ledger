@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.db import models
 
+from general_ledger.managers.mixins import CommonBooleanMixins
 from general_ledger.models.account import Account
 from general_ledger.models.mixins import (
     CreatedUpdatedMixin,
@@ -10,46 +11,8 @@ from general_ledger.models.mixins import (
 )
 
 
-class LedgerQuerySet(models.QuerySet):
-    def posted(self):
-        return self.filter(
-            is_posted=True,
-        )
-
-    def unposted(self):
-        return self.filter(
-            is_posted=False,
-        )
-
-    def locked(self):
-        return self.filter(
-            is_locked=True,
-        )
-
-    def unlocked(self):
-        return self.filter(
-            is_locked=False,
-        )
-
-    def system(self):
-        return self.filter(
-            is_system=True,
-        )
-
-    def not_system(self):
-        return self.filter(
-            is_system=False,
-        )
-
-    def hidden(self):
-        return self.filter(
-            is_hidden=True,
-        )
-
-    def not_hidden(self):
-        return self.filter(
-            is_hidden=False,
-        )
+class LedgerQuerySet(CommonBooleanMixins):
+    pass
 
 
 class LedgerManager(models.Manager):
@@ -60,6 +23,11 @@ class LedgerManager(models.Manager):
         )
 
     def for_book(self, book):
+        """
+        get all ledgers for a book
+        :param book:
+        :return:
+        """
         return self.get_queryset().filter(
             book=book,
         )

@@ -54,6 +54,10 @@ class AccountQuerySet(models.QuerySet):
             ],
         )
 
+    def inventory(self):
+        return self.filter(
+            type__slug="inventory",
+        )
 
 class AccountManager(models.Manager):
     def get_queryset(self):

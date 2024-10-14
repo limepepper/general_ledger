@@ -7,7 +7,6 @@ class RoutingLookup:
         cls,
         account_number,
         routing_number,
-        intu_bid=None,
         bankid=None,
     ):
         return "Bank Name"

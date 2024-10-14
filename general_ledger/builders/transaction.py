@@ -51,13 +51,17 @@ class TransactionBuilder(TransactionBuilderAbstract):
         tx_type: str,
     ):
         if isinstance(amount, float):
-            raise TypeError("The 'amount' parameter cannot be a float. Use Decimal, int, or str instead.")
+            raise TypeError(
+                "The 'amount' parameter cannot be a float. Use Decimal, int, or str instead."
+            )
 
         if not isinstance(amount, Decimal):
             try:
                 amount = Decimal(amount)  # Convert to Decimal if needed
             except InvalidOperation as e:
-                raise ValueError("Invalid 'amount' value. It must be convertible to a Decimal. {str(e)}")
+                raise ValueError(
+                    "Invalid 'amount' value. It must be convertible to a Decimal. {str(e)}"
+                )
 
         entry = Entry(
             account=account,
@@ -66,15 +70,19 @@ class TransactionBuilder(TransactionBuilderAbstract):
             transaction=self.tx,
         )
         self.entries.append(entry)
+        return self
 
     def set_description(self, description: str):
         self.tx.description = description
+        return self
 
     def set_ledger(self, ledger: Account):
         self.tx.ledger = ledger
+        return self
 
     def set_trans_date(self, trans_date: timezone):
         self.tx.trans_date = trans_date
+        return self
 
     @transaction.atomic
     def build(self) -> Transaction:

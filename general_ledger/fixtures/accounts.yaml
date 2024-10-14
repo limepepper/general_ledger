@@ -98,6 +98,26 @@
     is_system: true
     currency: GBP
 - model: general_ledger.account
+  pk: 574aa467-1b9f-ffff-ba78-73dc8c3a31fd
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
+    name: Other Income
+    slug: other-income
+    description: ''
+    code: '1073'
+    type:
+      - other-income
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_rate:
+      - 20-vat-on-income
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    is_placeholder: false
+    is_hidden: false
+    is_system: true
+    currency: GBP
+- model: general_ledger.account
   pk: e0b071fb-c314-487a-a057-d1d1da88ec15
   fields:
     created_at: 1970-01-01T00:00:00.000Z
@@ -162,6 +182,7 @@
     updated_at: 1970-01-01T00:00:00.000Z
     coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
     name: Purchases
+    slug: purchases
     description: ''
     code: '500'
     type:
@@ -181,6 +202,7 @@
     updated_at: 1970-01-01T00:00:00.000Z
     coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
     name: VAT
+    slug: vat
     description: ''
     code: '8000'
     type:
@@ -219,6 +241,7 @@
     updated_at: 1970-01-01T00:00:00.000Z
     coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
     name: Opening Balances
+    slug: opening-balances
     description: 'Opening balances'
     code: '0000'
     type:
@@ -231,6 +254,7 @@
     is_placeholder: false
     is_hidden: true
     currency: GBP
+# @TODO this is not needed i think as direct-costs should be used
 - model: general_ledger.account
   pk: 111a932e-0518-1111-a111-1115c7d7785e
   fields:
@@ -241,7 +265,7 @@
     description: 'Stock on hand'
     code: '10100'
     type:
-      - current-asset
+      - inventory
       - 1c16c522-2837-4b78-a95a-5f7aa4612e51
     tax_rate:
       - no-vat
@@ -249,4 +273,63 @@
     is_system: true
     is_placeholder: false
     is_hidden: false
+    currency: GBP
+- model: general_ledger.account
+  pk: f80a932e-0518-1111-a111-1115c7d11111
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
+    name: Trading
+    description: 'Trading Account'
+    code: '04200'
+    type:
+      - equity
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_rate:
+      - no-vat
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    is_system: true
+    is_placeholder: false
+    is_hidden: true
+    currency: GBP
+- model: general_ledger.account
+  pk: 3333932e-0518-1111-a111-1115c7d11111
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
+    name: Closing Inventory
+    slug: closing-inventory
+    description: 'Closing Inventory'
+    code: '04211'
+    type:
+      - current-asset
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_rate:
+      - no-vat
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    is_system: true
+    is_placeholder: false
+    is_hidden: true
+    currency: GBP
+- model: general_ledger.account
+  pk: f80a932e-0518-1111-a111-1115c7d11111
+  fields:
+    created_at: 1970-01-01T00:00:00.000Z
+    updated_at: 1970-01-01T00:00:00.000Z
+    coa: 5aeba0da-5a9c-4b18-a674-36624fc04850
+    name: Profit and Loss
+    slug: profit-and-loss
+    description: 'Profit and Loss'
+    code: '04232'
+    type:
+      - equity
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    tax_rate:
+      - no-vat
+      - 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    is_system: true
+    is_placeholder: false
+    is_hidden: true
     currency: GBP

@@ -5,10 +5,14 @@ from django.utils import timezone
 
 from django.db import models
 from django.db import transaction
+from rich.pretty import Pretty
+from rich.table import Table
 
 from general_ledger.managers.transaction import TransactionQuerySet
 from general_ledger.models import Direction
 from general_ledger.models.mixins import UuidMixin
+
+from loguru import logger
 
 
 class Transaction(
@@ -17,6 +21,12 @@ class Transaction(
 
     logger = logging.getLogger("TransactionModel")
     objects = TransactionQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = "Transaction"
+        verbose_name_plural = "Transactions"
+        db_table = "gl_transaction"
+        ordering = ["trans_date"]
 
     # some put the description in the entry model. see xero, sage.
     # some put it in the transaction model. see modern treasury.
@@ -63,11 +73,18 @@ class Transaction(
     def __str__(self):
         return f"{self.post_date} {self.description}"
 
-    class Meta:
-        verbose_name = "Transaction"
-        verbose_name_plural = "Transactions"
-        db_table = "gl_transaction"
-        ordering = ["trans_date"]
+    def __rich__(self) -> str:
+        return "[bold cyan]MyObject()"
+
+    def __rich_repr__(self):
+        yield "Transaction", {}
+        yield "Ledger", self.ledger
+        yield "Date", self.trans_date
+        yield "Debits", self.debit_amount
+        yield "Credits", self.credit_amount
+        yield "Is_Posted", self.is_posted
+        yield "Entries", self.get_entries()
+        # yield "Balance", Pretty(self.balance(), precision=2)
 
     def get_entries(self, get_accounts: bool = False):
         if get_accounts:
@@ -110,18 +127,18 @@ class Transaction(
         Check that the transaction is valid. This means that the sum of the debits and credits is zero.
         """
         total = 0
-        self.logger.debug(f"len(self.entry_set.all()): {len(self.entry_set.all())}")
+        logger.debug(f"len(self.entry_set.all()): {len(self.entry_set.all())}")
         tot_credits = 0
         tot_debits = 0
         for entry in self.entry_set.all():
-            self.logger.debug(
+            logger.debug(
                 f"total: {total} {entry.tx_type} {entry.account.type.direction}"
             )
             if entry.tx_type == Direction.CREDIT:
                 tot_credits += entry.amount
             else:
                 tot_debits += entry.amount
-        self.logger.debug(f"tot_credits: {tot_credits} tot_debits: {tot_debits}")
+        logger.debug(f"tot_credits: {tot_credits} tot_debits: {tot_debits}")
 
         result = tot_credits == tot_debits
 

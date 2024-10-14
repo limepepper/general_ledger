@@ -69,7 +69,13 @@ class TestBalanceSheetBuilder:
             account__in=accounts_ca,
         )
 
-        rprint("total assets " + str(combined_entries_nca.balance() + combined_entries_ca.balance()))
+        rprint(
+            "total assets "
+            + str(
+                combined_entries_nca.debit_balance()
+                + combined_entries_ca.debit_balance()
+            )
+        )
 
         # inspect(combined_entries_ca.balance())
 

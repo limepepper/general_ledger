@@ -101,7 +101,7 @@ sort_codes = {
     "60-93-03": "Weatherbys Bank Ltd",
     "60-93-71..76": "Bank of Baroda",
     "60-93-84": "Bank of Baroda",
-    "70-": "International Bank (no longer issued?)",
+    "70-": "International Bank (no longer issued)",
     "71-": "National Savings Bank (bank of england)",
     "72-": "Santander UK",
     "77-00..44-": "Formerly Lloyds TSB",
