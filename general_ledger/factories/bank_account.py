@@ -4,7 +4,7 @@ import factory
 from factory.django import DjangoModelFactory
 from faker import Faker
 
-from general_ledger.factories.account import AccountFactory
+from general_ledger.factories.account_factory import AccountFactory
 from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.factories.faker_utils import rand_sort_code, suffixes
 from general_ledger.models import Bank

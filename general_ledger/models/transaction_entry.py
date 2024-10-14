@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinValueValidator
@@ -8,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from general_ledger.models.mixins import CreatedUpdatedMixin
 from .direction import Direction
+from ..managers.transaction_entry import EntryQuerySet, EntryManager
 
 
 class Entry(
@@ -15,6 +17,7 @@ class Entry(
 ):
 
     logger = logging.getLogger(__name__)
+    objects = EntryManager.from_queryset(queryset_class=EntryQuerySet)()
 
     class Meta:
         verbose_name = "Entry"
@@ -37,6 +40,7 @@ class Entry(
     transaction = models.ForeignKey(
         "Transaction",
         on_delete=models.CASCADE,
+        related_name="entry_set",
     )
 
     amount = models.DecimalField(
@@ -47,6 +51,14 @@ class Entry(
         help_text=_("Account of the transaction."),
         validators=[MinValueValidator(0)],
     )
+
+    @property
+    def debit_amount(self):
+        return self.amount if self.is_debit else Decimal("0.00")
+
+    @property
+    def credit_amount(self):
+        return self.amount if self.is_credit else Decimal("0.00")
 
     tx_type = models.CharField(
         max_length=10,
@@ -91,6 +103,10 @@ class Entry(
 
         super().save(*args, **kwargs)
 
+    @property
+    def narrative(self):
+        return self.get_counter_entry()
+
     def get_counter_entry(self):
         """
         if the entry has a single opposite, return it
@@ -103,17 +119,24 @@ class Entry(
         # )
         # .values("accounts")
         # )
-        names = ", ".join([item.account.name for item in counter_entry])
+
+        # ety = entry.transaction.entry_set.filter(
+        #     ~Q(id=entry.id) & Q(tx_type=Direction(entry.tx_type).opposite())
+        # ).values_list("account__name", flat=True)
+        #
+        # accounts = ", ".join(ety)
+        # return accounts if accounts else None
+        names = ",".join([item.account.name[:12] for item in counter_entry])[:16]
         return names
 
     def __str__(self):
         try:
-            account_name = self.account.name
+            account_name = self.account.name[:16]
         except ObjectDoesNotExist:
-            account_name = "None"
+            account_name = "Unset"
         try:
             tx_type = self.tx_type
         except ObjectDoesNotExist:
-            tx_type = "None"
+            tx_type = "Unset"
 
-        return f"{account_name} {type(tx_type)} {self.amount}"
+        return f"{account_name: <16} {tx_type} {self.debit_amount: >10.2f} {self.credit_amount: >10.2f}"

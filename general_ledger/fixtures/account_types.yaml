@@ -1,4 +1,12 @@
 - model: general_ledger.accounttype
+  pk: 020d5c7a-9bd2-4840-96b4-374273286bc7
+  fields:
+    description: 'Opening Balances'
+    slug: opening-balances
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    name: Opening Balances
+    category: E
+- model: general_ledger.accounttype
   pk: 020d5c7a-9bd2-4840-96b4-3742b5286bc7
   fields:
     description: 'Accounts receivable type'
@@ -10,15 +18,15 @@
 - model: general_ledger.accounttype
   pk: 0dfa4a29-09e5-4022-b855-404f10fe1c42
   fields:
-    description: ''
-    slug: sales
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Sales
+    slug: sales
+    description: 'Income from business operations'
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: R
 - model: general_ledger.accounttype
   pk: 19d9ea45-4564-4f3e-b7dd-c4a93cee5a98
   fields:
-    description: ''
+    description: 'Expenses paid in advance'
     slug: prepayment
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Prepayment
@@ -26,7 +34,7 @@
 - model: general_ledger.accounttype
   pk: 1c1f6254-0abb-426f-b92a-96a55ce1e1ac
   fields:
-    description: ''
+    description: 'Income from other sources'
     slug: other-income
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Other Income
@@ -43,10 +51,10 @@
 - model: general_ledger.accounttype
   pk: 46dcba82-3bf0-4288-8c58-a90f917938cb
   fields:
-    description: ''
-    slug: direct-costs
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Direct Costs
+    slug: direct-costs
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: X
 - model: general_ledger.accounttype
   pk: 5eb1f56a-abfc-462a-bb15-fb1861ff0a4e
@@ -77,35 +85,35 @@
 - model: general_ledger.accounttype
   pk: 75a2d05a-cb0e-417c-bb70-66abb1e7af4a
   fields:
-    description: ''
-    slug: equity
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Equity
+    slug: equity
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: E
 - model: general_ledger.accounttype
   pk: afbc808b-78d2-4fdc-8eb9-83db3d30e83e
   fields:
-    description: ''
-    slug: unpaid-expense-claim
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Unpaid Expense Claims
+    slug: unpaid-expense-claim
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: CL
     liquidity: 71
 - model: general_ledger.accounttype
   pk: bbef0fa2-1b61-4bce-8631-976d8e82e944
   fields:
-    description: ''
-    slug: depreciation
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Depreciation
+    slug: depreciation
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: X
 - model: general_ledger.accounttype
   pk: d5d12848-1e9a-4807-8ccd-b8a32fbff811
   fields:
-    description: ''
-    slug: inventory
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Inventory
+    slug: inventory
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: CA
     liquidity: 70
 - model: general_ledger.accounttype
@@ -127,10 +135,10 @@
 - model: general_ledger.accounttype
   pk: e6ec274d-4b49-4a20-99c2-997a41fb5125
   fields:
-    description: ''
-    slug: non-current-asset
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Non-current Asset
+    slug: non-current-asset
+    description: 'Generic type for non-current or fixed assets'
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: NCA
 - model: general_ledger.accounttype
   pk: fb4547f5-50be-4723-a05e-debf20eb5905
@@ -148,3 +156,11 @@
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     name: Current Liability
     category: CL
+- model: general_ledger.accounttype
+  pk: dab895be-e395-4fb9-a946-eeed4add9d6b
+  fields:
+    name: Purchases
+    slug: purchases
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    category: X

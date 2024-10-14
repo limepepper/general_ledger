@@ -22,7 +22,11 @@ class TestTransactionCreatePost(GeneralLedgerBaseTest):
         for acct in Account.objects.all():
             logger.trace(
                 f"{acct.name} - {acct.type} {acct.code}",
-                extra={"user_id": 123, "username": "johndoe", "event": "login"},
+                extra={
+                    "user_id": 123,
+                    "username": "johndoe",
+                    "event": "login",
+                },
             )
 
         book = Book.objects.first()

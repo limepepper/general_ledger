@@ -29,6 +29,8 @@ filter_dict = {
     "general_ledger.helpers": "DEBUG",
     "general_ledger.helpers.book": "INFO",
     "general_ledger.helpers.invoice": "DEBUG",
+    "general_ledger.models.transaction": "INFO",
+    "general_ledger.managers.transaction_entry": "DEBUG",
 }
 
 

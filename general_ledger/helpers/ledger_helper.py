@@ -1,5 +1,8 @@
 import itertools
 import logging
+from rich import inspect
+from rich.pretty import pprint
+from colorama import Fore, Style, Back
 
 from django.db import transaction
 from django.db.models import CharField
@@ -16,7 +19,8 @@ from general_ledger.models.transaction import Transaction
 from general_ledger.models.transaction_entry import Entry
 from general_ledger.models.account import Account
 from general_ledger.models.ledger import Ledger
-from general_ledger.reports import AccountContext
+from general_ledger.utils.account_balanced import AccountBalancer
+from general_ledger.utils.consoler import pr_account_balanced
 
 
 class LedgerHelper:
@@ -163,14 +167,11 @@ class LedgerHelper:
         for account in Account.objects.annotate(num_txs=Count("entry")).filter(
             num_txs__gt=0, coa__ledger=self.ledger
         ):
-            context = AccountContext(account)
-            output += f"{account.name.center(81)}\n"
-            output += "-" * 81 + "\n"
-            # output += f"balance: {self.get_account_balance(account)}\n"
-            # output += "\n"
-            output += self.get_entry_summary(account.entry_set.all(), account)
-            output += "\n"
-            output += "\n"
+            balanced = AccountBalancer(
+                account=account,
+                ledger=self.ledger,
+            )
+            output = pr_account_balanced(balanced.grouped_entries)
         return output
 
     def get_entry_summary(self, entryset, account):
@@ -209,15 +210,11 @@ class LedgerHelper:
     def get_year_header_row(self, year, account, debits1, creditz1) -> str:
         output = ""
         if len(debits1) and len(creditz1):
-            output += f" {year: <31} {account.currency_symbol.center(6)} | {year: <28} {account.currency_symbol.center(10): >10}\n"
+            output += f" {Style.BRIGHT}{Fore.CYAN}{year: <31}{Style.RESET_ALL} {account.currency_symbol.center(6)} | {Style.BRIGHT}{Fore.CYAN}{year: <28}{Style.RESET_ALL} {account.currency_symbol.center(10): >10}\n"
         elif len(debits1):
-            output += (
-                f" {year: <31} {account.currency_symbol.center(6): >6} | {' '*39}\n"
-            )
+            output += f" {Style.BRIGHT}{Fore.CYAN}{year: <31}{Style.RESET_ALL} {account.currency_symbol.center(6): >6} | {' '*39}\n"
         elif len(creditz1):
-            output += (
-                f" {' '*38} | {year: <28} {account.currency_symbol.center(10): >10}\n"
-            )
+            output += f" {' '*38} | {Style.BRIGHT}{Fore.CYAN}{year: <28}{Style.RESET_ALL} {account.currency_symbol.center(10): >10}\n"
         return output
 
     def get_entry_row(self, entry):
@@ -225,9 +222,9 @@ class LedgerHelper:
         output = ""
         if entry:
             # print(self.get_counter_entry(entry))
-            tmp = self.get_counter_entry(entry)
+            tmp = entry.get_counter_entry()
             # print(f"tmp: '{tmp}'")
-            output += f" {entry.transaction.trans_date.strftime('%b %e'): <8}{tmp: <19} {entry.amount : >10} "
+            output += f" {entry.transaction.trans_date.strftime('%b %e'): <8}{tmp: <19} {entry.amount : >10.2f} "
         else:
             output += f" {' '*38} "
         return output
@@ -238,18 +235,3 @@ class LedgerHelper:
         output += f" {'totals'.rjust(38)} | {'1234.00'.rjust(38)}\n"
         output += f" {'======'.rjust(38)} | {'======='.rjust(38)}\n"
         return output
-
-    def get_counter_entry(self, entry: Entry):
-        """
-        if the entry has a single opposite, return it
-        """
-
-        ety = (
-            entry.transaction.entry_set.filter(
-                ~Q(id=entry.id) & Q(tx_type=Direction(entry.tx_type).opposite())
-            )
-            .values_list("account__name", flat=True)
-        )
-
-        accounts = ", ".join(ety)
-        return accounts if accounts else None
