@@ -4,10 +4,7 @@ set -eu -o pipefail
 
 export DJANGO_SETTINGS_MODULE=dashboard.settings
 
-python manage.py reset_db --noinput
 
-rm -rf general_ledger/migrations/*.py
-touch general_ledger/migrations/__init__.py
 
 python manage.py makemigrations
 

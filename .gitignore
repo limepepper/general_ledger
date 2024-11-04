@@ -6,10 +6,11 @@ mysite/settings/dev.py
 general_ledger/data
 general_ledger/guff
 .env.*
-.env
 /run
 stuff
 guff
+/general_ledger/scripts/ofxparse1.py
+/uploads/
 
 # Django #
 *.log
@@ -131,13 +132,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Sublime Text #
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-
 # sftp configuration file
 sftp-config.json
 
@@ -155,5 +149,3 @@ GitHub.sublime-settings
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
-/general_ledger/scripts/ofxparse1.py
-/uploads/
