@@ -19,6 +19,7 @@ click==8.1.7
 comm==0.2.2
 crispy-bootstrap5==2024.2
 cryptography==43.0.1
+currency-symbols==2.0.3
 debugpy==1.8.6
 decorator==5.1.1
 defusedxml==0.7.1
