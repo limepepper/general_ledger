@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from import_export.admin import ImportExportModelAdmin
 
-from general_ledger.models import Bank
+from general_ledger.django.models import Bank
 from general_ledger.utils import update_items
 
 

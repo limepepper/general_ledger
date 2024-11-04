@@ -9,8 +9,8 @@ In order to avoid the Invoice model from becoming too large, we have created a h
 various operations that can be performed on an invoice. This class will be used to handle the various operations
 """
 
-from general_ledger.builders import TransactionBuilder
-from general_ledger.models import Invoice, Direction
+from general_ledger.builders.transaction import TransactionBuilder
+from general_ledger.django.models import Invoice, Direction
 
 from loguru import logger
 

@@ -10,7 +10,7 @@ from formset.renderers.bootstrap import FormRenderer
 from formset.utils import FormMixin
 from loguru import logger
 
-from general_ledger.models import (
+from general_ledger.django.models import (
     Invoice,
     Contact,
     Ledger,

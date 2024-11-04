@@ -2,7 +2,7 @@ from django import forms
 from import_export import resources, fields
 from import_export.forms import ImportForm, ConfirmImportForm
 
-from general_ledger.models import Ledger, Transaction
+from general_ledger.django.models import Ledger, Transaction
 
 import logging
 

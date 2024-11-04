@@ -9,7 +9,6 @@ from general_ledger.factories import BookFactory, ContactFactory
 
 @pytest.mark.django_db
 def test_inventory_basic_1(user, client):
-    # inspect(user)
     client.force_login(user)
 
     book = BookFactory(

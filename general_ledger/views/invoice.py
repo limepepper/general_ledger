@@ -6,19 +6,17 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import (
-    ListView,
     CreateView,
     UpdateView,
 )
 from django_filters.views import FilterView
-from rich import inspect
 
-from general_ledger.filters import InvoiceFilter
+from general_ledger.django.filters import InvoiceFilter
 from general_ledger.forms import InvoiceForm, InvoiceLineFormSet
 from general_ledger.forms.contact_inline import ContactInlineForm
 from general_ledger.forms.invoice import create_invoice_line_formset
 from general_ledger.forms.invoice_status import InvoiceStatusForm
-from general_ledger.models import Invoice
+from general_ledger.django.models import Invoice
 from general_ledger.views.generic import GenericListView, GenericDetailView
 from general_ledger.views.history.history import HistoryView
 from general_ledger.views.mixins import (

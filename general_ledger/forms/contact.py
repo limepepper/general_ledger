@@ -7,7 +7,7 @@ from django.forms import (
 from django.forms import models
 from formset.widgets import Selectize
 
-from general_ledger.models import Contact, Account, TaxRate
+from general_ledger.django.models import Contact, Account, TaxRate
 
 
 class ContactUpdateForm(

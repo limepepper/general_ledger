@@ -3,7 +3,7 @@ import logging
 from django.contrib import admin
 from django.utils.html import format_html
 
-from general_ledger.models import Bank, Payment, Payment, PaymentItem
+from general_ledger.django.models import Bank, Payment, Payment, PaymentItem
 from general_ledger.utils import update_items
 
 

@@ -2,7 +2,7 @@ import factory
 from factory import SubFactory
 from faker import Faker
 
-from general_ledger.models import Ledger
+from general_ledger.django.models import Ledger
 
 fake = Faker()
 

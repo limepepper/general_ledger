@@ -8,7 +8,7 @@ from django.db import models
 from loguru import logger
 from rich import inspect
 
-from general_ledger.models import BankBalance
+from general_ledger.django.models import BankBalance
 
 
 def inspects(qs):
@@ -36,9 +36,6 @@ class BankBalanceHelper:
             qs = qs.filter(date__lte=end_date)
 
         dts = qs.dates("date", "day")
-
-        # inspect(qs)
-        # inspect(dts)
 
         balances = []
         for dt in dts:

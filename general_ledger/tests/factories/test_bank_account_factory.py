@@ -3,8 +3,8 @@ from rich import inspect
 
 from general_ledger.factories import BankAccountFactory
 from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
-from general_ledger.models import Bank, Account
-from general_ledger.models.bank_statement_line_type import BankStatementLineType
+from general_ledger.django.models import Bank, Account
+from general_ledger.django.models.bank_statement_line_type import BankStatementLineType
 
 
 class TestBankAccountFactory(TestCase):

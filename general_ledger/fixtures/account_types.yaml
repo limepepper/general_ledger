@@ -108,15 +108,6 @@
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: X
 - model: general_ledger.accounttype
-  pk: d5d12848-1e9a-4807-8ccd-b8a32fbff811
-  fields:
-    name: Inventory
-    slug: inventory
-    description: ''
-    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
-    category: CA
-    liquidity: 70
-- model: general_ledger.accounttype
   pk: dab895be-e395-4fb9-a946-9a1d4add9d6b
   fields:
     description: ''
@@ -157,10 +148,27 @@
     name: Current Liability
     category: CL
 - model: general_ledger.accounttype
-  pk: dab895be-e395-4fb9-a946-eeed4add9d6b
+  pk: dab895be-e395-4fb9-6746-eeed41dd9d6b
   fields:
     name: Purchases
     slug: purchases
     description: ''
     book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
     category: X
+- model: general_ledger.accounttype
+  pk: da3895be-e195-4fb9-a946-eeed41dd9d6b
+  fields:
+    name: Purchases Returns
+    slug: purchases-returns
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    category: X
+- model: general_ledger.accounttype
+  pk: d5d12848-1e9a-4807-8ccd-b8a32fbff811
+  fields:
+    name: Inventory
+    slug: inventory
+    description: ''
+    book: 1c16c522-2837-4b78-a95a-5f7aa4612e51
+    category: CA
+    liquidity: 70

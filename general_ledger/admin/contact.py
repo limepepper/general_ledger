@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from general_ledger.models import Contact
+from general_ledger.django.models import Contact
 
 
 @admin.register(Contact)

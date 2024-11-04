@@ -3,8 +3,8 @@ from decimal import Decimal
 from rich import inspect
 
 from general_ledger.factories.invoice import InvoiceFactory, InvoiceLineFactory
-from general_ledger.models import InvoiceLine
-from general_ledger.models.tax_inclusive import TaxInclusive
+from general_ledger.django.models import InvoiceLine
+from general_ledger.django.models.tax_inclusive import TaxInclusive
 from general_ledger.tests import GeneralLedgerBaseTest
 
 

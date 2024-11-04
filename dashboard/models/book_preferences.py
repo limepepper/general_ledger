@@ -1,7 +1,7 @@
 from django.db import models
 from dynamic_preferences.models import PerInstancePreferenceModel
 
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 
 
 class BookPreferenceModel(PerInstancePreferenceModel):

@@ -6,8 +6,8 @@ import factory
 from factory import SubFactory, LazyAttribute, post_generation
 from factory.django import DjangoModelFactory
 
-from general_ledger.models import Invoice, InvoiceLine
-from general_ledger.models.tax_inclusive import TaxInclusive
+from general_ledger.django.models import Invoice, InvoiceLine
+from general_ledger.django.models.tax_inclusive import TaxInclusive
 from faker import Faker
 
 

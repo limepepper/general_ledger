@@ -54,8 +54,8 @@ class OFXParser(StatementParser):
 
         # inspect(account)
 
-        #print(f"{sort_code=}")
-        #print(f"{account_number=}")
+        # print(f"{sort_code=}")
+        # print(f"{account_number=}")
 
         if len(sort_code) == 6:
             sort_code = f"{sort_code[:2]}-{sort_code[2:4]}-{sort_code[4:]}"
@@ -65,7 +65,6 @@ class OFXParser(StatementParser):
         data["account_type"] = account_type
 
         statement = account.statement
-        #inspect(statement)
 
         # at least barclays these are completely wrong
         data["start_date"] = statement.start_date
@@ -105,4 +104,3 @@ class OFXParser(StatementParser):
             raise ParsingError(
                 f"Error parsing OFX file txs: {str(e)} for {transaction}"
             )
-

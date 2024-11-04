@@ -2,7 +2,7 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 
-from general_ledger.models import Account, Book, AccountType
+from general_ledger.django.models import Account, Book, AccountType
 
 
 class AccountTypeResource(resources.ModelResource):

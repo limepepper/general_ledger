@@ -7,7 +7,7 @@ from loguru import logger
 from rich import print, inspect
 
 from general_ledger.builders.invoice_builder import InvoiceBuilder
-from general_ledger.models import (
+from general_ledger.django.models import (
     Ledger,
     Payment,
     Invoice,

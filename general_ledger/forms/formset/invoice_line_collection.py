@@ -4,7 +4,7 @@ from formset.collection import FormCollection
 from loguru import logger
 
 from general_ledger.forms.formset.invoice_line_formsetified import InvoiceLineForm
-from general_ledger.models import InvoiceLine
+from general_ledger.django.models import InvoiceLine
 
 
 class InvoiceLineCollection(

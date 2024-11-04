@@ -5,10 +5,17 @@ from general_ledger.helpers.routing_number_lookup import create_sort_code_trie
 from general_ledger.helpers.sort_code_lookup import sort_codes
 from general_ledger.io import ParserFactory
 from general_ledger.management.utils import get_book
-from general_ledger.models import Book, FileUpload, BankStatementLine, Bank, BankBalance
+from general_ledger.django.models import (
+    Book,
+    FileUpload,
+    BankStatementLine,
+    Bank,
+    BankBalance,
+)
 from django.contrib.auth import get_user_model
 from loguru import logger
-# from general_ledger.models.account_dl_treebeard import AccountClass
+
+# from general_ledger.django.models.account_dl_treebeard import AccountClass
 
 
 class Command(BaseCommand):
@@ -60,7 +67,7 @@ class Command(BaseCommand):
         #     account_number=parsed_data["account_number"],
         # )
 
-        for account in  parsed_data["accounts"]:
+        for account in parsed_data["accounts"]:
             print(f"{account['balance']=}")
             print(f"{account['balance_date']=}")
             print(f"{account['sort_code']=}")
@@ -69,7 +76,6 @@ class Command(BaseCommand):
             inspect(account)
 
             trie = create_sort_code_trie(sort_codes)
-
 
             print(trie.lookup("60-24-77"))
 
@@ -101,7 +107,6 @@ class Command(BaseCommand):
                     name=f"{bank_name} {account_suffix}",
                     type=account_type,
                 )
-
 
         # if not parsed_data["transactions"]:
         #     print("No transactions found")

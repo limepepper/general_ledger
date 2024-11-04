@@ -3,7 +3,7 @@ import logging
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from general_ledger.models import Account, AccountType, TaxRate, ChartOfAccounts
+from general_ledger.django.models import Account, AccountType, TaxRate, ChartOfAccounts
 from general_ledger.resources import AccountResource
 from general_ledger.resources.account import AccountResourceSimple
 from general_ledger.utils import update_items

@@ -1,0 +1,15 @@
+name,type_slug,tax_rate_slug
+J Bee,accounts-receivable,no-vat
+T Day,accounts-receivable,no-vat
+J Soul,accounts-receivable,no-vat
+D Blue,accounts-payable,no-vat
+F Rise,accounts-payable,no-vat
+P Lee,accounts-payable,no-vat
+L Hope,accounts-payable,no-vat
+R James,accounts-payable,no-vat
+Sales Returns,current-asset,no-vat
+Purchases Returns,current-liability,no-vat
+Sales,sales,20-vat-on-income
+Purchases,direct-costs,20-vat-on-expenses
+Cash,cash,no-vat
+Bank,bank,no-vat

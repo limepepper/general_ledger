@@ -1,247 +1,30 @@
-import datetime
 import logging
+from decimal import Decimal
 
-import pytest
 from django.template.loader import get_template
-from rich import inspect
-from rich.pretty import pprint
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
-from general_ledger.builders import TransactionBuilder
-from general_ledger.factories import BookFactory
-from general_ledger.factories import TransactionFactory, LedgerFactory
-from general_ledger.helpers import LedgerHelper
-from general_ledger.models import (
-    Account,
-    Direction,
-)
+from general_ledger.builders.account_summary_builder import AccountSummaryBuilder
+from general_ledger.render.utility_rich import ConsoleReportBuilder
 from general_ledger.tests import GeneralLedgerBaseTest
-from general_ledger.utils.account_balanced import AccountBalancer
-from general_ledger.utils.consoler import pr_entry_set, pr_account_balanced
+from general_ledger.tests.book.data_chap5 import (
+    load_chapter_5_data,
+    load_5_review_5_1_data,
+    load_5_review_5_2_data,
+    load_5_review_5_5_data,
+)
+from general_ledger.render.consoler import pr_account_balanced
+from general_ledger.render.renderables import render_2_cols
+from general_ledger.render.renderer_rich import RichConsoleRenderer
+from general_ledger.render.format_table_rich_three_col import ThreeColumnFormat
+from general_ledger.utils.inspect import inspect
 
+# from rich import print
 
-def load_chapter_5_data():
-    """
-    accounts for debtors
-    """
-    book = BookFactory()
-    ledger = book.get_default_ledger()
-    coa = book.get_default_coa()
-    bank = Account.objects.get(name="Bank Account", coa=coa)
-    cash = Account.objects.get(name="Cash", coa=coa)
-    purchases, _ = coa.account_set.get_or_create(
-        name="Purchases",
-        type__slug="direct-costs",
-    )
-    purchases_returns, _ = coa.account_set.get_or_create(
-        name="Purchases Returns",
-        type=book.accounttype_set.get(slug="current-liability"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    sales, _ = coa.account_set.get_or_create(
-        name="Sales",
-        type=book.accounttype_set.get(slug="sales"),
-        tax_rate=book.taxrate_set.get(slug="20-vat-on-income"),
-    )
-    k_tandy, _ = coa.account_set.get_or_create(
-        name="K Tandy",
-        type=book.accounttype_set.get(slug="accounts-receivable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    c_lee, _ = coa.account_set.get_or_create(
-        name="C Lee",
-        type=book.accounttype_set.get(slug="accounts-receivable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    k_wood, _ = coa.account_set.get_or_create(
-        name="K Wood",
-        type=book.accounttype_set.get(slug="accounts-receivable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    d_knight, _ = coa.account_set.get_or_create(
-        name="D Knight",
-        type=book.accounttype_set.get(slug="accounts-receivable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    b_walters, _ = coa.account_set.get_or_create(
-        name="B Walters",
-        type=book.accounttype_set.get(slug="accounts-receivable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    e_williams, _ = coa.account_set.get_or_create(
-        name="E Williams",
-        type=book.accounttype_set.get(slug="accounts-payable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-    k_patterson, _ = coa.account_set.get_or_create(
-        name="K Patterson",
-        type=book.accounttype_set.get(slug="accounts-payable"),
-        tax_rate=book.taxrate_set.get(slug="no-vat"),
-    )
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to K tandy")
-    tb.set_trans_date("2012-08-1")
-    tb.add_entry(sales, 144, Direction.CREDIT)
-    tb.add_entry(k_tandy, 144, Direction.DEBIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to K tandy")
-    tb.set_trans_date("2012-08-19")
-    tb.add_entry(sales, 300, Direction.CREDIT)
-    tb.add_entry(k_tandy, 300, Direction.DEBIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="payment by K tandy")
-    tb.set_trans_date("2012-08-22")
-    tb.add_entry(bank, 144, Direction.DEBIT)
-    tb.add_entry(k_tandy, 144, Direction.CREDIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="payment by K tandy")
-    tb.set_trans_date("2012-08-28")
-    tb.add_entry(bank, 300, Direction.DEBIT)
-    tb.add_entry(k_tandy, 300, Direction.CREDIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to C Lee on credit")
-    tb.set_trans_date("2012-08-11")
-    tb.add_entry(sales, 177, Direction.CREDIT)
-    tb.add_entry(c_lee, 177, Direction.DEBIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to C Lee on credit")
-    tb.set_trans_date("2012-08-19")
-    tb.add_entry(sales, "203.00", Direction.CREDIT)
-    tb.add_entry(c_lee, "203.00", Direction.DEBIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to C Lee on credit")
-    tb.set_trans_date("2012-08-22")
-    tb.add_entry(sales, 100, Direction.CREDIT)
-    tb.add_entry(c_lee, 100, Direction.DEBIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="payment by c lee")
-    tb.set_trans_date("2012-08-30")
-    tb.add_entry(bank, 480, Direction.DEBIT)
-    tb.add_entry(c_lee, 480, Direction.CREDIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to K wood on credit")
-    tb.set_trans_date("2012-08-6")
-    tb.add_entry(sales, 214, Direction.CREDIT)
-    tb.add_entry(k_wood, 214, Direction.DEBIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="payment by k wood")
-    tb.set_trans_date("2012-08-30")
-    tb.add_entry(bank, 214, Direction.DEBIT)
-    tb.add_entry(k_wood, 214, Direction.CREDIT)
-    tx = tb.build()
-    assert tx.can_post()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="sales to d knight")
-    tb.set_trans_date("2012-08-1")
-    tb.add_entry(sales, 158, Direction.CREDIT)
-    tb.add_entry(d_knight, 158, Direction.DEBIT)
-    tx = tb.build()
-    tx.post()
-
-    tb2 = TransactionBuilder(ledger=ledger, description="sales to d knight")
-    tb2.set_trans_date("2012-08-15")
-    tb2.add_entry(sales, 206, Direction.CREDIT)
-    tb2.add_entry(d_knight, 206, Direction.DEBIT)
-    tx2 = tb2.build()
-    tx2.post()
-
-    tb2 = TransactionBuilder(ledger=ledger, description="sales to d knight")
-    tb2.set_trans_date("2012-08-30")
-    tb2.add_entry(sales, 118, Direction.CREDIT)
-    tb2.add_entry(d_knight, 118, Direction.DEBIT)
-    tx2 = tb2.build()
-    tx2.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="receive payment from k knight")
-    tb.set_trans_date("2012-08-28")
-    tb.add_entry(bank, 158, Direction.DEBIT)
-    tb.add_entry(d_knight, 158, Direction.CREDIT)
-    tx = tb.build()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="receive payment from k knight")
-    tb.set_trans_date("2012-08-18")
-    tb.add_entry(sales, 51, Direction.CREDIT)
-    tb.add_entry(b_walters, 51, Direction.DEBIT)
-    tx = tb.build()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="Purchases from E williams")
-    tb.set_trans_date("2012-08-2")
-    tb.add_entry(purchases, 248, Direction.DEBIT)
-    tb.add_entry(e_williams, 248, Direction.CREDIT)
-    tx = tb.build()
-    tx.post()
-
-    TransactionBuilder(
-        ledger=ledger, description="Purchases from E williams"
-    ).set_trans_date("2012-08-18").add_entry(purchases, 116, Direction.DEBIT).add_entry(
-        e_williams, 116, Direction.CREDIT
-    ).build().post()
-
-    tb = TransactionBuilder(ledger=ledger, description="Test Transaction - 12")
-    tb.set_trans_date("2012-08-21")
-    tb.add_entry(bank, 100, Direction.CREDIT)
-    tb.add_entry(e_williams, 100, Direction.DEBIT)
-    tx = tb.build()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="Test Transaction - 12")
-    tb.set_trans_date("2012-08-8")
-    tb.add_entry(purchases, 620, Direction.DEBIT)
-    tb.add_entry(k_patterson, 620, Direction.CREDIT)
-    tx = tb.build()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="Test Transaction - 12")
-    tb.set_trans_date("2012-08-15")
-    tb.add_entry(purchases, 200, Direction.DEBIT)
-    tb.add_entry(k_patterson, 200, Direction.CREDIT)
-    tx = tb.build()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="Test Transaction - 12")
-    tb.set_trans_date("2012-08-28")
-    tb.add_entry(bank, 600, Direction.CREDIT)
-    tb.add_entry(k_patterson, 600, Direction.DEBIT)
-    tx = tb.build()
-    tx.post()
-
-    tb = TransactionBuilder(ledger=ledger, description="Test Transaction - 12")
-    tb.set_trans_date("2012-08-14")
-    tb.add_entry(purchases_returns, 20, Direction.CREDIT)
-    tb.add_entry(k_patterson, 20, Direction.DEBIT)
-    tx = tb.build()
-    tx.post()
-
-    return ledger
+console = Console()
 
 
 # Create your tests here.
@@ -249,96 +32,362 @@ class TestChap5Woods(GeneralLedgerBaseTest):
 
     logger = logging.getLogger(__name__)
 
-    def test_5_1(self):
+    def test_chap_5_1_k_tandy(self):
 
-        # tb4 = TransactionBuilder(ledger=ledger, description="paid insurance by cheque")
-        # tb4.set_trans_date("2024-08-28")
-        # tb4.add_entry(d_knight, 158, Direction.CREDIT)
-        # tb4.add_entry(bank, 158, Direction.DEBIT)
-        # tx4 = tb4.build()
-        # tx4.post()
+        print("")
 
         ledger = load_chapter_5_data()
 
-        # lh = LedgerHelper(ledger)
-        # self.logger.info(lh.get_account_summary())
+        k_tandy = ledger.coa.getac("K Tandy")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(k_tandy)
+            .with_final_balance()
+            .build()
+        )
+
+        suffix = account_summary.entries_grouped["suffix"]
+        assert suffix["debit_bd"] is None
+        assert suffix["credit_bd"] is None
+        assert suffix["debit_cd"] is None
+        assert suffix["credit_cd"] is None
+
+        assert account_summary.debit_balance == Decimal("0")
+        assert account_summary.credit_balance == Decimal("0")
+        assert account_summary.debit_total == Decimal("444")
+        assert account_summary.credit_total == Decimal("444")
+
+        # inspect(account_summary)
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(
+            account_summary.entries_grouped, title="Account Name"
+        )
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+        #        console.print(Text.from_ansi(col2))
+
+        panel = Panel(col1, expand=True)
+        console.print(panel)
+
+    def test_chap_5_1_c_lee(self):
+
+        ledger = load_chapter_5_data()
+
+        c_lee = ledger.coa.getac("C Lee")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(c_lee)
+            .build()
+        )
+        account_summary.balance_off()
+
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(account_summary.entries_grouped)
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+
+        suffix = account_summary.entries_grouped["suffix"]
+        assert suffix["debit_bd"] is None
+        assert suffix["credit_bd"] is None
+        assert suffix["debit_cd"] is None
+        assert suffix["credit_cd"] is None
+
+        assert account_summary.debit_balance == Decimal("0")
+        assert account_summary.credit_balance == Decimal("0")
+        assert account_summary.debit_total == Decimal("480")
+        assert account_summary.credit_total == Decimal("480")
+
+    def test_chap_5_1_k_wood(self):
+
+        ledger = load_chapter_5_data()
+
+        k_wood = ledger.coa.getac("K Wood")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(k_wood)
+            # .with_start_date("2012-08-15")
+            .with_final_balance()
+            .build()
+        )
+        account_summary.balance_off()
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(account_summary.entries_grouped)
+
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+
+        suffix = account_summary.entries_grouped["suffix"]
+        assert suffix["debit_bd"] is None
+        assert suffix["credit_bd"] is None
+        assert suffix["debit_cd"] is None
+        assert suffix["credit_cd"] is None
+
+        assert account_summary.debit_balance == Decimal("0")
+        assert account_summary.credit_balance == Decimal("0")
+        assert account_summary.debit_total == Decimal("214")
+        assert account_summary.credit_total == Decimal("214")
+
+    def test_chap_5_1_d_knight(self):
+
+        ledger = load_chapter_5_data()
+
+        d_knight = ledger.coa.getac("D Knight")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(d_knight)
+            # .with_start_date("2012-01-15")
+            .with_balance_interval("month")
+            .with_final_balance()
+            .build()
+        )
+        account_summary.balance_off()
+        # inspect(account_summary)
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(account_summary.entries_grouped)
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+
+        suffix = account_summary.entries_grouped["suffix"]
+        assert suffix["debit_bd"] == Decimal("324.00")
+        assert suffix["credit_bd"] is None
+
+        assert account_summary.debit_balance == Decimal("324")
+        assert account_summary.credit_balance == Decimal("0")
+        assert account_summary.debit_total == Decimal("482")
+        assert account_summary.credit_total == Decimal("158")
+
+    def test_chap_5_1_b_walters(self):
+
+        ledger = load_chapter_5_data()
+
+        b_walters = ledger.coa.getac("B Walters")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(b_walters)
+            # .with_start_date("2012-08-15")
+            # .with_by_group_intervals([])
+            .with_balance_interval("month")
+            .with_end_date("2012-09-3")
+            .with_final_balance()
+            .build()
+        )
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(account_summary.entries_grouped)
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+
+        suffix = account_summary.entries_grouped["suffix"]
+        assert suffix["debit_bd"] == Decimal("51.00")
+        assert suffix["credit_bd"] is None
+
+    def test_chap_5_2(self):
+        """accounts for creditors"""
+
+        print("")
+        ledger = load_chapter_5_data()
+
+        e_williams = ledger.coa.getac("E Williams")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(e_williams)
+            .with_balance_interval("month")
+            .with_final_balance()
+            .build()
+        )
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(account_summary.entries_grouped)
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+
+        e_williams = ledger.coa.getac("K Patterson")
+
+        account_summary = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_ledger(ledger=ledger)
+            .with_account(e_williams)
+            .with_balance_interval("month")
+            .with_final_balance()
+            .build()
+        )
+        col1 = account_summary.render()
+        col2 = pr_account_balanced(account_summary.entries_grouped)
+        console.print(render_2_cols(col1, Text.from_ansi(col2)))
+
+    def test_chap_5_3(self):
+        """
+        Three columns accounts
+        :return:
+        """
+        print("")
+        ledger = load_chapter_5_data()
+
+        accounts = ledger.coa.account_set.filter(
+            type__slug__in=[
+                "accounts-receivable",
+                "accounts-payable",
+            ]
+        )
+
+        col1_list = []
+        grid = Table.grid()
+        grid.add_column()
+
+        for account in accounts:
+            account_summary = (
+                AccountSummaryBuilder(strict_dates=False)
+                .with_ledger(ledger=ledger)
+                .with_account(account)
+                # .with_balance_interval("week")
+                .build()
+            )
+            if account_summary.entries:
+                print(f"{account=}")
+                # inspect(account_summary)
+                account_summary.set_renderer(RichConsoleRenderer())
+                account_summary.set_table_format(ThreeColumnFormat())
+                out = account_summary.render()
+                col1_list.append(out)
+                grid.add_row(out)
 
         template = get_template("gl/console/three_col_accounts.j2")
 
         context = {
             "ledger": ledger,
-            "accounts": Account.objects.filter(coa=ledger.coa),
+            "accounts": accounts,
         }
 
         self.logger.info(template.render(context=context))
+        col2 = template.render(context=context)
+        console.print(render_2_cols(grid, Text.from_ansi(col2)))
 
-        print(template.render(context=context))
-
-        # bank = Account.objects.get(name="Bank Account", coa=self.invoice.ledger.coa)
-        # cash = Account.objects.get(name="Cash", coa=self.invoice.ledger.coa)
-        # purchases, _ = Account.objects.get_or_create(
-        #     coa=self.invoice.ledger.coa,
-        #     name="Purchases",
-        #     type__name="Direct Costs",
-        # )
-        # sales, _ = Account.objects.get_or_create(
-        #     coa=self.invoice.ledger.coa,
-        #     name="Sales",
-        #     type__name="Sales",
-        # )
-        # vat_charged, _ = Account.objects.get_or_create(
-        #     coa=self.invoice.ledger.coa,
-        #     name="VAT Charged",
-        #     type=AccountType.objects.get(
-        #         name="Current Liability",
-        #         book=self.invoice.ledger.book,
-        #     ),
-        #     defaults={
-        #         "tax_rate": TaxRate.objects.get(
-        #             slug="no-vat",
-        #             book=self.invoice.ledger.book,
-        #         )
-        #     },
-        # )
-        # accounts_receivable, _ = Account.objects.get_or_create(
-        #     coa=self.invoice.ledger.coa,
-        #     name="Accounts Receivable",
-        #     type__name="Current Asset",
-        # )
-
-
-class TestChap5WoodsPyTests:
-    @pytest.mark.django_db
-    def test_balancing_off_simple_1(self):
+    def test_chap_5_review_5_1(self):
+        """
+        Three columns accounts
+        :return:
+        """
         print("")
-        print(f"This statement gets mixed with pytest output")
-        ledger = LedgerFactory()
-        coa = ledger.coa
-        accounts_receivable = coa.account_set.get(name="Accounts Receivable")
-        transactions = TransactionFactory.create_batch(
-            50,
-            ledger=ledger,
-            create_transaction_entry_lines__accounts=ledger.coa.account_set.filter(
-                slug__in=[
-                    "bank-account",
-                    "sales",
-                    "accounts-receivable",
-                ]
-            ),
+        ledger = load_5_review_5_1_data()
+
+        accounts = ledger.coa.account_set.filter(
+            type__slug__in=["accounts-receivable", "accounts-payable"]
         )
 
-        # lh = LedgerHelper(ledger)
-        # print(lh.get_account_summary())
+        grid_left = Table.grid()
+        grid_left.add_column()
+        grid_right = Table.grid()
+        grid_right.add_column()
 
-        entry_set = accounts_receivable.entry_set.filter(
-            transaction__ledger=ledger,
+        for account in accounts:
+            summary = (
+                AccountSummaryBuilder(strict_dates=False)
+                .with_ledger(ledger=ledger)
+                .with_account(account)
+                .with_final_balance()
+                # .with_balance_interval("week")
+                .build()
+            )
+            if summary.entries:
+                print(f"{account=}")
+                summary.balance_off()
+                # inspect(account_summary)
+                # account_summary.set_table_format(ThreeColumnFormat())
+                grid_left.add_row(summary.render())
+                summary.set_table_format(ThreeColumnFormat())
+                grid_right.add_row(summary.render())
+
+        console.print(render_2_cols(grid_left, grid_right))
+
+    def test_chap_5_review_5_2(self):
+        """
+        Three columns accounts
+        :return:
+        """
+        print("")
+        ledger = load_5_review_5_2_data()
+
+        accounts = ledger.coa.account_set.filter(
+            type__slug__in=["accounts-receivable", "accounts-payable"]
         )
 
-        test = AccountBalancer(
-            entry_set=entry_set,
-            # start_date="2023-01-01",
-            balance_interval="week",
-        )
-        # inspect(test)
+        grid_left = Table.grid()
+        grid_left.add_column()
+        grid_right = Table.grid()
+        grid_right.add_column()
 
-        print(pr_account_balanced(test.grouped_entries))
+        for account in accounts:
+            summary = (
+                AccountSummaryBuilder(strict_dates=False)
+                .with_ledger(ledger=ledger)
+                .with_account(account)
+                .with_final_balance()
+                .with_balance_interval("month")
+                .build()
+            )
+            if summary.entries:
+                print(f"{account=}")
+                summary.set_renderer(RichConsoleRenderer())
+                grid_left.add_row(summary.render())
+                summary.set_table_format(
+                    ThreeColumnFormat(),
+                    decimal_format="8,.0f",
+                    date_format="%b  %e",
+                )
+                grid_right.add_row(summary.render())
+
+        console.print(render_2_cols(grid_left, grid_right))
+
+    def test_chap_5_review_5_5(self):
+        print("")
+        ledger = load_5_review_5_5_data()
+
+        accounts = ledger.coa.account_set.filter(
+            type__slug__in=[
+                "accounts-receivable",
+                "accounts-payable",
+            ]
+        )
+
+        report = ConsoleReportBuilder(panel=True)
+
+        for account in accounts:
+            summary = (
+                AccountSummaryBuilder(strict_dates=False)
+                .with_ledger(ledger=ledger)
+                .with_account(account)
+                .with_final_balance()
+                .with_balance_interval("month")
+                .build()
+            )
+            if summary.entries:
+                report.add_column_item(
+                    "left",
+                    summary.set_renderer(
+                        RichConsoleRenderer(
+                            decimal_format="8,.0f",
+                            date_format="%b %e",
+                        )
+                    ).render(),
+                )
+                report.add_column_item(
+                    "right",
+                    summary.set_renderer(
+                        RichConsoleRenderer(
+                            decimal_format="8,.0f",
+                            date_format="%b %e",
+                        )
+                    )
+                    .set_table_format(
+                        ThreeColumnFormat(),
+                        decimal_format="8,.0f",
+                        date_format="%b  %e",
+                    )
+                    .render(),
+                )
+
+        console.print(report.build())

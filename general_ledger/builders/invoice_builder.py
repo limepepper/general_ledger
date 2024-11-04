@@ -2,13 +2,13 @@ from datetime import date
 
 from loguru import logger
 
-from general_ledger.models import (
+from general_ledger.django.models import (
     Invoice,
     DocumentNumberSequence as DocNumSeq,
     Account,
     TaxRate,
 )
-from general_ledger.models import InvoiceLine
+from general_ledger.django.models import InvoiceLine
 
 
 class InvoiceBuilder:

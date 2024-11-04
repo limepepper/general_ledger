@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
-from general_ledger.models import Book, Ledger, TaxRate
+from general_ledger.django.models import Book, Ledger, TaxRate
 from general_ledger.resources import TaxRateResource
 
 from general_ledger.utils import update_items

@@ -1,10 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from django_filters.views import FilterView
 
-from general_ledger.filters import BillFilter
-from general_ledger.models import PurchaseInvoice
+from general_ledger.django.filters import BillFilter
+from general_ledger.django.models import PurchaseInvoice
 from general_ledger.views.mixins import ActiveBookRequiredMixin
 from general_ledger.views.mixins import GeneralLedgerSecurityMixIn
 

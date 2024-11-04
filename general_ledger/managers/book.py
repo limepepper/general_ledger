@@ -17,6 +17,8 @@ class BookManager(models.Manager):
         )
 
     def for_user(self, user):
+        if user.is_superuser:
+            return self.get_queryset()
         return self.get_queryset().filter(
             Q(owner=user) | Q(users__in=[user]),
         )

@@ -2,7 +2,7 @@ import logging
 
 from django import forms
 
-from general_ledger.models import InvoiceLine, TaxRate
+from general_ledger.django.models import InvoiceLine, TaxRate
 
 
 class InvoiceLineForm(forms.ModelForm):

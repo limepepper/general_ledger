@@ -2,12 +2,12 @@ import yaml
 from loguru import logger
 
 from dashboard import settings
-from general_ledger.models.ledger import Ledger
-from general_ledger.models.account import Account
-from general_ledger.models.account_type import AccountType
-from general_ledger.models.tax_rate import TaxRate
-from general_ledger.models.coa import ChartOfAccounts
-from general_ledger.models.tax_type import (
+from general_ledger.django.models.ledger import Ledger
+from general_ledger.django.models.account import Account
+from general_ledger.django.models.account_type import AccountType
+from general_ledger.django.models.tax_rate import TaxRate
+from general_ledger.django.models.coa import ChartOfAccounts
+from general_ledger.django.models.tax_type import (
     TaxType,
 )
 

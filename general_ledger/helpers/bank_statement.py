@@ -1,7 +1,7 @@
 import logging
 from ofxparse import OfxParser
 
-from general_ledger.models import FileUpload, Bank, Book
+from general_ledger.django.models import FileUpload, Bank, Book
 
 
 class BankStatementHelper:

@@ -2,10 +2,17 @@ from django.core.management.base import BaseCommand
 from rich import inspect
 
 from general_ledger.io import ParserFactory
-from general_ledger.models import Book, FileUpload, BankStatementLine, Bank, BankBalance
+from general_ledger.django.models import (
+    Book,
+    FileUpload,
+    BankStatementLine,
+    Bank,
+    BankBalance,
+)
 from django.contrib.auth import get_user_model
 from loguru import logger
-# from general_ledger.models.account_dl_treebeard import AccountClass
+
+# from general_ledger.django.models.account_dl_treebeard import AccountClass
 
 
 class Command(BaseCommand):
@@ -34,6 +41,9 @@ class Command(BaseCommand):
 
         if kwargs.get("bank1"):
             self.bank1 = Bank.objects.search(kwargs.get("bank1"))
+        else:
+            logger.error("Bank1 is required")
+            raise ValueError("Bank1 is required")
 
         file_upload = FileUpload.objects.get(id=kwargs["file_id"])
         file_path = file_upload.file.path
@@ -51,7 +61,7 @@ class Command(BaseCommand):
             print(f"{parsed_data['balance']=}")
             print(f"{parsed_data['balance_date']=}")
             balance, created = BankBalance.objects.get_or_create(
-                bank=bank,
+                bank=self.bank1,
                 balance=parsed_data["balance"],
                 balance_date=parsed_data["balance_date"],
                 balance_source=parsed_data["balance_source"],
@@ -66,7 +76,7 @@ class Command(BaseCommand):
 
         for data in parsed_data["transactions"]:
             line, created = BankStatementLine.objects.get_or_create(
-                bank=bank,
+                bank=self.bank1,
                 hash=data["hash"],
                 date=data["date"],
                 amount=data["amount"],

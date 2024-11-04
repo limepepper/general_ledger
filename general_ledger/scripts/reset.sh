@@ -19,6 +19,11 @@ python manage.py reset_gl | while IFS= read -r line; do
   echo "DROP TABLE $line" | python manage.py dbshell
 done
 
+python manage.py reset_db --noinput
+
+rm -rf general_ledger/migrations/*.py
+touch general_ledger/migrations/__init__.py
+
 # Make new migrations
 # python manage.py makemigrations $APP_NAME
 

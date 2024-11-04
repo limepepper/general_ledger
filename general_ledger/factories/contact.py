@@ -1,5 +1,5 @@
 import factory
-from general_ledger.models import Contact
+from general_ledger.django.models import Contact
 
 
 class ContactFactory(factory.django.DjangoModelFactory):

@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 from django_filters.views import FilterView
 
-from general_ledger.models import Bank, Book
+from general_ledger.django.models import Bank, Book
 from general_ledger.views.generic import GenericListView, GenericDetailView
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,
@@ -26,6 +26,9 @@ class BookListView(
     context_object_name = "books"
     # paginate_by = 25
     # filterset_class = BankFilter
+
+    def get_queryset(self):
+        return self.model.objects.for_user(self.request.user)
 
 
 class BookDetailView(

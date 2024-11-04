@@ -5,10 +5,11 @@ import factory
 from factory.django import DjangoModelFactory as DjangoModelFactory
 from factory.fuzzy import FuzzyDate
 from faker import Faker
+
 # from django.utils import timezone
 from datetime import timezone
-from general_ledger.models import BankStatementLine
-from general_ledger.models.bank_statement_line_type import BankStatementLineType
+from general_ledger.django.models import BankStatementLine
+from general_ledger.django.models.bank_statement_line_type import BankStatementLineType
 
 fake = Faker()
 
@@ -21,10 +22,12 @@ class BankTransactionFactory(DjangoModelFactory):
         "general_ledger.factories.BankAccountFactory",
     )
 
-    #date = factory.Faker("date_this_year")
+    # date = factory.Faker("date_this_year")
     date = factory.Faker(
         "date_time_between",
-        start_date=factory.fuzzy.FuzzyDate(datetime.date(2022, 1, 1)),  # Default start date
+        start_date=factory.fuzzy.FuzzyDate(
+            datetime.date(2022, 1, 1)
+        ),  # Default start date
         end_date=factory.fuzzy.FuzzyDate(datetime.date.today()),  # Default end date
         tzinfo=timezone.utc,
     )
@@ -121,7 +124,8 @@ class BankTransactionFactory(DjangoModelFactory):
                 raise ValueError("Cannot transfer to the same bank")
 
             transaction_date = fake.date_between(
-                start_date=datetime.datetime.now() - datetime.timedelta(days=years_ago * 365),
+                start_date=datetime.datetime.now()
+                - datetime.timedelta(days=years_ago * 365),
                 end_date="today",
             )
 

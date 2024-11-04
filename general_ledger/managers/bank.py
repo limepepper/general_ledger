@@ -3,9 +3,10 @@ from uuid import UUID
 from django.db import models
 from django.db.models import Q
 from loguru import logger
-from rich import inspect
 
-from general_ledger.models import Account, TaxRate, AccountType
+from general_ledger.django.models.account_type import AccountType
+from general_ledger.django.models.tax_rate import TaxRate
+from general_ledger.django.models.account import Account
 
 
 # LOGGING_CONSOLE = Console(

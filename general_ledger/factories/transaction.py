@@ -8,7 +8,7 @@ from faker import Faker
 from rich import inspect
 
 from general_ledger.factories.ledger import LedgerFactory
-from general_ledger.models import Transaction, Entry, Direction
+from general_ledger.django.models import Transaction, Entry, Direction
 
 fake = Faker()
 

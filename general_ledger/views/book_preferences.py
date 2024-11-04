@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from dynamic_preferences.views import PreferenceFormView
 
 from dashboard.forms.book_preferences import book_preference_form_builder
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 from general_ledger.views import GeneralLedgerSecurityMixIn
 from general_ledger.views.mixins import ActiveBookRequiredMixin
 

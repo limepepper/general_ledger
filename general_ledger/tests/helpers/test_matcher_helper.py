@@ -8,17 +8,17 @@ from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import BookFactory, ContactFactory, BankAccountFactory
 from general_ledger.factories.bank_statement_line_factory import BankTransactionFactory
 from general_ledger.helpers.matcher import MatcherHelper
-from general_ledger.models import Bank
-from general_ledger.models.bank_statement_line_type import BankStatementLineType
+from general_ledger.django.models import Bank
+from general_ledger.django.models.bank_statement_line_type import BankStatementLineType
 
 
 @pytest.fixture()
 def resources():
-    #print("setup")
+    # print("setup")
     book = BookFactory()
     bank = BankAccountFactory(book=book)
     yield book, bank
-    #print("teardown")
+    # print("teardown")
 
 
 class TestMatcherHelper:
@@ -144,7 +144,6 @@ class TestMatcherHelper:
             book=book,
         )
         matcher.reconcile_bank_statement()
-        # inspect(matcher.candidates)
         assert len(matcher.candidates["transfer"]) == num_transfers
 
         # this shouldn't change anything
@@ -153,8 +152,6 @@ class TestMatcherHelper:
 
         for xfer in matcher.candidates["transfer"]:
             bsl_from, bsl_to = xfer
-            # inspect(bsl_from)
-            # inspect(bsl_to)
             pb = PaymentBuilder(
                 ledger=book.get_default_ledger(),
                 book=book,
@@ -165,4 +162,3 @@ class TestMatcherHelper:
                 to_object=bsl_to,
             )
             payment = pb.build()
-            # inspect(pb)

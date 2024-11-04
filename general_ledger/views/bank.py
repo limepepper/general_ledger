@@ -7,15 +7,15 @@ from django.views.generic import UpdateView, DetailView
 from django_filters.views import FilterView
 from formset.views import FormViewMixin
 
-import general_ledger
 from general_ledger.forms.bank import BankForm
-from general_ledger.models import Bank
+from general_ledger.django.models import Bank
 from general_ledger.views.generic import GenericListView
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,
     ActiveBookRequiredMixin,
 )
-from general_ledger.filters.bank_account_filter import BankAccountFilter
+from general_ledger.django.filters import BankAccountFilter
+
 
 class BankListView(
     GeneralLedgerSecurityMixIn,

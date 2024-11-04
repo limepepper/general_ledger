@@ -10,11 +10,9 @@ class Command(BaseCommand):
     help = "generate sample banks"
 
     def handle(self, *args, **kwargs):
-        # inspect(logger)
         logger.info("Processing matches")
         matcher = MatcherHelper()
         matcher.reconcile_bank_statement()
-        # inspect(matcher.candidates)
 
         for candidate in matcher.candidates["exact"]:
             logger.info(candidate)

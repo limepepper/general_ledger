@@ -1,0 +1,28 @@
+<!-- Chart Card -->
+<div class="grid-stack-item"
+     gs-id="grid-item-main-card"
+     gs-x="{{ layout['grid-item-main-card']['x']|default('0') }}"
+     gs-y="{{ layout['grid-item-main-card']['y']|default('0') }}"
+     gs-h="{{ layout['grid-item-main-card']['h']|default('2') }}"
+     gs-w="{{ layout['grid-item-main-card']['w']|default('12') }}"
+     gs-min-w="6"
+     gs-min-h="2">
+    <div class="grid-stack-item-content card">
+        <div class="card-header">
+            <h5 class="card-title">Cash Flow</h5>
+        </div>
+        <div class="card-body">
+
+
+            <div id="chart"></div>
+
+        </div>
+        {# <select id="timeRange" onchange="updateChart()">
+                                    <option value="3">Last 3 Months</option>
+                                    <option value="6">Last 6 Months</option>
+                                    <option value="12" selected>Last 12 Months</option>
+                                    <option value="all">All Time</option>
+                                  </select> #}
+
+    </div>
+</div><!-- Chart Card -->

@@ -6,7 +6,7 @@ from rich import inspect
 from tablib import Dataset
 
 from general_ledger.forms.bank_statement_import_form import BankStatementImportForm
-from general_ledger.models import Bank
+from general_ledger.django.models import Bank
 from general_ledger.resources.bank_statement_import import BankStatementTsbCsvResource
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,

@@ -7,7 +7,7 @@ from general_ledger.management.utils import (
     get_or_create_customers,
     get_or_create_banks,
 )
-from general_ledger.models import Bank, Book
+from general_ledger.django.models import Bank, Book
 
 
 class TestGenerateTransfers:

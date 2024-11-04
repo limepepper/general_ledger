@@ -3,7 +3,7 @@ from django.urls import include, path
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 
-from general_ledger.models import Bank
+from general_ledger.django.models import Bank
 from general_ledger.views.bank import BankListView, BankDetailView, BankUpdateView
 from general_ledger.views.bank_matching import BankReconciliation
 from general_ledger.views.bank_transactions import BankTransactionsListView

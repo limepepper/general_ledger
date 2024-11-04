@@ -7,7 +7,7 @@ from general_ledger.management.utils import (
     get_book,
     get_or_create_banks,
 )
-from general_ledger.models import Bank
+from general_ledger.django.models import Bank
 
 
 class Command(BaseCommand):
@@ -64,6 +64,7 @@ class Command(BaseCommand):
 
     def __init__(self, stdout=None, stderr=None, no_color=False, force_color=False):
         super().__init__(stdout, stderr, no_color, force_color)
+        self.user = None
         self.bank2 = None
         self.bank1 = None
         self.num_banks = None
@@ -88,7 +89,6 @@ class Command(BaseCommand):
             self.bank2 = Bank.objects.search(kwargs.get("bank2"))
 
         self.other1()
-
 
     def other1(self, *args, **kwargs):
 

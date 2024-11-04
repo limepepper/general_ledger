@@ -1,0 +1,29 @@
+---
+
+renderer:
+  rich:
+    trial_balance:
+      date_format: "%-m.%-d"
+      decimal_format: "8,.0f"
+      highlight_debtors: false
+      highlight_creditors: false
+      colors:
+        debit: "green"
+        credit: "red"
+        header: "bold white"
+    t_account:
+      date_format: "%-m.%-d"
+      decimal_format: "8.2f"
+      highlight_debtors: false
+      highlight_creditors: false
+      colors:
+        debit: "green"
+        credit: "red"
+        header: "bold white"
+    three_column:
+      date_format: "%y.%-m.%-d"
+      decimal_format: "8.2f"
+      colors:
+        header: "bold yellow"
+        debit_column: "green"
+        credit_column: "red"

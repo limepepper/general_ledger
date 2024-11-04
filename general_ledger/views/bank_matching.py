@@ -7,7 +7,7 @@ from rich import inspect
 from general_ledger.forms.matching_xfer import TransferForm
 from general_ledger.forms.payment import PaymentCreateForm
 from general_ledger.forms.payment_edit import PaymentEditForm
-from general_ledger.models import BankStatementLine, Payment, Payment
+from general_ledger.django.models import BankStatementLine, Payment, Payment
 from general_ledger.views.mixins import (
     GeneralLedgerSecurityMixIn,
     ActiveBookRequiredMixin,

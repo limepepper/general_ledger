@@ -7,7 +7,7 @@ from faker import Faker
 from rich import inspect
 
 from general_ledger.factories import BankAccountFactory, BookFactory
-from general_ledger.models import Ledger, Bank, Account, TaxRate, AccountType
+from general_ledger.django.models import Ledger, Bank, Account, TaxRate, AccountType
 from general_ledger.tests import GeneralLedgerBaseTest
 
 
@@ -77,9 +77,6 @@ class TestBankAccountModel(GeneralLedgerBaseTest):
         account.save()
         bank.save()
 
-        # inspect(account)
-        # inspect(bank)
-
     def test_bank_with_account_updating(self):
         """
         test bank with account updating
@@ -90,11 +87,5 @@ class TestBankAccountModel(GeneralLedgerBaseTest):
             name="BeforeName",
         )
 
-        # inspect(bank)
-        # inspect(bank.account)
-
         bank.name = "AfterName"
         bank.save()
-
-        # inspect(bank.name)
-        # inspect(bank.account.name)

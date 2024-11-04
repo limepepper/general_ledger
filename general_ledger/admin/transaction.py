@@ -4,7 +4,7 @@ from django.urls import path
 from django.http import HttpResponse
 
 from general_ledger.forms.transaction import TransactionLedgerImportForm
-from general_ledger.models import Transaction, Entry
+from general_ledger.django.models import Transaction, Entry
 from general_ledger.resources.transaction import TransactionResource
 
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin

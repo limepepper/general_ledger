@@ -1,6 +1,6 @@
 from import_export import resources
 
-from general_ledger.models import TaxType
+from general_ledger.django.models import TaxType
 
 
 class TaxTypeResource(resources.ModelResource):

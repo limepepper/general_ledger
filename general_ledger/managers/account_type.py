@@ -1,18 +1,9 @@
-import logging
-
 from django.db import models
-
-from general_ledger.models import Direction
-from general_ledger.models.mixins import (
-    NameDescriptionMixin,
-    UuidMixin,
-    CreatedUpdatedMixin,
-    SlugMixin,
-)
 
 
 class AccountTypeQuerySet(models.QuerySet):
     pass
+
 
 class AccountTypeManager(models.Manager):
     def for_book(self, book):

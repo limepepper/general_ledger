@@ -1,6 +1,6 @@
 from import_export import resources, fields
 
-from general_ledger.models import Invoice
+from general_ledger.django.models import Invoice
 
 
 class InvoiceResource(resources.ModelResource):

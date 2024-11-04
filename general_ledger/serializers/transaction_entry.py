@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from general_ledger.models import Entry
+from general_ledger.django.models import Entry
 
 
 class TransactionEntrySerializer(serializers.ModelSerializer):

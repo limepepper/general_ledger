@@ -10,7 +10,7 @@ from django.forms.fields import CharField
 from formset.utils import FormMixin
 from loguru import logger
 
-from general_ledger.models import (
+from general_ledger.django.models import (
     InvoiceLine,
     TaxRate,
 )

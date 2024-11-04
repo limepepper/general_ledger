@@ -1,12 +1,10 @@
 from django.contrib import admin
 
-from general_ledger.models.xero_gl_import import XeroGlImport
+from general_ledger.django.models.xero_gl_import import XeroGlImport
 
-from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from import_export.fields import Field
 
-from general_ledger.resources.xero_gl_import import XeroGlImportResource, OtherResource
+from general_ledger.resources.xero_gl_import import XeroGlImportResource
 
 
 @admin.register(XeroGlImport)

@@ -7,7 +7,7 @@ from rich import inspect
 
 from general_ledger.builders.payment import PaymentBuilder
 from general_ledger.factories import ContactFactory, BankAccountFactory
-from general_ledger.models import Book
+from general_ledger.django.models import Book
 
 logger.add(
     sys.stderr,

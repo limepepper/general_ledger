@@ -1,6 +1,6 @@
 from django import forms
 
-from general_ledger.models import BankStatementLine
+from general_ledger.django.models import BankStatementLine
 
 
 class BankTransactionForm(forms.ModelForm):

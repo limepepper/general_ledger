@@ -1,19 +1,8 @@
-import logging
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import F, Window, Sum
 from forex_python.converter import CurrencyCodes
 
-from general_ledger.models.account_type import AccountType
-from general_ledger.models.direction import Direction
-from general_ledger.models.tax_rate import TaxRate
-from general_ledger.models.mixins import (
-    NameDescriptionMixin,
-    CreatedUpdatedMixin,
-    UuidMixin,
-    SlugMixin,
-)
+from general_ledger.django.models.tax_rate import TaxRate
 
 
 class FileUploadManager(models.Manager):

@@ -1,16 +1,42 @@
 from collections import defaultdict
+from datetime import datetime, timezone
 from decimal import Decimal
 
 from django.db import models
 from django.db.models import Case, When, IntegerField
-from django.db.models import F, Func, Value, CharField
+from django.db.models import CharField
+from django.db.models import F
+from django.db.models.functions import Cast
 from django.db.models.functions import TruncYear, TruncMonth, TruncWeek, TruncDay
 from loguru import logger
-from rich import inspect
-from django.db.models import CharField
-from django.db.models.functions import Cast
+
 from general_ledger.managers.mixins import CommonAggregationMixins
-from general_ledger.models import Direction
+from general_ledger.django.models.direction import Direction
+
+
+class RichDefaultDict(defaultdict):
+    def __rich_repr__(self):
+        yield "Count", len(self)
+        yield "prefix", self.get("prefix", "")
+        for key in self["meta"]["interval_keys"]:
+            yield "interval", RichIntervalDict(self[key])
+        yield "suffix", self.get("suffix", "")
+
+
+class RichIntervalDict(dict):
+    def __rich_repr__(self):
+        yield "interval_key", self["interval_key"]
+        yield "Count", len(self["entries"])
+        yield f"Entries", self["entries"]
+        yield f"status", self["status"] if "status" in self else "empty"
+        yield "debit_bd", self["debit_bd"] if "debit_bd" in self else Decimal("0.00"), 0
+        yield f"credit_bd", (
+            self["credit_bd"] if "credit_bd" in self else Decimal("0.00")
+        )
+        yield f"debit_cd", self["debit_cd"] if "debit_cd" in self else Decimal("0.00")
+        yield f"credit_cd", (
+            self["credit_cd"] if "credit_cd" in self else Decimal("0.00")
+        )
 
 
 class EntryQuerySet(
@@ -24,10 +50,8 @@ class EntryQuerySet(
         self.credit_bd = Decimal("0.00")
 
     def set_balances_bd(self, debit_bd=None, credit_bd=None):
-        if debit_bd:
-            self.debit_bd = debit_bd
-        if credit_bd:
-            self.credit_bd = credit_bd
+        self.debit_bd = debit_bd or self.debit_bd
+        self.credit_bd = credit_bd or self.credit_bd
         return self
 
     def debits(self):
@@ -35,6 +59,11 @@ class EntryQuerySet(
 
     def credits(self):
         return self.filter(tx_type=Direction.CREDIT)
+
+    # @TODO this is dumb. need to create LedgerAccount object
+    # to encapsulate the idea of an account on a ledger
+    def balance(self):
+        return abs(self.debit_total() - self.credit_total())
 
     def debit_balance(self):
         """
@@ -78,7 +107,7 @@ class EntryQuerySet(
         self,
     ):
         """
-        is the entry set balanced? optionally correct for any balance brought down
+        is the entry set balanced?
         :param debit_bd:
         :param credit_bd:
         :return:
@@ -108,16 +137,30 @@ class EntryQuerySet(
 
     def get_grouped_entries(self, interval):
         if "interval_key" in self.query.annotations:
-            logger.debug("Already annotated with interval_key")
+            logger.warning("Already annotated with interval_key")
         else:
-            logger.debug("No interval annotation found")
+            logger.trace("No interval annotation found")
+
+        grouped_entries = RichDefaultDict(dict)
+
+        if interval is None:
+            first_entry = self.first()
+            grouped_entries["all"] = {
+                "entries": self,
+                "interval_key_dt": (
+                    first_entry.trans_date
+                    if first_entry
+                    else datetime.fromtimestamp(0, tz=timezone.utc)
+                ),
+                "interval_key": "all",
+            }
+            grouped_entries["meta"]["interval_keys"] = ["all"]
+            return grouped_entries
 
         entry_set = self.annotate_by_interval(interval)
         entry_set = entry_set.annotate(
             interval_key_str=Cast("interval_key", CharField())
         )
-
-        grouped_entries = defaultdict(dict)
 
         interval_keys = (
             entry_set.values_list("interval_key_str", flat=True)
@@ -134,7 +177,7 @@ class EntryQuerySet(
         # inspect(interval_keys)
         # inspect(interval_keys_dt)
 
-        grouped_entries["meta"]["interval_keys"] = interval_keys
+        grouped_entries["meta"]["interval_keys"] = list(interval_keys)
 
         for i, interval_key in enumerate(interval_keys):
             grouped_entries[interval_key]["entries"] = entry_set.filter(
@@ -146,10 +189,9 @@ class EntryQuerySet(
         return grouped_entries
 
     def __rich_repr__(self):
-        yield "Transaction", {}
         yield "Count", self.count()
-        yield "Entries", str(self)
-        yield
+        yield "Db_total", self.debit_total()
+        yield "Cr_total", self.credit_total()
 
 
 class EntryManager(models.Manager):

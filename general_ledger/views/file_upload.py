@@ -8,7 +8,7 @@ from django.views.generic import (
     DetailView,
 )
 from general_ledger.forms.file_upload import FileUploadForm
-from general_ledger.models import FileUpload
+from general_ledger.django.models import FileUpload
 from ofxparse import OfxParser
 
 from general_ledger.views import GeneralLedgerSecurityMixIn

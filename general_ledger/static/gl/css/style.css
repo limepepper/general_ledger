@@ -135,7 +135,7 @@ footer .text-center {
 
 .invoice-status-container {
   display: flex;
-  align-items: right;
+  align-items: end;
 }
 
 .form-invoice-status {
@@ -204,4 +204,99 @@ footer .text-center {
 .potential-match {
   background-color: #8ecfcf;
   /* Light red */
+}
+
+.node-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.node-content {
+  font-size: 1.2em;
+}
+
+.node-content .node-content {
+  font-size: 1em;
+}
+
+.node-value.node-total {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #eeeeee;
+}
+
+.node-value {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #eeeeee;
+}
+
+.node-level-9 {
+  background-color: #f0f9ff; /* Light pastel blue */
+}
+
+.node-level-8 {
+  background-color: #e0f2fe; /* Light pastel cyan */
+}
+
+.node-level-7 {
+  background-color: #bae6fd; /* Soft pastel light cyan */
+}
+
+.node-level-6 {
+  background-color: #7dd3fc; /* Pastel sky blue */
+}
+
+.node-level-5 {
+  background-color: #38bdf8; /* Medium pastel blue */
+}
+
+.node-level-4 {
+  background-color: #0ea5e9; /* Rich pastel blue */
+}
+
+.node-level-3 {
+  background-color: #0284c7; /* Deep pastel blue */
+}
+
+.node-level-2 {
+  background-color: #0369a1; /* Dark pastel blue */
+}
+
+.node-level-1 {
+  background-color: #075985; /* Very dark pastel blue */
+}
+
+.node-level-0 {
+  background-color: #0c4a6e; /* Intense dark blue */
+}
+
+/* Add to your CSS file */
+.grid-stack-item-drag-handle {
+    cursor: move;
+    cursor: grab;
+}
+
+.grid-stack-item-drag-handle:active {
+    cursor: grabbing;
+}
+
+.grid-stack-item-drag-handle .bi-grip-horizontal {
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.grid-stack-item-drag-handle:hover .bi-grip-horizontal {
+    opacity: 1;
+}
+
+/* Optional: Highlight the draggable area on hover */
+.grid-stack-item-drag-handle:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Make sure content is not draggable */
+.card-body {
+    cursor: default;
+    user-select: text;
 }

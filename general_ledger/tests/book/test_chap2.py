@@ -1,21 +1,19 @@
 import logging
 
-from general_ledger import constants
+from general_ledger.builders.transaction import TransactionBuilder
+from general_ledger.builders.account_summary_builder import AccountSummaryBuilder
 from general_ledger.factories import BookFactory
-from general_ledger.helpers import LedgerHelper
-from general_ledger.models import (
+from general_ledger.helpers.ledger_helper import LedgerHelper
+from general_ledger.django.models import (
     Transaction,
     Account,
     Ledger,
     Direction,
-    AccountType,
-    TaxRate,
 )
 from general_ledger.tests import GeneralLedgerBaseTest
-
-from general_ledger.builders import TransactionBuilder
-from general_ledger.utils.account_balanced import AccountBalancer
-from general_ledger.utils.consoler import pr_account_balanced
+from general_ledger.render.consoler import pr_account_balanced
+from general_ledger.utils.data_loader import tx as post_tx
+from django.utils import timezone
 
 
 # Create your tests here.
@@ -59,21 +57,27 @@ class TestBasicOperations(GeneralLedgerBaseTest):
         print(ledger)
 
         lh = LedgerHelper(ledger)
-        tx = lh.build_transaction(
-            description="Test Transaction",
-            entries=[
-                {
-                    "account": "102",
-                    "amount": 100,
-                    "tx_type": constants.TxType.CREDIT,
-                },
-                {
-                    "account": "103",
-                    "amount": 100,
-                    "tx_type": constants.TxType.DEBIT,
-                },
-            ],
+        # tx(ledger,
+
+        account_to_credit = Account.objects.get(
+            code="102",
+            coa=ledger.coa,
         )
+
+        account_to_debit = Account.objects.get(
+            code="103",
+            coa=ledger.coa,
+        )
+
+        tx = post_tx(
+            ledger,
+            account_to_debit,
+            100,
+            timezone.now(),
+            account_to_credit,
+            "Test Transaction",
+        )
+
         print(tx)
         self.assertIsInstance(tx, Transaction)
         self.assertEqual(tx.description, "Test Transaction")
@@ -160,6 +164,7 @@ class TestBasicOperations(GeneralLedgerBaseTest):
         tb4.add_entry(cash, 1_250, Direction.CREDIT)
         tx4 = tb4.build()
         tx4.post()
+
         self.assertEqual(LedgerHelper.get_account_balance(cash), 4_250)
 
         self.assertIsInstance(tx1, Transaction)
@@ -176,11 +181,13 @@ class TestBasicOperations(GeneralLedgerBaseTest):
         # self.assertTrue(False)
         lh = LedgerHelper(ledger)
         self.logger.info(lh.get_account_summary())
-
-        cash_balanced = AccountBalancer(
-            account=cash,
-            ledger=ledger,
+        cash_balanced = (
+            AccountSummaryBuilder(strict_dates=False)
+            .with_account(cash)
+            .with_ledger(ledger)
+            .build()
         )
+        cash_balanced.balance_off()
         # inspect(test)
 
-        print(pr_account_balanced(cash_balanced.grouped_entries))
+        print(pr_account_balanced(cash_balanced.entries_grouped))
