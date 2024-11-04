@@ -168,5 +168,4 @@ websocket-client==1.8.0
 Werkzeug==3.0.6
 widgetsnbextension==4.0.13
 xstate-machine==3.2.0
-
 colorama~=0.4.6
